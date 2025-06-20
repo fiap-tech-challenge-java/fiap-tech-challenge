@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TechchallengeApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(TechchallengeApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(TechchallengeApplication.class, args);
+    }
 
 }
