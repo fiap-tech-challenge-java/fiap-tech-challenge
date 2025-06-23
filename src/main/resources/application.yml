@@ -1,0 +1,20 @@
+server:
+  port: 8080
+
+app:
+  version: 0.0.1
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/techchallenge
+    username: postgres
+    password: postgrespass
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+
+jwt:
+  secret:        "yX56ambwC9AM8QkQzYOpHr0wYviQizzneZBtbeO+IfY="
+  expiration-ms:  604800000  # 7d em ms
