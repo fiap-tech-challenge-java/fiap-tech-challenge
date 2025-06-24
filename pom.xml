@@ -83,6 +83,28 @@
 			<artifactId>validation-api</artifactId>
 			<version>1.1.0.Final</version>
 		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId> <!-- ou jjwt-gson, se preferir -->
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.5.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -111,30 +133,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>io.swagger</groupId>
-				<artifactId>swagger-codegen-maven-plugin</artifactId>
-				<version>2.4.16</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>generate</goal>
-						</goals>
-						<configuration>
-							<inputSpec>./api-def/apiDefinition.yaml</inputSpec>
-							<language>spring</language>
-							<configOptions>
-								<sourceFolder>swagger</sourceFolder>
-								<java8>true</java8>
-								<interfaceOnly>true</interfaceOnly>
-								<modelPackage>com.fiap.techchallenge.model</modelPackage>
-								<apiPackage>com.fiap.techchallenge.api</apiPackage>
-								<useBeanValidation>true</useBeanValidation>
-							</configOptions>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
+
 		</plugins>
 	</build>
 
