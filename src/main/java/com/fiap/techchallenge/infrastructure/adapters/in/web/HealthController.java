@@ -1,8 +1,8 @@
-package com.fiap.techchallenge.adapters.in.rest;
+package com.fiap.techchallenge.infrastructure.adapters.in.web;
 
 
-import com.fiap.techchallenge.application.HealthCheckService;
-import com.fiap.techchallenge.domain.HealthStatus;
+import com.fiap.techchallenge.application.services.HealthCheckService;
+import com.fiap.techchallenge.domain.model.HealthStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

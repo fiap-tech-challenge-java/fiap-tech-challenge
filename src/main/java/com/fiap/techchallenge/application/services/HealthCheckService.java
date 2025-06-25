@@ -1,7 +1,7 @@
-package com.fiap.techchallenge.application;
+package com.fiap.techchallenge.application.services;
 
-import com.fiap.techchallenge.domain.HealthStatus;
-import com.fiap.techchallenge.infrastructure.database.DatabaseHealthChecker;
+import com.fiap.techchallenge.domain.model.HealthStatus;
+import com.fiap.techchallenge.infrastructure.adapters.out.persistence.DatabaseHealthChecker;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

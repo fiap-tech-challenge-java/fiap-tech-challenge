@@ -1,5 +1,6 @@
-package com.fiap.techchallenge.infrastructure.config;
+package com.fiap.techchallenge.infrastructure.security;
 
+import com.fiap.techchallenge.infrastructure.config.JwtUtil;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.*;

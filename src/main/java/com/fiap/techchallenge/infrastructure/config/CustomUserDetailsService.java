@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.infrastructure.security;
+package com.fiap.techchallenge.infrastructure.config;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

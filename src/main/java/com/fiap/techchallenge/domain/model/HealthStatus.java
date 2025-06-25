@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.domain;
+package com.fiap.techchallenge.domain.model;
 
 public class HealthStatus {
 

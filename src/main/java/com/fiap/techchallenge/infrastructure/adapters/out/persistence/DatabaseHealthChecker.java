@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.infrastructure.database;
+package com.fiap.techchallenge.infrastructure.adapters.out.persistence;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
