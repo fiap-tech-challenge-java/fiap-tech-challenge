@@ -47,7 +47,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id, @Valid @RequestBody CreateUserCommand command) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable UUID id,
+            @Valid @RequestBody CreateUserCommand command) {
         UserResponse response = updateUserUseCase.update(id, command);
         return ResponseEntity.ok(response);
     }
@@ -58,9 +59,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginCommand command) {
-        UserResponse response = loginUserUseCase.execute(command);
-        return ResponseEntity.ok(response);
-    }
 }

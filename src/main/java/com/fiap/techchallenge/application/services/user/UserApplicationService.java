@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.application.services;
+package com.fiap.techchallenge.application.services.user;
 
 import com.fiap.techchallenge.application.ports.in.user.CreateUserUseCase;
 import com.fiap.techchallenge.application.ports.in.user.DeleteUserUseCase;
@@ -8,7 +8,7 @@ import com.fiap.techchallenge.application.ports.in.user.UpdateUserUseCase;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUserCommand;
 import com.fiap.techchallenge.application.ports.in.user.dtos.LoginCommand;
 import com.fiap.techchallenge.application.ports.in.user.dtos.UserResponse;
-import com.fiap.techchallenge.application.ports.out.UserRepositoryPort;
+import com.fiap.techchallenge.application.ports.out.user.UserRepositoryPort;
 import com.fiap.techchallenge.domain.exceptions.InvalidLoginException;
 import com.fiap.techchallenge.domain.exceptions.UserNotFoundException;
 import com.fiap.techchallenge.domain.model.User;
@@ -25,7 +25,8 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class UserApplicationService implements CreateUserUseCase, GetUserUseCase, UpdateUserUseCase, DeleteUserUseCase, LoginUserUseCase {
+public class UserApplicationService
+        implements CreateUserUseCase, GetUserUseCase, UpdateUserUseCase, DeleteUserUseCase, LoginUserUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
     private final PasswordEncoder passwordEncoder;
@@ -33,14 +34,8 @@ public class UserApplicationService implements CreateUserUseCase, GetUserUseCase
     @Override
     public UserResponse execute(CreateUserCommand command) {
         String hashedPassword = passwordEncoder.encode(command.password());
-        User user = new User(
-                command.name(),
-                command.email(),
-                command.login(),
-                hashedPassword,
-                command.address(),
-                command.type()
-        );
+        User user = new User(command.name(), command.email(), command.login(), hashedPassword, command.address(),
+                command.type());
         User savedUser = userRepositoryPort.save(user);
         return mapToUserResponse(savedUser);
     }
@@ -56,9 +51,7 @@ public class UserApplicationService implements CreateUserUseCase, GetUserUseCase
     @Override
     @Transactional(readOnly = true)
     public List<UserResponse> getAllUsers() {
-        return userRepositoryPort.findAll().stream()
-                .map(this::mapToUserResponse)
-                .collect(Collectors.toList());
+        return userRepositoryPort.findAll().stream().map(this::mapToUserResponse).collect(Collectors.toList());
     }
 
     @Override
@@ -101,14 +94,7 @@ public class UserApplicationService implements CreateUserUseCase, GetUserUseCase
     }
 
     private UserResponse mapToUserResponse(User user) {
-        return new UserResponse(
-                user.getId(),
-                user.getName(),
-                user.getEmail(),
-                user.getLogin(),
-                user.getAddress(),
-                user.getType(),
-                user.getLastModifiedDate()
-        );
+        return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getLogin(), user.getAddress(),
+                user.getType(), user.getLastModifiedDate());
     }
 }

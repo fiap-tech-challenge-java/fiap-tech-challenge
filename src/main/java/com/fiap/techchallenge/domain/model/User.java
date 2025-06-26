@@ -23,8 +23,7 @@ public class User {
     private UserType type;
 
     public enum UserType {
-        CLIENTE,
-        DONO_RESTAURANTE
+        CLIENTE, DONO_RESTAURANTE
     }
 
     public User(String name, String email, String login, String password, String address, UserType type) {

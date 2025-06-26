@@ -1,6 +1,6 @@
 package com.fiap.techchallenge.infrastructure.adapters.out.persistence;
 
-import com.fiap.techchallenge.application.ports.out.UserRepositoryPort;
+import com.fiap.techchallenge.application.ports.out.user.UserRepositoryPort;
 import com.fiap.techchallenge.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -25,21 +25,17 @@ public class UserRepositoryAdapter implements UserRepositoryPort {
 
     @Override
     public Optional<User> findById(UUID id) {
-        return userJpaRepository.findById(id)
-                .map(UserJpaEntity::toDomainModel);
+        return userJpaRepository.findById(id).map(UserJpaEntity::toDomainModel);
     }
 
     @Override
     public Optional<User> findByLogin(String login) {
-        return userJpaRepository.findByLogin(login)
-                .map(UserJpaEntity::toDomainModel);
+        return userJpaRepository.findByLogin(login).map(UserJpaEntity::toDomainModel);
     }
 
     @Override
     public List<User> findAll() {
-        return userJpaRepository.findAll().stream()
-                .map(UserJpaEntity::toDomainModel)
-                .collect(Collectors.toList());
+        return userJpaRepository.findAll().stream().map(UserJpaEntity::toDomainModel).collect(Collectors.toList());
     }
 
     @Override

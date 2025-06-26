@@ -1,4 +1,4 @@
-package com.fiap.techchallenge.application.ports.out;
+package com.fiap.techchallenge.application.ports.out.user;
 
 import com.fiap.techchallenge.domain.model.User;
 import java.util.List;
@@ -7,8 +7,12 @@ import java.util.UUID;
 
 public interface UserRepositoryPort {
     User save(User user);
+
     Optional<User> findById(UUID id);
+
     Optional<User> findByLogin(String login);
+
     List<User> findAll();
+
     void deleteById(UUID id);
 }

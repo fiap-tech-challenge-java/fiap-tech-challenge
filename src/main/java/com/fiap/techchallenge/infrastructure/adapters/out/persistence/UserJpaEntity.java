@@ -35,28 +35,13 @@ public class UserJpaEntity {
     private UserType type;
 
     public static UserJpaEntity fromDomainModel(User user) {
-        return UserJpaEntity.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .login(user.getLogin())
-                .password(user.getPassword())
-                .lastModifiedDate(user.getLastModifiedDate())
-                .address(user.getAddress())
-                .type(user.getType())
-                .build();
+        return UserJpaEntity.builder().id(user.getId()).name(user.getName()).email(user.getEmail())
+                .login(user.getLogin()).password(user.getPassword()).lastModifiedDate(user.getLastModifiedDate())
+                .address(user.getAddress()).type(user.getType()).build();
     }
 
     public User toDomainModel() {
-        return new User(
-                this.id,
-                this.name,
-                this.email,
-                this.login,
-                this.password,
-                this.lastModifiedDate,
-                this.address,
-                this.type
-        );
+        return new User(this.id, this.name, this.email, this.login, this.password, this.lastModifiedDate, this.address,
+                this.type);
     }
 }

@@ -17,20 +17,12 @@ public class JwtUtil {
 
     public String generateToken(String username) {
         Date now = new Date();
-        return Jwts.builder()
-                .setSubject(username)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expMs))
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
+        return Jwts.builder().setSubject(username).setIssuedAt(now).setExpiration(new Date(now.getTime() + expMs))
+                .signWith(SignatureAlgorithm.HS256, secret).compact();
     }
 
     public String extractUsername(String token) {
-        return Jwts.parser()
-                .setSigningKey(secret)
-                .parseClaimsJws(token)
-                .getBody()
-                .getSubject();
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
     public boolean validateToken(String token) {

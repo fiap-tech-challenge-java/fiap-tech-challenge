@@ -6,5 +6,6 @@ import java.util.UUID;
 
 public interface GetUserUseCase {
     UserResponse getById(UUID id);
+
     List<UserResponse> getAllUsers();
 }

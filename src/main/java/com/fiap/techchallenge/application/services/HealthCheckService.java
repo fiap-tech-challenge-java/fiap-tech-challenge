@@ -5,7 +5,6 @@ import com.fiap.techchallenge.infrastructure.adapters.out.persistence.DatabaseHe
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-
 @Service
 public class HealthCheckService {
 
