@@ -10,10 +10,7 @@ public class OpenApiConfig {
 
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI()
-                .info(new Info()
-                        .title("Coezoo API")
-                        .version("1.0.0")
-                        .description("Documentação automática via springdoc-openapi"));
+        return new OpenAPI().info(new Info().title("Coezoo API").version("1.0.0")
+                .description("Documentação automática via springdoc-openapi"));
     }
 }
