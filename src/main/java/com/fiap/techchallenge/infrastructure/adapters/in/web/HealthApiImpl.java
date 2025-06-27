@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/health")
-public class HealthController {
+public class HealthApiImpl {
 
     private final HealthCheckService healthCheckService;
 
-    public HealthController(HealthCheckService healthCheckService) {
+    public HealthApiImpl(HealthCheckService healthCheckService) {
         this.healthCheckService = healthCheckService;
     }
 

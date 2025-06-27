@@ -6,7 +6,7 @@ app:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/techchallenge
+    url: jdbc:postgresql://localhost:5438/techchallenge
     username: postgres
     password: postgrespass
     driver-class-name: org.postgresql.Driver
