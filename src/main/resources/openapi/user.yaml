@@ -127,7 +127,6 @@ components:
         - password
         - address
         - role
-        - active
       properties:
         name:
           type: string
@@ -150,9 +149,6 @@ components:
           $ref: '#/components/schemas/Address'
         role:
           $ref: '#/components/schemas/UserRole'
-        active:
-          type: boolean
-          example: true
 
     UserResponse:
       type: object

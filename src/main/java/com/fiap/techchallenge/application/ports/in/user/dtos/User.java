@@ -1,6 +1,8 @@
 package com.fiap.techchallenge.application.ports.in.user.dtos;
 
-import com.fiap.techchallenge.domain.model.enums.UserEnum;
+import com.fiap.techchallenge.domain.model.enums.RoleEnum;
+import com.fiap.techchallenge.user.model.Address;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -12,21 +14,24 @@ public class User {
     private String login;
     private String password;
     private LocalDateTime lastModifiedDate;
-    private String address;
-    private UserEnum userEnum = UserEnum.CLIENTE;
+    private Address address;
+    private RoleEnum roleEnum;
+    private boolean active;
 
     public User() {
     }
 
-    public User(String name, String email, String login, String password, String address, UserEnum userEnum) {
-        this.id = UUID.randomUUID();
+    public User(UUID id, String name, String email, String login, String password, LocalDateTime lastModifiedDate,
+            Address address, RoleEnum roleEnum, boolean active) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.login = login;
         this.password = password;
+        this.lastModifiedDate = lastModifiedDate;
         this.address = address;
-        this.userEnum = userEnum;
-        this.lastModifiedDate = LocalDateTime.now();
+        this.roleEnum = roleEnum;
+        this.active = active;
     }
 
     public UUID getId() {
@@ -77,19 +82,27 @@ public class User {
         this.lastModifiedDate = lastModifiedDate;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
+    public void setAddress(Address address) {
         this.address = address;
     }
 
-    public UserEnum getUserEnum() {
-        return userEnum;
+    public RoleEnum getRoleEnum() {
+        return roleEnum;
     }
 
-    public void setUserEnum(UserEnum userEnum) {
-        this.userEnum = userEnum;
+    public void setRoleEnum(RoleEnum roleEnum) {
+        this.roleEnum = roleEnum;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

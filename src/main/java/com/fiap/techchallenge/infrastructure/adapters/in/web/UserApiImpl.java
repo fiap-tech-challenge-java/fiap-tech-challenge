@@ -2,7 +2,7 @@ package com.fiap.techchallenge.infrastructure.adapters.in.web;
 
 import com.fiap.techchallenge.application.services.user.UserUseCase;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
-import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UsersApiMapper;
+import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
 import com.fiap.techchallenge.user.api.UsersApi;
 import com.fiap.techchallenge.user.model.UserRequest;
 import com.fiap.techchallenge.user.model.UserResponse;
@@ -14,12 +14,12 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("/api/v1")
 public class UserApiImpl implements UsersApi {
 
     private final UserUseCase userUseCase;
 
-    private static final UsersApiMapper USERS_API_MAPPER = UsersApiMapper.INSTANCE;
+    private static final UserApiMapper USERS_API_MAPPER = UserApiMapper.INSTANCE;
 
     public UserApiImpl(UserUseCase userUseCase) {
         this.userUseCase = userUseCase;
