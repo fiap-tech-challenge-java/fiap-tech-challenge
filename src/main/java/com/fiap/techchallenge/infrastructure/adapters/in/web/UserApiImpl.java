@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
 public class UserApiImpl implements UsersApi {
 
     private final UserUseCase userUseCase;
