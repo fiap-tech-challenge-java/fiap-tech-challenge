@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: User API
+  title: FIAP_TC1
   version: 1.0.0
   description: API para gerenciar usuários (dono de restaurante e cliente)
 
@@ -8,19 +8,17 @@ servers:
   - url: http://localhost:8080/api/v1
 
 tags:
-  - name: User
+  - name: Users
     description: Operações relacionadas a usuários
 
 paths:
   /users:
     get:
       operationId: getUsers
-      tags:
-        - User
       summary: Lista todos os usuários
       responses:
         '200':
-          description: Lista de usuários retornada com sucesso
+          description: Lista de usuários retornada com sucesso (pode ser vazia)
           content:
             application/json:
               schema:
@@ -30,8 +28,6 @@ paths:
 
     post:
       operationId: createUser
-      tags:
-        - User
       summary: Cria um novo usuário
       requestBody:
         required: true
@@ -46,12 +42,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Dados inválidos fornecidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /users/{id}:
     get:
       operationId: getUser
-      tags:
-        - User
       summary: Busca um usuário pelo ID
       parameters:
         - name: id
@@ -72,8 +72,6 @@ paths:
 
     put:
       operationId: updateUser
-      tags:
-        - User
       summary: Atualiza um usuário existente
       parameters:
         - name: id
@@ -97,11 +95,13 @@ paths:
                 $ref: '#/components/schemas/UserResponse'
         '404':
           description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
     delete:
       operationId: deleteUser
-      tags:
-        - User
       summary: Deleta um usuário existente
       parameters:
         - name: id
@@ -115,9 +115,52 @@ paths:
           description: Usuário deletado com sucesso
         '404':
           description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/change-password:
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+        required: true
+      responses:
+        '204':
+          description: Senha trocada com sucesso.
+      operationId: changePassword
+      summary: Troca a senha do usuário.
 
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - message
+        - code
+        - status
+        - path
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro detalhada
+        code:
+          type: string
+          description: Código do erro
+        status:
+          type: integer
+          description: Código de status HTTP
+        path:
+          type: string
+          description: URL da requisição
+        fieldErrors:
+          type: object
+          description: Mapa de erros de validação específicos do campo.
+          additionalProperties:
+            type: string
     UserRequest:
       type: object
       required:
@@ -238,6 +281,23 @@ components:
           type: string
           format: date-time
           readOnly: true
+
+    ChangePassword:
+      title: Root Type for ResetPassword
+      description: ''
+      type: object
+      properties:
+        idUser:
+          format: int32
+          type: integer
+        lastPassword:
+          type: string
+        newPassword:
+          type: string
+      example:
+        idUser: 1
+        lastPassword: laf123
+        newPassword: laf1234
 
     UserRole:
       type: string

@@ -1,8 +1,8 @@
 package com.fiap.techchallenge.application.services;
 
-import com.fiap.techchallenge.domain.HealthStatus;
+import com.fiap.techchallenge.domain.model.HealthStatus;
+import com.fiap.techchallenge.infrastructure.adapters.out.persistence.DatabaseHealthChecker;
 import com.fiap.techchallenge.domain.exceptions.BusinessException;
-import com.fiap.techchallenge.infrastructure.database.DatabaseHealthChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

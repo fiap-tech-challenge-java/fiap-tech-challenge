@@ -1,7 +1,7 @@
-package com.fiap.techchallenge.infrastructure.security;
+package com.fiap.techchallenge.infrastructure.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiap.techchallenge.adapters.in.rest.exception.ErrorResponse;
+import com.fiap.techchallenge.model.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -93,11 +93,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
-        ErrorResponse errorResponse = new ErrorResponse(message, errorCode, status.value(), null);
-        errorResponse.setTimestamp(LocalDateTime.now());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(message);
+        errorResponse.setCode(errorCode);
+        errorResponse.setStatus(status.value());
 
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
         response.getWriter().write(jsonResponse);
     }
-
 }

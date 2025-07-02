@@ -18,17 +18,37 @@ public class AddressEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id")
     private UUID id;
 
+    @Column(name = "public_place")
     private String publicPlace;
+
+    @Column(name = "number")
     private String number;
+
+    @Column(name = "complement")
     private String complement;
+
+    @Column(name = "neighborhood")
     private String neighborhood;
+
+    @Column(name = "city")
     private String city;
+
+    @Column(name = "state")
     private String state;
+
+    @Column(name = "postal_code")
     private String postalCode;
+
+    @Column(name = "country")
     private String country;
+
+    @Column(name = "latitude")
     private Double latitude;
+
+    @Column(name = "longitude")
     private Double longitude;
 
     /** Muitos endereços → 1 usuário */

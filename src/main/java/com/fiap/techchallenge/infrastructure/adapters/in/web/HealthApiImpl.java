@@ -1,8 +1,8 @@
 package com.fiap.techchallenge.adapters.in.rest;
 
-import com.fiap.techchallenge.application.HealthCheckService;
-import com.fiap.techchallenge.domain.HealthStatus;
+import com.fiap.techchallenge.application.services.HealthCheckService;
 import com.fiap.techchallenge.domain.exceptions.ResourceNotFoundException;
+import com.fiap.techchallenge.domain.model.HealthStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
