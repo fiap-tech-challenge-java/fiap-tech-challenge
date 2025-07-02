@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  title: User API
+  title: FIAP_TC1
   version: 1.0.0
   description: API para gerenciar usuários (dono de restaurante e cliente)
 
@@ -8,15 +8,13 @@ servers:
   - url: http://localhost:8080/api/v1
 
 tags:
-  - name: User
+  - name: Users
     description: Operações relacionadas a usuários
 
 paths:
   /users:
     get:
       operationId: getUsers
-      tags:
-        - User
       summary: Lista todos os usuários
       responses:
         '200':
@@ -30,8 +28,6 @@ paths:
 
     post:
       operationId: createUser
-      tags:
-        - User
       summary: Cria um novo usuário
       requestBody:
         required: true
@@ -56,8 +52,6 @@ paths:
   /users/{id}:
     get:
       operationId: getUser
-      tags:
-        - User
       summary: Busca um usuário pelo ID
       parameters:
         - name: id
@@ -78,8 +72,6 @@ paths:
 
     put:
       operationId: updateUser
-      tags:
-        - User
       summary: Atualiza um usuário existente
       parameters:
         - name: id
@@ -110,8 +102,6 @@ paths:
 
     delete:
       operationId: deleteUser
-      tags:
-        - User
       summary: Deleta um usuário existente
       parameters:
         - name: id
