@@ -22,13 +22,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fiap.techchallenge.model.ErrorResponse;
+
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
             HttpServletRequest request) {
 
         Map<String, String> errors = new HashMap<>();
@@ -38,8 +40,11 @@ public class GlobalExceptionHandler {
             errors.put(fieldName, errorMessage);
         });
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse("Erro de validação dos dados", "VALIDATION_ERROR",
-                HttpStatus.BAD_REQUEST.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Erro de validação dos dados");
+        errorResponse.setCode("VALIDATION_ERROR");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
         errorResponse.setFieldErrors(errors);
 
         logger.warn("Erro de validação: {}", errors);
@@ -47,150 +52,188 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(ex.getMessage(), "RESOURCE_NOT_FOUND",
-                HttpStatus.NOT_FOUND.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("RESOURCE_NOT_FOUND");
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Recurso não encontrado: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ApiErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(ex.getMessage(), ex.getClass().getSimpleName(),
-                HttpStatus.BAD_REQUEST.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode(ex.getClass().getSimpleName());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Erro de negócio: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiErrorResponse> handleUnauthorizedException(UnauthorizedException ex,
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(ex.getMessage(), "UNAUTHORIZED",
-                HttpStatus.UNAUTHORIZED.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("UNAUTHORIZED");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Acesso não autorizado: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiErrorResponse> handleAccessDeniedException(AccessDeniedException ex,
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(
-                "Acesso negado. Você não tem permissão para acessar este recurso.", "ACCESS_DENIED",
-                HttpStatus.FORBIDDEN.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Acesso negado. Você não tem permissão para acessar este recurso.");
+        errorResponse.setCode("ACCESS_DENIED");
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Acesso negado para {}: {}", request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ApiErrorResponse> handleAuthenticationException(AuthenticationException ex,
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse("Falha na autenticação: " + ex.getMessage(),
-                "AUTHENTICATION_FAILED", HttpStatus.UNAUTHORIZED.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Falha na autenticação: " + ex.getMessage());
+        errorResponse.setCode("AUTHENTICATION_FAILED");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Falha na autenticação: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiErrorResponse> handleBadCredentialsException(BadCredentialsException ex,
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse("Credenciais inválidas", "INVALID_CREDENTIALS",
-                HttpStatus.UNAUTHORIZED.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Credenciais inválidas");
+        errorResponse.setCode("INVALID_CREDENTIALS");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Credenciais inválidas para {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ApiErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse("Requisição inválida. Verifique o formato dos dados enviados.", "INVALID_REQUEST_BODY",
-                HttpStatus.BAD_REQUEST.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Requisição inválida. Verifique o formato dos dados enviados.");
+        errorResponse.setCode("INVALID_REQUEST_BODY");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Erro na leitura do corpo da requisição: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity<ApiErrorResponse> handleMethodArgumentTypeMismatchException(
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
 
         String message = String.format("O parâmetro '%s' deve ser do tipo %s", ex.getName(),
                 ex.getRequiredType().getSimpleName());
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(message, "INVALID_PARAMETER_TYPE",
-                HttpStatus.BAD_REQUEST.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(message);
+        errorResponse.setCode("INVALID_PARAMETER_TYPE");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Tipo de parâmetro inválido: {}", message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
-    public ResponseEntity<ApiErrorResponse> handleMissingServletRequestParameterException(
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
             MissingServletRequestParameterException ex, HttpServletRequest request) {
 
         String message = String.format("Parâmetro obrigatório '%s' não foi fornecido", ex.getParameterName());
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(message, "MISSING_PARAMETER",
-                HttpStatus.BAD_REQUEST.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(message);
+        errorResponse.setCode("MISSING_PARAMETER");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Parâmetro obrigatório ausente: {}", ex.getParameterName());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiErrorResponse> handleHttpRequestMethodNotSupportedException(
+    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
 
         String message = String.format("Método HTTP '%s' não é suportado para este endpoint", ex.getMethod());
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(message, "METHOD_NOT_ALLOWED",
-                HttpStatus.METHOD_NOT_ALLOWED.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(message);
+        errorResponse.setCode("METHOD_NOT_ALLOWED");
+        errorResponse.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Método HTTP não suportado: {} {}", ex.getMethod(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<ApiErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex,
+    public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse("Endpoint não encontrado", "ENDPOINT_NOT_FOUND",
-                HttpStatus.NOT_FOUND.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Endpoint não encontrado");
+        errorResponse.setCode("ENDPOINT_NOT_FOUND");
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.warn("Endpoint não encontrado: {} {}", ex.getHttpMethod(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
             HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse(
-                "Erro de integridade dos dados. Verifique se os dados não violam restrições do banco.",
-                "DATA_INTEGRITY_VIOLATION", HttpStatus.CONFLICT.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse
+                .setMessage("Erro de integridade dos dados. Verifique se os dados não violam restrições do banco.");
+        errorResponse.setCode("DATA_INTEGRITY_VIOLATION");
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.error("Erro de integridade dos dados: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
 
-        ApiErrorResponse errorResponse = new ApiErrorResponse("Erro interno do servidor. Tente novamente mais tarde.",
-                "INTERNAL_SERVER_ERROR", HttpStatus.INTERNAL_SERVER_ERROR.value(), request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Erro interno do servidor. Tente novamente mais tarde.");
+        errorResponse.setCode("INTERNAL_SERVER_ERROR");
+        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorResponse.setPath(request.getRequestURI());
 
         logger.error("Erro interno não tratado", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);

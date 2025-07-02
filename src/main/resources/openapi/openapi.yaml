@@ -20,7 +20,7 @@ paths:
       summary: Lista todos os usuários
       responses:
         '200':
-          description: Lista de usuários retornada com sucesso
+          description: Lista de usuários retornada com sucesso (pode ser vazia)
           content:
             application/json:
               schema:
@@ -46,6 +46,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+        '400':
+          description: Dados inválidos fornecidos
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /users/{id}:
     get:
@@ -97,6 +103,10 @@ paths:
                 $ref: '#/components/schemas/UserResponse'
         '404':
           description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
     delete:
       operationId: deleteUser
@@ -115,9 +125,38 @@ paths:
           description: Usuário deletado com sucesso
         '404':
           description: Usuário não encontrado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      required:
+        - message
+        - code
+        - status
+        - path
+      properties:
+        message:
+          type: string
+          description: Mensagem de erro detalhada
+        code:
+          type: string
+          description: Código do erro
+        status:
+          type: integer
+          description: Código de status HTTP
+        path:
+          type: string
+          description: URL da requisição
+        fieldErrors:
+          type: object
+          description: Mapa de erros de validação específicos do campo.
+          additionalProperties:
+            type: string
     UserRequest:
       type: object
       required:
