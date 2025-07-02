@@ -3,11 +3,11 @@ package com.fiap.techchallenge.infrastructure.adapters.in.web;
 import com.fiap.techchallenge.application.services.user.UserUseCase;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
-import com.fiap.techchallenge.user.api.UsersApi;
-import com.fiap.techchallenge.user.model.UserRequest;
-import com.fiap.techchallenge.user.model.UserResponse;
+import com.fiap.techchallenge.api.UsersApi;
+import com.fiap.techchallenge.model.ChangePassword;
+import com.fiap.techchallenge.model.UserRequest;
+import com.fiap.techchallenge.model.UserResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -50,6 +50,11 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<UserResponse> updateUser(UUID id, UserRequest userRequest) {
+        return null;
+    }
+
+    @Override
+    public ResponseEntity<Void> changePassword(ChangePassword changePassword) {
         return null;
     }
 }

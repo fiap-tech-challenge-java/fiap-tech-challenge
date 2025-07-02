@@ -2,8 +2,8 @@ package com.fiap.techchallenge.infrastructure.adapters.in.mapper;
 
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
-import com.fiap.techchallenge.user.model.UserRequest;
-import com.fiap.techchallenge.user.model.UserResponse;
+import com.fiap.techchallenge.model.UserRequest;
+import com.fiap.techchallenge.model.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

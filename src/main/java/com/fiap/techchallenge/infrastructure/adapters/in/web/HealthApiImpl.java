@@ -1,17 +1,17 @@
-package com.fiap.techchallenge.adapters.in.rest;
+package com.fiap.techchallenge.infrastructure.adapters.in.web;
 
-import com.fiap.techchallenge.application.HealthCheckService;
-import com.fiap.techchallenge.domain.HealthStatus;
+import com.fiap.techchallenge.application.services.HealthCheckService;
 import com.fiap.techchallenge.domain.exceptions.ResourceNotFoundException;
+import com.fiap.techchallenge.domain.model.HealthStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/health")
-public class HealthController {
+public class HealthApiImpl {
 
     private final HealthCheckService healthCheckService;
 
-    public HealthController(HealthCheckService healthCheckService) {
+    public HealthApiImpl(HealthCheckService healthCheckService) {
         this.healthCheckService = healthCheckService;
     }
 

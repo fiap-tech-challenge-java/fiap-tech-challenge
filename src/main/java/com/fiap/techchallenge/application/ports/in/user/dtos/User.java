@@ -1,7 +1,7 @@
 package com.fiap.techchallenge.application.ports.in.user.dtos;
 
 import com.fiap.techchallenge.domain.model.enums.RoleEnum;
-import com.fiap.techchallenge.user.model.Address;
+import com.fiap.techchallenge.model.Address;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

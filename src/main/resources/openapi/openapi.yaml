@@ -130,6 +130,20 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /users/change-password:
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePassword'
+        required: true
+      responses:
+        '204':
+          description: Senha trocada com sucesso.
+      operationId: changePassword
+      summary: Troca a senha do usuário.
+
 components:
   schemas:
     ErrorResponse:
@@ -277,6 +291,23 @@ components:
           type: string
           format: date-time
           readOnly: true
+
+    ChangePassword:
+      title: Root Type for ResetPassword
+      description: ''
+      type: object
+      properties:
+        idUser:
+          format: int32
+          type: integer
+        lastPassword:
+          type: string
+        newPassword:
+          type: string
+      example:
+        idUser: 1
+        lastPassword: laf123
+        newPassword: laf1234
 
     UserRole:
       type: string
