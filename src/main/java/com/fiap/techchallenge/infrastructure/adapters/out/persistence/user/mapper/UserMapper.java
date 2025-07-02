@@ -4,6 +4,7 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.UserEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper

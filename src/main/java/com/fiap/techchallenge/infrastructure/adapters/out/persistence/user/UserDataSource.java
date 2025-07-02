@@ -3,6 +3,7 @@ package com.fiap.techchallenge.infrastructure.adapters.out.persistence.user;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
+import com.fiap.techchallenge.domain.exceptions.BusinessException;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.UserEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.UserMapper;
@@ -32,7 +33,10 @@ public class UserDataSource implements UserRepository {
 
     @Override
     public Optional<User> findById(UUID id) {
-        return Optional.empty();
+        UserEntity userEntity = jpaRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("User not found with id: " + id));
+        return Optional.of(USER_MAPPER.mapToUser(userEntity));
+
     }
 
     @Override
@@ -42,11 +46,12 @@ public class UserDataSource implements UserRepository {
 
     @Override
     public List<User> findAll() {
-        return List.of();
+        return jpaRepository.findAll().stream().map(USER_MAPPER::mapToUser).toList();
     }
 
     @Override
     public void deleteById(UUID id) {
+        jpaRepository.deleteById(id);
     }
 
 }
