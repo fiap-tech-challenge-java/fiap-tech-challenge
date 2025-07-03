@@ -126,7 +126,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ChangePassword'
+              $ref: '#/components/schemas/ChangePasswordRequest'
         required: true
       responses:
         '204':
@@ -282,22 +282,22 @@ components:
           format: date-time
           readOnly: true
 
-    ChangePassword:
-      title: Root Type for ResetPassword
+    ChangePasswordRequest:
+      title: Root Type for ChangePassword
       description: ''
       type: object
       properties:
         idUser:
-          format: int32
-          type: integer
+          type: string
+          format: uuid
         lastPassword:
           type: string
         newPassword:
           type: string
       example:
         idUser: 1
-        lastPassword: laf123
-        newPassword: laf1234
+        lastPassword: Laf123
+        newPassword: Laf1234
 
     UserRole:
       type: string

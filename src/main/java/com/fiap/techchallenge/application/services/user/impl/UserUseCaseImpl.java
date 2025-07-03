@@ -1,10 +1,12 @@
 package com.fiap.techchallenge.application.services.user.impl;
 
+import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.Login;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
 import com.fiap.techchallenge.application.services.user.UserUseCase;
+import com.fiap.techchallenge.infrastructure.validation.ChangePasswordValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +51,22 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public void delete(UUID id) {
+
+    }
+
+    @Override
+    public void changePassword(ChangePassword changePassword) {
+
+        if(ChangePasswordValidator.isValid(changePassword.getNewPassword())) {
+
+            ChangePassword changingPassword = new ChangePassword(
+                    changePassword.getIdUser(),
+                    passwordEncoder.encode(changePassword.getLastPassword()),
+                    passwordEncoder.encode(changePassword.getNewPassword())
+            );
+
+            this.userRepository.changePassword(changingPassword);
+        }
 
     }
 }

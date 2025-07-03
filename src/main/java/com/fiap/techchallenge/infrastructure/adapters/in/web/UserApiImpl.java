@@ -1,10 +1,11 @@
 package com.fiap.techchallenge.infrastructure.adapters.in.web;
 
-import com.fiap.techchallenge.application.services.user.UserUseCase;
-import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
-import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
 import com.fiap.techchallenge.api.UsersApi;
-import com.fiap.techchallenge.model.ChangePassword;
+import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
+import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
+import com.fiap.techchallenge.application.services.user.UserUseCase;
+import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
+import com.fiap.techchallenge.model.ChangePasswordRequest;
 import com.fiap.techchallenge.model.UserRequest;
 import com.fiap.techchallenge.model.UserResponse;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +55,11 @@ public class UserApiImpl implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<Void> changePassword(ChangePassword changePassword) {
-        return null;
+    public ResponseEntity<Void> changePassword(ChangePasswordRequest changePasswordRequest) {
+        ChangePassword changePassword = USERS_API_MAPPER.mapToChangePassword(changePasswordRequest);
+
+        this.userUseCase.changePassword(changePassword);
+
+        return ResponseEntity.noContent().build();
     }
 }
