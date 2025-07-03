@@ -27,8 +27,50 @@ import com.fiap.techchallenge.model.ErrorResponse;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-    //
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    @ExceptionHandler(PasswordsDoNotMatchException.class)
+    public ResponseEntity<ErrorResponse> handlePasswordsDoNotMatchException(PasswordsDoNotMatchException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("BAD_REQUEST");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Erro de validação de senha: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(MissingRequiredFieldsException.class)
+    public ResponseEntity<ErrorResponse> handleMissingRequiredFieldsException(MissingRequiredFieldsException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("BAD_REQUEST");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Campos obrigatórios ausentes: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidPasswordPatternException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPasswordPatternException(InvalidPasswordPatternException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("BAD_REQUEST");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Senha inválida: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     // @ExceptionHandler(MethodArgumentNotValidException.class)
     // public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
     // HttpServletRequest request) {

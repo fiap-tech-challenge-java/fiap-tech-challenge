@@ -56,17 +56,12 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public void changePassword(ChangePassword changePassword) {
+        ChangePasswordValidator.isValid(changePassword);
 
-        if(ChangePasswordValidator.isValid(changePassword.getNewPassword())) {
+        ChangePassword changingPassword = new ChangePassword(changePassword.getIdUser(),
+                passwordEncoder.encode(changePassword.getConfirmPassword()));
 
-            ChangePassword changingPassword = new ChangePassword(
-                    changePassword.getIdUser(),
-                    passwordEncoder.encode(changePassword.getLastPassword()),
-                    passwordEncoder.encode(changePassword.getNewPassword())
-            );
-
-            this.userRepository.changePassword(changingPassword);
-        }
-
+        this.userRepository.changePassword(changingPassword);
     }
+
 }

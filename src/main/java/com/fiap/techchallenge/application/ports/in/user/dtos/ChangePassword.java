@@ -4,15 +4,14 @@ import java.util.UUID;
 
 public class ChangePassword {
     private UUID idUser;
-    private String lastPassword;
     private String newPassword;
+    private String confirmPassword;
 
     public ChangePassword() {
     }
 
-    public ChangePassword(UUID idUser, String lastPassword, String newPassword) {
+    public ChangePassword(UUID idUser, String newPassword) {
         this.idUser = idUser;
-        this.lastPassword = lastPassword;
         this.newPassword = newPassword;
     }
 
@@ -24,19 +23,19 @@ public class ChangePassword {
         this.idUser = idUser;
     }
 
-    public String getLastPassword() {
-        return lastPassword;
-    }
-
-    public void setLastPassword(String lastPassword) {
-        this.lastPassword = lastPassword;
-    }
-
     public String getNewPassword() {
         return newPassword;
     }
 
     public void setNewPassword(String newPassword) {
         this.newPassword = newPassword;
+    }
+
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 }

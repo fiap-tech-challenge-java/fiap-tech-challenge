@@ -290,9 +290,9 @@ components:
         idUser:
           type: string
           format: uuid
-        lastPassword:
-          type: string
         newPassword:
+          type: string
+        confirmPassword:
           type: string
       example:
         idUser: 1
