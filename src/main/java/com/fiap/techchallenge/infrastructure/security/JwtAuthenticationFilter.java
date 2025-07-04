@@ -44,21 +44,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         try {
+            // Processa o token JWT apenas se estiver presente
             String header = req.getHeader("Authorization");
+            if (header == null || !header.startsWith("Bearer ")) {
+                chain.doFilter(req, res);
+                return;
+            }
 
-            if (header != null && header.startsWith("Bearer ")) {
-                String token = header.substring(7);
+            String token = header.substring(7);
+            if (jwtUtil.validateToken(token)) {
+                String username = jwtUtil.extractUsername(token);
+                UserDetails ud = uds.loadUserByUsername(username);
 
-                if (jwtUtil.validateToken(token)) {
-                    String username = jwtUtil.extractUsername(token);
-                    UserDetails ud = uds.loadUserByUsername(username);
+                var auth = new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
+                auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+                SecurityContextHolder.getContext().setAuthentication(auth);
 
-                    var auth = new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
-                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-
-                    logger.debug("Usuário autenticado: {}", username);
-                }
+                logger.debug("Usuário autenticado: {}", username);
             }
 
             chain.doFilter(req, res);
@@ -89,6 +91,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 
     private void handleJwtException(HttpServletResponse response, String message, String errorCode, HttpStatus status)
             throws IOException {

@@ -8,13 +8,44 @@ servers:
   - url: http://localhost:8080/api/v1
 
 tags:
-  - name: Users
+  - name: users
     description: Operações relacionadas a usuários
+  - name: auth
+    description: Operações relacionadas a autenticação
 
 paths:
+  /auth/login:
+    post:
+      operationId: login
+      tags:
+        - auth
+      summary: Autentica um usuário e retorna um token JWT
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Usuário autenticado com sucesso
+          content:
+            application/json:
+              schema:
+                type: string
+                example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNjg5MjY4MDUwLCJleHAiOjE2ODkyNzA0NTB9.XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx
+        '401':
+          description: Credenciais inválidas
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /users:
     get:
       operationId: getUsers
+      tags:
+        - users
       summary: Lista todos os usuários
       responses:
         '200':
@@ -28,6 +59,8 @@ paths:
 
     post:
       operationId: createUser
+      tags:
+        - users
       summary: Cria um novo usuário
       requestBody:
         required: true
@@ -52,6 +85,8 @@ paths:
   /users/{id}:
     get:
       operationId: getUser
+      tags:
+        - users
       summary: Busca um usuário pelo ID
       parameters:
         - name: id
@@ -72,6 +107,8 @@ paths:
 
     put:
       operationId: updateUser
+      tags:
+        - users
       summary: Atualiza um usuário existente
       parameters:
         - name: id
@@ -102,6 +139,8 @@ paths:
 
     delete:
       operationId: deleteUser
+      tags:
+        - users
       summary: Deleta um usuário existente
       parameters:
         - name: id
@@ -161,6 +200,20 @@ components:
           description: Mapa de erros de validação específicos do campo.
           additionalProperties:
             type: string
+    LoginRequest:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+          example: LariLu
+        password:
+          type: string
+          format: password
+          example: senha123
+          description: Senha do usuário (não retornada nas consultas)
     UserRequest:
       type: object
       required:
