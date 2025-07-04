@@ -1,12 +1,10 @@
 package com.fiap.techchallenge.application.services.user.impl;
 
-import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
-import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
-import com.fiap.techchallenge.application.ports.in.user.dtos.Login;
-import com.fiap.techchallenge.application.ports.in.user.dtos.User;
+import com.fiap.techchallenge.application.ports.in.user.dtos.*;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
 import com.fiap.techchallenge.application.services.user.UserUseCase;
 import com.fiap.techchallenge.infrastructure.validation.ChangePasswordValidator;
+import com.fiap.techchallenge.infrastructure.validation.CreateUserValidator;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +29,8 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public User create(CreateUser createUser) {
+        CreateUserValidator.validate(createUser);
+
         return this.userRepository.create(createUser);
     }
 
@@ -43,6 +43,11 @@ public class UserUseCaseImpl implements UserUseCase {
     public User getById(UUID id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+    }
+
+    @Override
+    public User update(UUID id, UpdateUser updateUser) {
+        return this.userRepository.update(id, updateUser);
     }
 
     @Override

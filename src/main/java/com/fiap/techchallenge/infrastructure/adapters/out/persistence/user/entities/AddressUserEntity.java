@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressEntity {
+public class AddressUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -42,17 +42,8 @@ public class AddressEntity {
     @Column(name = "postal_code")
     private String postalCode;
 
-    @Column(name = "country")
-    private String country;
-
-    @Column(name = "latitude")
-    private Double latitude;
-
-    @Column(name = "longitude")
-    private Double longitude;
-
     /** Muitos endereços → 1 usuário */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private UserEntity user;
 }

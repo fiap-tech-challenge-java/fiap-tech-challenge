@@ -2,9 +2,9 @@ package com.fiap.techchallenge.application.ports.in.user.dtos;
 
 import java.util.UUID;
 
-public class Address {
+public class CreateAddress {
 
-    private UUID idAddress;
+    private UUID idUser;
 
     private String publicPlace;
 
@@ -20,12 +20,12 @@ public class Address {
 
     private String postalCode;
 
-    public UUID getIdAddress() {
-        return idAddress;
+    public UUID getIdUser() {
+        return idUser;
     }
 
-    public void setIdAddress(UUID idAddress) {
-        this.idAddress = idAddress;
+    public void setIdUser(UUID idUser) {
+        this.idUser = idUser;
     }
 
     public String getPublicPlace() {

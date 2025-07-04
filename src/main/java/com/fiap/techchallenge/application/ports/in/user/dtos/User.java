@@ -1,9 +1,9 @@
 package com.fiap.techchallenge.application.ports.in.user.dtos;
 
 import com.fiap.techchallenge.domain.model.enums.RoleEnum;
-import com.fiap.techchallenge.model.Address;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class User {
@@ -11,24 +11,24 @@ public class User {
     private UUID id;
     private String name;
     private String email;
+    private String cpf;
     private String login;
     private String password;
-    private LocalDateTime lastModifiedDate;
-    private Address address;
+    private List<Address> address;
     private RoleEnum roleEnum;
     private boolean active;
 
     public User() {
     }
 
-    public User(UUID id, String name, String email, String login, String password, LocalDateTime lastModifiedDate,
-            Address address, RoleEnum roleEnum, boolean active) {
+    public User(UUID id, String name, String email, String cpf, String login, String password, List<Address> address,
+            RoleEnum roleEnum, boolean active) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.cpf = cpf;
         this.login = login;
         this.password = password;
-        this.lastModifiedDate = lastModifiedDate;
         this.address = address;
         this.roleEnum = roleEnum;
         this.active = active;
@@ -48,6 +48,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -74,19 +82,11 @@ public class User {
         this.password = password;
     }
 
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Address getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 

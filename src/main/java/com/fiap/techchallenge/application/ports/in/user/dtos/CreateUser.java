@@ -2,9 +2,10 @@ package com.fiap.techchallenge.application.ports.in.user.dtos;
 
 import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 
-public class CreateUser  {
+public class CreateUser {
     String name;
     String email;
+    String cpf;
     String login;
     String password;
     Address address;
@@ -13,9 +14,11 @@ public class CreateUser  {
     public CreateUser() {
     }
 
-    public CreateUser(String name, String email, String login, String password, Address address, RoleEnum roleEnum) {
+    public CreateUser(String name, String email, String cpf, String login, String password, Address address,
+            RoleEnum roleEnum) {
         this.name = name;
         this.email = email;
+        this.cpf = cpf;
         this.login = login;
         this.password = password;
         this.address = address;
@@ -36,6 +39,14 @@ public class CreateUser  {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getLogin() {

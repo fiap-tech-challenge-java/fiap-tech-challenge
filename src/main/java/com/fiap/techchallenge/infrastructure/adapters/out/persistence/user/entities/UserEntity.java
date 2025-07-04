@@ -28,6 +28,9 @@ public class UserEntity {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "cpf")
+    private String cpf;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
@@ -42,7 +45,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "addresses")
-    private List<AddressEntity> addresses = new ArrayList<>();
+    private List<AddressUserEntity> addressesList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role_enum", nullable = false)
