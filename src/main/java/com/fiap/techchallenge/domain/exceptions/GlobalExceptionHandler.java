@@ -71,213 +71,213 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
-     @ExceptionHandler(MethodArgumentNotValidException.class)
-     public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
+            HttpServletRequest request) {
 
-     Map<String, String> errors = new HashMap<>();
-     ex.getBindingResult().getAllErrors().forEach((error) -> {
-     String fieldName = ((FieldError) error).getField();
-     String errorMessage = error.getDefaultMessage();
-     errors.put(fieldName, errorMessage);
-     });
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage("Erro de validação dos dados");
-     errorResponse.setCode("VALIDATION_ERROR");
-     errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-     errorResponse.setPath(request.getRequestURI());
-     errorResponse.setFieldErrors(errors);
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Erro de validação dos dados");
+        errorResponse.setCode("VALIDATION_ERROR");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+        errorResponse.setFieldErrors(errors);
 
-     logger.warn("Erro de validação: {}", errors);
-     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-     }
+        logger.warn("Erro de validação: {}", errors);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-     @ExceptionHandler(ResourceNotFoundException.class)
-     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage(ex.getMessage());
-     errorResponse.setCode("RESOURCE_NOT_FOUND");
-     errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("RESOURCE_NOT_FOUND");
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Recurso não encontrado: {}", ex.getMessage());
-     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-     }
+        logger.warn("Recurso não encontrado: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
 
-     @ExceptionHandler(BusinessException.class)
-     public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
+    @ExceptionHandler(BusinessException.class)
+    public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException ex, HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage(ex.getMessage());
-     errorResponse.setCode(ex.getClass().getSimpleName());
-     errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode(ex.getClass().getSimpleName());
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Erro de negócio: {}", ex.getMessage());
-     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-     }
+        logger.warn("Erro de negócio: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-     @ExceptionHandler(UnauthorizedException.class)
-     public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage(ex.getMessage());
-     errorResponse.setCode("UNAUTHORIZED");
-     errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("UNAUTHORIZED");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Acesso não autorizado: {}", ex.getMessage());
-     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-     }
+        logger.warn("Acesso não autorizado: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
 
-     @ExceptionHandler(AccessDeniedException.class)
-     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage("Acesso negado. Você não tem permissão para acessar este recurso.");
-     errorResponse.setCode("ACCESS_DENIED");
-     errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Acesso negado. Você não tem permissão para acessar este recurso.");
+        errorResponse.setCode("ACCESS_DENIED");
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Acesso negado para {}: {}", request.getRequestURI(), ex.getMessage());
-     return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
-     }
+        logger.warn("Acesso negado para {}: {}", request.getRequestURI(), ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
 
-     @ExceptionHandler(AuthenticationException.class)
-     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage("Falha na autenticação: " + ex.getMessage());
-     errorResponse.setCode("AUTHENTICATION_FAILED");
-     errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Falha na autenticação: " + ex.getMessage());
+        errorResponse.setCode("AUTHENTICATION_FAILED");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Falha na autenticação: {}", ex.getMessage());
-     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-     }
+        logger.warn("Falha na autenticação: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
 
-     @ExceptionHandler(BadCredentialsException.class)
-     public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ErrorResponse> handleBadCredentialsException(BadCredentialsException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage("Credenciais inválidas");
-     errorResponse.setCode("INVALID_CREDENTIALS");
-     errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Credenciais inválidas");
+        errorResponse.setCode("INVALID_CREDENTIALS");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Credenciais inválidas para {}", request.getRequestURI());
-     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
-     }
+        logger.warn("Credenciais inválidas para {}", request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
 
-     @ExceptionHandler(HttpMessageNotReadableException.class)
-     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage("Requisição inválida. Verifique o formato dos dados enviados.");
-     errorResponse.setCode("INVALID_REQUEST_BODY");
-     errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Requisição inválida. Verifique o formato dos dados enviados.");
+        errorResponse.setCode("INVALID_REQUEST_BODY");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Erro na leitura do corpo da requisição: {}", ex.getMessage());
-     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-     }
+        logger.warn("Erro na leitura do corpo da requisição: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
-     MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
+            MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
 
-     String message = String.format("O parâmetro '%s' deve ser do tipo %s", ex.getName(),
-     ex.getRequiredType().getSimpleName());
+        String message = String.format("O parâmetro '%s' deve ser do tipo %s", ex.getName(),
+                ex.getRequiredType().getSimpleName());
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage(message);
-     errorResponse.setCode("INVALID_PARAMETER_TYPE");
-     errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(message);
+        errorResponse.setCode("INVALID_PARAMETER_TYPE");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Tipo de parâmetro inválido: {}", message);
-     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-     }
+        logger.warn("Tipo de parâmetro inválido: {}", message);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-     @ExceptionHandler(MissingServletRequestParameterException.class)
-     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
-     MissingServletRequestParameterException ex, HttpServletRequest request) {
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
+            MissingServletRequestParameterException ex, HttpServletRequest request) {
 
-     String message = String.format("Parâmetro obrigatório '%s' não foi fornecido", ex.getParameterName());
+        String message = String.format("Parâmetro obrigatório '%s' não foi fornecido", ex.getParameterName());
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage(message);
-     errorResponse.setCode("MISSING_PARAMETER");
-     errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(message);
+        errorResponse.setCode("MISSING_PARAMETER");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Parâmetro obrigatório ausente: {}", ex.getParameterName());
-     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-     }
+        logger.warn("Parâmetro obrigatório ausente: {}", ex.getParameterName());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 
-     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-     public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
-     HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
+            HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
 
-     String message = String.format("Método HTTP '%s' não é suportado para este endpoint", ex.getMethod());
+        String message = String.format("Método HTTP '%s' não é suportado para este endpoint", ex.getMethod());
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage(message);
-     errorResponse.setCode("METHOD_NOT_ALLOWED");
-     errorResponse.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(message);
+        errorResponse.setCode("METHOD_NOT_ALLOWED");
+        errorResponse.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Método HTTP não suportado: {} {}", ex.getMethod(), request.getRequestURI());
-     return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
-     }
+        logger.warn("Método HTTP não suportado: {} {}", ex.getMethod(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
+    }
 
-     @ExceptionHandler(NoHandlerFoundException.class)
-     public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage("Endpoint não encontrado");
-     errorResponse.setCode("ENDPOINT_NOT_FOUND");
-     errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Endpoint não encontrado");
+        errorResponse.setCode("ENDPOINT_NOT_FOUND");
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.warn("Endpoint não encontrado: {} {}", ex.getHttpMethod(), request.getRequestURI());
-     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
-     }
+        logger.warn("Endpoint não encontrado: {} {}", ex.getHttpMethod(), request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
 
-     @ExceptionHandler(DataIntegrityViolationException.class)
-     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
-     HttpServletRequest request) {
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex,
+            HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse
-     .setMessage("Erro de integridade dos dados. Verifique se os dados não violam restrições do banco.");
-     errorResponse.setCode("DATA_INTEGRITY_VIOLATION");
-     errorResponse.setStatus(HttpStatus.CONFLICT.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse
+                .setMessage("Erro de integridade dos dados. Verifique se os dados não violam restrições do banco.");
+        errorResponse.setCode("DATA_INTEGRITY_VIOLATION");
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.error("Erro de integridade dos dados: {}", ex.getMessage(), ex);
-     return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
-     }
+        logger.error("Erro de integridade dos dados: {}", ex.getMessage(), ex);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
 
-     @ExceptionHandler(Exception.class)
-     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
 
-     ErrorResponse errorResponse = new ErrorResponse();
-     errorResponse.setMessage("Erro interno do servidor. Tente novamente mais tarde.");
-     errorResponse.setCode("INTERNAL_SERVER_ERROR");
-     errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-     errorResponse.setPath(request.getRequestURI());
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Erro interno do servidor. Tente novamente mais tarde.");
+        errorResponse.setCode("INTERNAL_SERVER_ERROR");
+        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        errorResponse.setPath(request.getRequestURI());
 
-     logger.error("Erro interno não tratado", ex);
-     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
-     }
+        logger.error("Erro interno não tratado", ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
+    }
 }

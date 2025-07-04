@@ -31,6 +31,7 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public User create(CreateUser createUser) {
+        createUser.setPassword(passwordEncoder.encode(createUser.getPassword()));
         return this.userRepository.create(createUser);
     }
 

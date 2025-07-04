@@ -44,7 +44,8 @@ public class UserDataSource implements UserRepository {
 
     @Override
     public Optional<User> findByLogin(String login) {
-        return Optional.empty();
+        Optional<UserEntity> userEntity = jpaRepository.findByLogin(login);
+        return userEntity.map(USER_MAPPER::mapToUser);
     }
 
     @Override
