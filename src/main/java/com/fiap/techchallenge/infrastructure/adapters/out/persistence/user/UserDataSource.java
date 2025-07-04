@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.infrastructure.adapters.out.persistence.user;
 
+import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
@@ -10,6 +11,7 @@ import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entit
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -56,9 +58,14 @@ public class UserDataSource implements UserRepository {
     }
 
     @Override
-    public User update(UUID id, CreateUser user) {
-        return null;
-    }
+    public void changePassword(ChangePassword changePassword) {
+        UserEntity savedEntity = jpaRepository.findById(changePassword.getIdUser()).orElse(null);
 
+        if (savedEntity != null) {
+            savedEntity.setPassword(changePassword.getNewPassword());
+            savedEntity.setLastModifiedDate(LocalDateTime.now());
+            jpaRepository.save(savedEntity);
+        }
+    }
 
 }

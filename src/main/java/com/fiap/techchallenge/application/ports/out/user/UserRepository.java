@@ -1,7 +1,9 @@
 package com.fiap.techchallenge.application.ports.out.user;
 
+import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -17,5 +19,5 @@ public interface UserRepository {
 
     void deleteById(UUID id);
 
-    User update(UUID id, CreateUser user);
+    void changePassword(ChangePassword changePassword);
 }
