@@ -60,10 +60,7 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<UserResponse> updateUser(UUID id, UserRequest userRequest) {
-        CreateUser updateMapper = USERS_API_MAPPER.mapToCreateUser(userRequest);
-        User updatedUser = userUseCase.update(id, updateMapper);
-        UserResponse response = USERS_API_MAPPER.mapToUserResponse(updatedUser);
-        return ResponseEntity.ok(response);
+      return null;
     }
 
     @Override

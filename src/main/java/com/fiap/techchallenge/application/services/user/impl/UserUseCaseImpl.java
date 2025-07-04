@@ -39,12 +39,8 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public User getById(UUID id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
-    }
-
-    @Override
-    public User update(UUID id, CreateUser createUser) {
-        return null;
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
     }
 
     @Override

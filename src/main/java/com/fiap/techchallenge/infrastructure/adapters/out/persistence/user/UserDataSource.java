@@ -4,6 +4,7 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
 import com.fiap.techchallenge.domain.exceptions.BusinessException;
+import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.AddressEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.UserEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.UserMapper;
@@ -53,5 +54,11 @@ public class UserDataSource implements UserRepository {
     public void deleteById(UUID id) {
         jpaRepository.deleteById(id);
     }
+
+    @Override
+    public User update(UUID id, CreateUser user) {
+        return null;
+    }
+
 
 }
