@@ -1,10 +1,15 @@
-package com.fiap.techchallenge.infrastructure.config;
+package com.fiap.techchallenge.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiap.techchallenge.infrastructure.config.JwtUtil;
 import com.fiap.techchallenge.model.ErrorResponse;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -17,10 +22,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 

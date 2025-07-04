@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.application.services.user;
 
+import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.Login;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
@@ -19,4 +20,6 @@ public interface UserUseCase {
     User update(UUID id, CreateUser command);
 
     void delete(UUID id);
+
+    void changePassword(ChangePassword changePassword);
 }
