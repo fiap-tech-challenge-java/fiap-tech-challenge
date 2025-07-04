@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.infrastructure.adapters.in.web;
 
 import com.fiap.techchallenge.application.services.HealthCheckService;
+
 import com.fiap.techchallenge.domain.exceptions.ResourceNotFoundException;
 import com.fiap.techchallenge.domain.model.HealthStatus;
 import org.springframework.web.bind.annotation.*;

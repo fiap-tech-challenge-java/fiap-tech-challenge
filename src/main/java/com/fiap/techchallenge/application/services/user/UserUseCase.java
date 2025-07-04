@@ -17,8 +17,6 @@ public interface UserUseCase {
 
     User getById(UUID id);
 
-    User update(UUID id, CreateUser command);
-
     void delete(UUID id);
 
     void changePassword(ChangePassword changePassword);

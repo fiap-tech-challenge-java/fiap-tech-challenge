@@ -7,6 +7,7 @@ import com.fiap.techchallenge.model.ChangePasswordRequest;
 import com.fiap.techchallenge.model.UserRequest;
 import com.fiap.techchallenge.model.UserResponse;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
 @Mapper
@@ -14,6 +15,7 @@ public interface UserApiMapper {
 
     UserApiMapper INSTANCE = Mappers.getMapper(UserApiMapper.class);
 
+    @Mapping(source = "role", target = "roleEnum")
     CreateUser mapToCreateUser(UserRequest userRequest);
 
     UserResponse mapToUserResponse(User user);

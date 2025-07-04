@@ -1,10 +1,11 @@
 package com.fiap.techchallenge.infrastructure.adapters.in.web;
 
+import com.fiap.techchallenge.application.ports.in.user.dtos.User;
+import com.fiap.techchallenge.application.services.user.UserUseCase;
+import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
+import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
 import com.fiap.techchallenge.api.UsersApi;
 import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
-import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
-import com.fiap.techchallenge.application.services.user.UserUseCase;
-import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
 import com.fiap.techchallenge.model.ChangePasswordRequest;
 import com.fiap.techchallenge.model.UserRequest;
 import com.fiap.techchallenge.model.UserResponse;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserApiImpl implements UsersApi {
@@ -36,22 +38,30 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<Void> deleteUser(UUID id) {
-        return null;
+        userUseCase.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
     public ResponseEntity<UserResponse> getUser(UUID id) {
-        return null;
+        User user = userUseCase.getById(id);
+        UserResponse response = USERS_API_MAPPER.mapToUserResponse(user);
+        return ResponseEntity.ok(response);
     }
 
     @Override
     public ResponseEntity<List<UserResponse>> getUsers() {
-        return null;
+
+        List<User> users = userUseCase.getAll();
+        List<UserResponse> responses = users.stream().map(USERS_API_MAPPER::mapToUserResponse)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responses);
     }
 
     @Override
     public ResponseEntity<UserResponse> updateUser(UUID id, UserRequest userRequest) {
-        return null;
+      return null;
     }
 
     @Override
