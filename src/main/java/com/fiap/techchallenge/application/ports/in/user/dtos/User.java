@@ -1,9 +1,8 @@
 package com.fiap.techchallenge.application.ports.in.user.dtos;
 
 import com.fiap.techchallenge.domain.model.enums.RoleEnum;
-import com.fiap.techchallenge.model.Address;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -12,22 +11,24 @@ public class User {
     private UUID id;
     private String name;
     private String email;
+    private String cpf;
     private String login;
     private String password;
+    private List<Address> address;
     private OffsetDateTime updatedAt;
     private OffsetDateTime createdAt;
-    private Address address;
     private RoleEnum role;
     private boolean active;
 
     public User() {
     }
 
-    public User(UUID id, String name, String email, String login, String password, LocalDateTime lastModifiedDate,
-            Address address, RoleEnum role, boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
+    public User(UUID id, String name, String email, String login, String password, String cpf,
+            List<Address> address, RoleEnum role, boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
+        this.cpf = cpf;
         this.login = login;
         this.password = password;
         this.address = address;
@@ -51,6 +52,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -77,11 +86,11 @@ public class User {
         this.password = password;
     }
 
-    public Address getAddress() {
+    public List<Address> getAddress() {
         return address;
     }
 
-    public void setAddress(Address address) {
+    public void setAddress(List<Address> address) {
         this.address = address;
     }
 

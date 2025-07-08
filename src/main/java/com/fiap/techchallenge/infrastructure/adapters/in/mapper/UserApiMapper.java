@@ -2,10 +2,9 @@ package com.fiap.techchallenge.infrastructure.adapters.in.mapper;
 
 import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
+import com.fiap.techchallenge.application.ports.in.user.dtos.UpdateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
-import com.fiap.techchallenge.model.ChangePasswordRequest;
-import com.fiap.techchallenge.model.UserRequest;
-import com.fiap.techchallenge.model.UserResponse;
+import com.fiap.techchallenge.model.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
@@ -15,9 +14,13 @@ public interface UserApiMapper {
 
     UserApiMapper INSTANCE = Mappers.getMapper(UserApiMapper.class);
 
-    CreateUser mapToCreateUser(UserRequest userRequest);
+    CreateUser mapToCreateUser(CreateUserRequest userRequest);
+
+    CreateUserResponse mapToCreateUserResponse(User user);
 
     UserResponse mapToUserResponse(User user);
+
+    UpdateUser mapToUpdateUser(UpdateUserRequest updateUser);
 
     ChangePassword mapToChangePassword(ChangePasswordRequest changePasswordRequest);
 }

@@ -2,10 +2,11 @@ package com.fiap.techchallenge.infrastructure.adapters.out.persistence.user;
 
 import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
+import com.fiap.techchallenge.application.ports.in.user.dtos.UpdateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
 import com.fiap.techchallenge.domain.exceptions.BusinessException;
-import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.AddressEntity;
+import com.fiap.techchallenge.domain.exceptions.UserNotFoundException;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.UserEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.UserMapper;
@@ -51,6 +52,19 @@ public class UserDataSource implements UserRepository {
     @Override
     public List<User> findAll() {
         return jpaRepository.findAll().stream().map(USER_MAPPER::mapToUser).toList();
+    }
+
+    @Override
+    public User update(UUID id, UpdateUser updateUser) {
+        UserEntity savedEntity = jpaRepository.findById(id).orElse(null);
+
+        if (savedEntity != null) {
+            savedEntity.setName(updateUser.getName());
+            savedEntity.setLogin(updateUser.getLogin());
+            jpaRepository.save(savedEntity);
+        }
+
+        throw new UserNotFoundException();
     }
 
     @Override

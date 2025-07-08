@@ -1,9 +1,7 @@
 package com.fiap.techchallenge.application.services.user;
 
-import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
-import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
-import com.fiap.techchallenge.application.ports.in.user.dtos.Login;
-import com.fiap.techchallenge.application.ports.in.user.dtos.User;
+import com.fiap.techchallenge.application.ports.in.user.dtos.*;
+import com.fiap.techchallenge.model.UpdateUserRequest;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +14,8 @@ public interface UserUseCase {
     List<User> getAll();
 
     User getById(UUID id);
+
+    User update(UUID id, UpdateUser updateUser);
 
     void delete(UUID id);
 

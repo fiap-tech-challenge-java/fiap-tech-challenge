@@ -3,7 +3,6 @@ info:
   title: FIAP_TC1
   version: 1.0.0
   description: API para gerenciar usuários (dono de restaurante e cliente)
-
 servers:
   - url: http://localhost:8080/api/v1
 
@@ -49,13 +48,13 @@ paths:
       summary: Lista todos os usuários
       responses:
         '200':
-          description: Lista de usuários retornada com sucesso (pode ser vazia)
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserResponse'
+          description: Lista de usuários retornada com sucesso (pode ser vazia)
 
     post:
       operationId: createUser
@@ -63,24 +62,24 @@ paths:
         - users
       summary: Cria um novo usuário
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: '#/components/schemas/CreateUserRequest'
+        required: true
       responses:
         '201':
-          description: Usuário criado com sucesso
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: '#/components/schemas/CreateUserResponse'
+          description: Usuário criado com sucesso.
         '400':
-          description: Dados inválidos fornecidos
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+          description: Dados inválidos fornecidos
 
   /users/{id}:
     get:
@@ -89,19 +88,20 @@ paths:
         - users
       summary: Busca um usuário pelo ID
       parameters:
-        - name: id
+        -
+          name: id
+          schema:
+            format: uuid
+            type: string
           in: path
           required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '200':
-          description: Usuário encontrado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+          description: Usuário encontrado
         '404':
           description: Usuário não encontrado
 
@@ -110,32 +110,33 @@ paths:
       tags:
         - users
       summary: Atualiza um usuário existente
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
       requestBody:
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: '#/components/schemas/UpdateUserRequest'
+        required: true
+      parameters:
+        -
+          name: id
+          schema:
+            format: uuid
+            type: string
+          in: path
+          required: true
       responses:
         '200':
-          description: Usuário atualizado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserResponse'
+          description: Usuário atualizado
         '404':
-          description: Usuário não encontrado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+          description: Usuário não encontrado
 
     delete:
       operationId: deleteUser
@@ -143,21 +144,22 @@ paths:
         - users
       summary: Deleta um usuário existente
       parameters:
-        - name: id
+        -
+          name: id
+          schema:
+            format: uuid
+            type: string
           in: path
           required: true
-          schema:
-            type: string
-            format: uuid
       responses:
         '204':
           description: Usuário deletado com sucesso
         '404':
-          description: Usuário não encontrado
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+          description: Usuário não encontrado
 
   /users/change-password:
     put:
@@ -172,34 +174,421 @@ paths:
           description: Senha trocada com sucesso.
       operationId: changePassword
       summary: Troca a senha do usuário.
-
+  /addresses/user:
+    get:
+      parameters:
+        -
+          name: idUser
+          description: ''
+          schema:
+            format: uuid
+            type: string
+          in: query
+          required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AddressResponse'
+          description: Lista com sucesso todos os endereços do usuário.
+      operationId: listAllAddressesUser
+      summary: Lista todos os endereços do usuário.
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateAddressRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressResponse'
+          description: Endereço alterado com sucesso.
+      operationId: updateAddressUser
+      summary: Alterar endereço do usuário
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAddressRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressResponse'
+          description: Cria com sucesso endereço ao usuário.
+      operationId: createAddressUser
+    delete:
+      parameters:
+        -
+          name: idUSer
+          description: ''
+          schema:
+            format: uuid
+            type: string
+          in: query
+          required: true
+        -
+          name: idAddress
+          description: ''
+          schema:
+            format: uuid
+            type: string
+          in: query
+          required: true
+      responses:
+        '204':
+          description: Endereço deletado com sucesso
+      operationId: deleteAddressUser
+      summary: Deleta logicamente o endereço do usuário.
 components:
   schemas:
     ErrorResponse:
-      type: object
       required:
         - message
         - code
         - status
         - path
+      type: object
       properties:
         message:
-          type: string
           description: Mensagem de erro detalhada
+          type: string
         code:
-          type: string
           description: Código do erro
-        status:
-          type: integer
-          description: Código de status HTTP
-        path:
           type: string
+        status:
+          description: Código de status HTTP
+          type: integer
+        path:
           description: URL da requisição
+          type: string
         fieldErrors:
-          type: object
           description: Mapa de erros de validação específicos do campo.
+          type: object
           additionalProperties:
             type: string
+    AddressUserRequest:
+      type: object
+      properties:
+        publicPlace:
+          type: string
+        number:
+          type: string
+        complement:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+    ChangePasswordRequest:
+      title: Root Type for ChangePassword
+      description: ''
+      type: object
+      properties:
+        idUser:
+          format: uuid
+          type: string
+        newPassword:
+          type: string
+        confirmPassword:
+          type: string
+      example:
+        idUser: 1
+        lastPassword: Laf123
+        newPassword: Laf1234
+    UserRole:
+      description: Papel do usuário no sistema
+      enum:
+        - OWNER
+        - CUSTOMER
+      type: string
+    CreateAddressRequest:
+      title: Root Type for AddressUser
+      description: ''
+      type: object
+      properties:
+        idUser:
+          type: string
+          format: uuid
+        publicPlace:
+          type: string
+        number:
+          type: string
+        complement:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+      example:
+        userId: b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99
+        publicPlace: Rua das Flores
+        number: '123'
+        complement: Apto 202
+        neighborhood: Jardim Primavera
+        city: São Paulo
+        state: SP
+        postalCode: 01234-567
+    UpdateAddressRequest:
+      title: Root Type for UpdateAddressRequest
+      description: ''
+      type: object
+      properties:
+        idUser:
+          format: uuid
+          type: string
+        idAddress:
+          type: string
+        publicPlace:
+          type: string
+        number:
+          type: string
+        complement:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+      example:
+        idUser: b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99
+        idAddress: b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99
+        publicPlace: Rua das Flores
+        number: '123'
+        complement: Apto 202
+        neighborhood: Jardim Primavera
+        city: São Paulo
+        state: SP
+        postalCode: 01234-567
+    AddressResponse:
+      title: Root Type for UpdateAddressResponse
+      description: ''
+      type: object
+      properties:
+        idAddress:
+          type: string
+        publicPlace:
+          type: string
+        number:
+          type: string
+        complement:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+      example:
+        idAddress: b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99
+        publicPlace: Rua das Flores
+        number: '123'
+        complement: Apto 202
+        neighborhood: Jardim Primavera
+        city: São Paulo
+        state: SP
+        postalCode: 01234-567
+    CreateUserRequest:
+      title: Root Type for CreateUserRequest
+      description: ''
+      required:
+        - address
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        address:
+          $ref: '#/components/schemas/AddressUserRequest'
+          properties:
+            publicPlace:
+              type: string
+            number:
+              type: string
+            complement:
+              type: string
+            neighborhood:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            postalCode:
+              type: string
+      example:
+        name: João Silva
+        email: joao@exemplo.com
+        cpf: '23423423423'
+        login: joaosilva123
+        password: MyPassword123!
+        role: CUSTOMER
+        address:
+          publicPlace: Rua das Flores
+          number: '123'
+          complement: Apartamento 45
+          neighborhood: Centro
+          city: São Paulo
+          state: SP
+          postalCode: 01001-000
+    CreateUserResponse:
+      title: Root Type for CreateUserResponse
+      description: ''
+      type: object
+      properties:
+        idUser:
+          format: uuid
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        address:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressResponse'
+          properties:
+            idAddress:
+              type: string
+            publicPlace:
+              type: string
+            number:
+              type: string
+            complement:
+              type: string
+            neighborhood:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            postalCode:
+              type: string
+      example:
+        idUser: fdsgasfdg234-sfdgh-39468956-adfg
+        name: João Silva
+        email: joao@exemplo.com
+        cpf: '23423423423'
+        login: joaosilva123
+        password: MyPassword123!
+        role: CUSTOMER
+        active: 'true'
+        address:
+          idAddress: fdsgadfghsfdgh-39468956-adfg
+          publicPlace: Rua das Flores
+          number: '123'
+          complement: Apartamento 45
+          neighborhood: Centro
+          city: São Paulo
+          state: SP
+          postalCode: 01001-000
+    UserResponse:
+      title: Root Type for UserReponse
+      description: ''
+      required: []
+      type: object
+      properties:
+        idUser:
+          format: uuid
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        cpf:
+          type: string
+        login:
+          type: string
+        password:
+          type: string
+        role:
+          type: string
+        address:
+          type: array
+          items:
+            $ref: '#/components/schemas/AddressResponse'
+        active:
+          description: ''
+          type: boolean
+      example:
+        idUser: fdsgasfdg234-sfdgh-39468956-adfg
+        name: João Silva
+        email: joao@exemplo.com
+        cpf: '23423423423'
+        login: joaosilva123
+        password: MyPassword123!
+        role: CUSTOMER
+        active: 'true'
+        address:
+          -
+            idAddress: fdsgadfghsfdgh-39468956-adfg
+            publicPlace: Rua das Flores
+            number: '123'
+            complement: Apartamento 45
+            neighborhood: Centro
+            city: São Paulo
+            state: SP
+            postalCode: 01001-000
+          -
+            idAddress: abc123-39468956-adfg-xyz987
+            publicPlace: Avenida Brasil
+            number: '456'
+            complement: Casa
+            neighborhood: Jardim América
+            city: Rio de Janeiro
+            state: RJ
+            postalCode: 22000-000
+    UpdateUserRequest:
+      title: Root Type for UpdateUserRequest
+      description: ''
+      type: object
+      properties:
+        nome:
+          type: string
+        login:
+          type: string
+      example:
+        nome: Larissa fiap
+        login: LarissaLu
     LoginRequest:
       type: object
       required:
@@ -214,147 +603,3 @@ components:
           format: password
           example: MyPassword123!
           description: Senha do usuário (não retornada nas consultas)
-    UserRequest:
-      type: object
-      required:
-        - name
-        - email
-        - login
-        - password
-        - address
-        - role
-      properties:
-        name:
-          type: string
-          example: João Silva
-          minLength: 3
-          maxLength: 50
-        email:
-          type: string
-          format: email
-          example: joao@exemplo.com
-        login:
-          type: string
-          example: joaosilva123
-        password:
-          type: string
-          format: password
-          example: MyPassword123!
-          description: Senha do usuário (não retornada nas consultas)
-        address:
-          $ref: '#/components/schemas/Address'
-        role:
-          $ref: '#/components/schemas/UserRole'
-
-    UserResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Identificador único (gerado automaticamente)
-        name:
-          type: string
-          example: João Silva
-        email:
-          type: string
-          format: email
-          example: joao@exemplo.com
-        login:
-          type: string
-          example: joaosilva123
-        address:
-          $ref: '#/components/schemas/Address'
-        role:
-          $ref: '#/components/schemas/UserRole'
-        active:
-          type: boolean
-          example: true
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-
-    Address:
-      type: object
-      required:
-        - publicPlace
-        - number
-        - city
-        - state
-        - postalCode
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-          description: Identificador único do endereço
-        publicPlace:
-          type: string
-          example: Rua das Flores, 123
-        number:
-          type: string
-          example: 123
-        complement:
-          type: string
-          example: Apartamento 45
-        neighborhood:
-          type: string
-          example: Centro
-        city:
-          type: string
-          example: São Paulo
-        state:
-          type: string
-          example: SP
-        postalCode:
-          type: string
-          example: 01001-000
-        country:
-          type: string
-          example: Brasil
-        latitude:
-          type: number
-          format: double
-          example: -23.55052
-        longitude:
-          type: number
-          format: double
-          example: -46.633308
-        createdAt:
-          type: string
-          format: date-time
-          readOnly: true
-        updatedAt:
-          type: string
-          format: date-time
-          readOnly: true
-
-    ChangePasswordRequest:
-      title: Root Type for ChangePassword
-      description: ''
-      type: object
-      properties:
-        idUser:
-          type: string
-          format: uuid
-        newPassword:
-          type: string
-        confirmPassword:
-          type: string
-      example:
-        idUser: 1
-        lastPassword: Laf123
-        newPassword: Laf1234
-
-    UserRole:
-      type: string
-      description: Papel do usuário no sistema
-      enum:
-        - OWNER
-        - CUSTOMER

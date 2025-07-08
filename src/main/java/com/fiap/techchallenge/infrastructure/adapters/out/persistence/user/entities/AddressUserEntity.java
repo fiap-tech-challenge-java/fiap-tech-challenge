@@ -1,21 +1,20 @@
 package com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import com.fiap.techchallenge.domain.model.BaseEntity;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Entity
-@Table(name = "addresses")
+@Table(name = "address")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddressEntity extends BaseEntity {
+public class AddressUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
