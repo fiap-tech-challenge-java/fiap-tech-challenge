@@ -23,8 +23,8 @@ public class User {
     public User() {
     }
 
-    public User(UUID id, String name, String email, String login, String password, String cpf,
-            List<Address> address, RoleEnum role, boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
+    public User(UUID id, String name, String email, String login, String password, String cpf, List<Address> address,
+            RoleEnum role, boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;

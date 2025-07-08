@@ -23,15 +23,16 @@ public class AddressUserApiImpl implements AddressesApi {
     }
 
     @Override
-    public ResponseEntity<AddressResponse> createAddressUser(CreateAddressRequest createAddressRequest) {
+    public ResponseEntity<AddressResponse> createAddressForUser(UUID userId,
+            CreateAddressRequest createAddressRequest) {
         Address address = this.addressUserUseCase.create(ADDRESS_USER_MAPPER.mapToCreateAddress(createAddressRequest));
 
         return ResponseEntity.status(201).body(ADDRESS_USER_MAPPER.mapToAddressResponse(address));
     }
 
     @Override
-    public ResponseEntity<List<AddressResponse>> listAllAddressesUser(UUID idUser) {
-        List<Address> addresses = addressUserUseCase.listAll(idUser);
+    public ResponseEntity<List<AddressResponse>> listAddressesByUserId(UUID userId) {
+        List<Address> addresses = addressUserUseCase.listAll(userId);
 
         if (addresses.isEmpty()) {
             return ResponseEntity.noContent().build();
@@ -43,7 +44,8 @@ public class AddressUserApiImpl implements AddressesApi {
     }
 
     @Override
-    public ResponseEntity<AddressResponse> updateAddressUser(UpdateAddressRequest updateAddressRequest) {
+    public ResponseEntity<AddressResponse> updateAddressForUser(UUID userId, UUID addressId,
+            UpdateAddressRequest updateAddressRequest) {
         UpdateAddress updateAddress = ADDRESS_USER_MAPPER.mapToUpdateAddress(updateAddressRequest);
 
         Address updated = addressUserUseCase.update(updateAddress);
@@ -54,7 +56,7 @@ public class AddressUserApiImpl implements AddressesApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteAddressUser(UUID idUSer, UUID idAddress) {
+    public ResponseEntity<Void> deleteAddressForUser(UUID userId, UUID addressId) {
         return null;
     }
 
