@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities;
 
+import com.fiap.techchallenge.domain.model.BaseEntity;
 import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -40,17 +41,15 @@ public class UserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
-
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Column(name = "addresses")
     private List<AddressUserEntity> addressesList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "role_enum", nullable = false)
-    private RoleEnum roleEnum;
+    @Column(name = "role", nullable = false)
+    private RoleEnum role;
 
     @Column(name = "active", nullable = false)
     private boolean active;
+
 }

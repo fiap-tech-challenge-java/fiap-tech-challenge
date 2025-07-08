@@ -2,8 +2,8 @@ package com.fiap.techchallenge.application.ports.in.user.dtos;
 
 import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 
-import java.time.LocalDateTime;
 import java.util.List;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class User {
@@ -15,14 +15,16 @@ public class User {
     private String login;
     private String password;
     private List<Address> address;
-    private RoleEnum roleEnum;
+    private OffsetDateTime updatedAt;
+    private OffsetDateTime createdAt;
+    private RoleEnum role;
     private boolean active;
 
     public User() {
     }
 
-    public User(UUID id, String name, String email, String cpf, String login, String password, List<Address> address,
-            RoleEnum roleEnum, boolean active) {
+    public User(UUID id, String name, String email, String login, String password, String cpf,
+            List<Address> address, RoleEnum role, boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -30,8 +32,10 @@ public class User {
         this.login = login;
         this.password = password;
         this.address = address;
-        this.roleEnum = roleEnum;
+        this.role = role;
         this.active = active;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
     }
 
     public UUID getId() {
@@ -90,12 +94,12 @@ public class User {
         this.address = address;
     }
 
-    public RoleEnum getRoleEnum() {
-        return roleEnum;
+    public RoleEnum getRole() {
+        return role;
     }
 
-    public void setRoleEnum(RoleEnum roleEnum) {
-        this.roleEnum = roleEnum;
+    public void setRole(RoleEnum role) {
+        this.role = role;
     }
 
     public boolean isActive() {
@@ -104,5 +108,21 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
