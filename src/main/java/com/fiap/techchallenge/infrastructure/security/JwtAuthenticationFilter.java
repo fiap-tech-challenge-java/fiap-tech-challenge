@@ -92,8 +92,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
-
-
     private void handleJwtException(HttpServletResponse response, String message, String errorCode, HttpStatus status)
             throws IOException {
 

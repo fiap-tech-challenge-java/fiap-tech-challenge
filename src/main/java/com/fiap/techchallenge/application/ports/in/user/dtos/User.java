@@ -4,6 +4,7 @@ import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 import com.fiap.techchallenge.model.Address;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 public class User {
@@ -13,25 +14,27 @@ public class User {
     private String email;
     private String login;
     private String password;
-    private LocalDateTime lastModifiedDate;
+    private OffsetDateTime updatedAt;
+    private OffsetDateTime createdAt;
     private Address address;
-    private RoleEnum roleEnum;
+    private RoleEnum role;
     private boolean active;
 
     public User() {
     }
 
     public User(UUID id, String name, String email, String login, String password, LocalDateTime lastModifiedDate,
-            Address address, RoleEnum roleEnum, boolean active) {
+            Address address, RoleEnum role, boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.login = login;
         this.password = password;
-        this.lastModifiedDate = lastModifiedDate;
         this.address = address;
-        this.roleEnum = roleEnum;
+        this.role = role;
         this.active = active;
+        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
     }
 
     public UUID getId() {
@@ -74,14 +77,6 @@ public class User {
         this.password = password;
     }
 
-    public LocalDateTime getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
     public Address getAddress() {
         return address;
     }
@@ -90,12 +85,12 @@ public class User {
         this.address = address;
     }
 
-    public RoleEnum getRoleEnum() {
-        return roleEnum;
+    public RoleEnum getRole() {
+        return role;
     }
 
-    public void setRoleEnum(RoleEnum roleEnum) {
-        this.roleEnum = roleEnum;
+    public void setRole(RoleEnum role) {
+        this.role = role;
     }
 
     public boolean isActive() {
@@ -104,5 +99,21 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }
