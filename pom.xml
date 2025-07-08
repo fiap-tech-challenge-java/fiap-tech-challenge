@@ -157,6 +157,7 @@
 								<useBeanValidation>true</useBeanValidation>
 								<performBeanValidation>true</performBeanValidation>
 								<openApiNullable>false</openApiNullable>
+								<useTags>true</useTags>
 							</configOptions>
 							<generateApiTests>false</generateApiTests>
 							<generateModelTests>false</generateModelTests>
