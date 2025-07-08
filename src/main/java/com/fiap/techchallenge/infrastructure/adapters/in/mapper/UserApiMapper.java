@@ -14,7 +14,6 @@ public interface UserApiMapper {
 
     UserApiMapper INSTANCE = Mappers.getMapper(UserApiMapper.class);
 
-    @Mapping(source = "role", target = "roleEnum")
     CreateUser mapToCreateUser(CreateUserRequest userRequest);
 
     CreateUserResponse mapToCreateUserResponse(User user);
