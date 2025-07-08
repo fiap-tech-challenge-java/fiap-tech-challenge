@@ -1,18 +1,20 @@
 server:
   port: 8080
+  servlet:
+    context-path: /api/v1
 
 app:
   version: 0.0.1
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/techchallenge
+    url: jdbc:postgresql://localhost:5438/techchallenge
     username: postgres
     password: postgrespass
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
     show-sql: true
 
 jwt:
