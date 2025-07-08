@@ -208,11 +208,11 @@ components:
       properties:
         login:
           type: string
-          example: LariLu
+          example: joaosilva123
         password:
           type: string
           format: password
-          example: senha123
+          example: MyPassword123!
           description: Senha do usuário (não retornada nas consultas)
     UserRequest:
       type: object

@@ -61,7 +61,7 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<UserResponse> updateUser(UUID id, UserRequest userRequest) {
-      return null;
+        return null;
     }
 
     @Override

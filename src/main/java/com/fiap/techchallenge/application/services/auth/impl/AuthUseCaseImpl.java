@@ -25,7 +25,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
     @Autowired
     public AuthUseCaseImpl(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-                           UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+            UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;

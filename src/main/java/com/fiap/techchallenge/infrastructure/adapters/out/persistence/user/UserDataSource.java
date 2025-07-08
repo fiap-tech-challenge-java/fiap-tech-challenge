@@ -64,7 +64,6 @@ public class UserDataSource implements UserRepository {
 
         if (savedEntity != null) {
             savedEntity.setPassword(changePassword.getNewPassword());
-            savedEntity.setLastModifiedDate(LocalDateTime.now());
             jpaRepository.save(savedEntity);
         }
     }
