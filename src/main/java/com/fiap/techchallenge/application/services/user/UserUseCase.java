@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface UserUseCase {
-    User login(Login login);
 
     User create(CreateUser createUser);
 
