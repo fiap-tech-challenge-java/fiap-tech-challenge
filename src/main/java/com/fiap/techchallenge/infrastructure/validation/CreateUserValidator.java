@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.infrastructure.validation;
 
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
+import com.fiap.techchallenge.domain.exceptions.InvalidEmailPatternException;
 import com.fiap.techchallenge.domain.utils.CpfValidator;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
@@ -25,7 +26,7 @@ public final class CreateUserValidator {
         }
 
         if (!EMAIL_REGEX.matcher(request.getEmail()).matches()) {
-            throw new IllegalArgumentException("E‑mail inválido.");
+            throw new InvalidEmailPatternException("E‑mail inválido.");
         }
 
         CpfValidator.validate(request.getCpf());
