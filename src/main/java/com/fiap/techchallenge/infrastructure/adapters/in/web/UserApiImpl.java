@@ -29,8 +29,8 @@ public class UserApiImpl implements UsersApi {
     public ResponseEntity<CreateUserResponse> createUser(CreateUserRequest createUserRequest) {
         CreateUser createMapper = USERS_API_MAPPER.mapToCreateUser(createUserRequest);
 
-        CreateUserResponse userResponse = USERS_API_MAPPER
-                .mapToCreateUserResponse(this.userUseCase.create(createMapper));
+        User user = userUseCase.create(createMapper);
+        CreateUserResponse userResponse = USERS_API_MAPPER.mapToCreateUserResponse(user);
 
         return ResponseEntity.status(201).body(userResponse);
     }

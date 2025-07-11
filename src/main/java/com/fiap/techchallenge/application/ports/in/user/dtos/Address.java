@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public class Address {
 
-    private UUID idAddress;
+    private UUID id;
 
     private String publicPlace;
 
@@ -20,12 +20,12 @@ public class Address {
 
     private String postalCode;
 
-    public UUID getIdAddress() {
-        return idAddress;
+    public UUID getId() {
+        return id;
     }
 
-    public void setIdAddress(UUID idAddress) {
-        this.idAddress = idAddress;
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getPublicPlace() {

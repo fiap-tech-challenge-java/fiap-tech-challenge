@@ -12,10 +12,12 @@ import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entit
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.AddressUserMapper;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.AddressUserJpaRepository;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class AddressUserDataSource implements AddressUserRepository {
 
     private final AddressUserJpaRepository addressUserJpaRepository;
@@ -49,11 +51,10 @@ public class AddressUserDataSource implements AddressUserRepository {
     }
 
     @Override
-    public Address update(UpdateAddress updateAddress) {
-        userJpaRepository.findById(updateAddress.getIdUser()).orElseThrow(UserNotFoundException::new);
+    public Address update(UpdateAddress updateAddress, UUID userId, UUID addressId) {
+        userJpaRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        AddressUserEntity entity = addressUserJpaRepository
-                .findByIdAndUserId(updateAddress.getIdAddress(), updateAddress.getIdUser())
+        AddressUserEntity entity = addressUserJpaRepository.findByIdAndUserId(addressId, userId)
                 .orElseThrow(AddressNotFoundException::new);
 
         entity.setPublicPlace(updateAddress.getPublicPlace());

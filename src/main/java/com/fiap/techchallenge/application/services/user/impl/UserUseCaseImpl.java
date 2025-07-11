@@ -14,10 +14,13 @@ import java.util.UUID;
 @Service
 public class UserUseCaseImpl implements UserUseCase {
 
+    private final CreateUserValidator validator;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserUseCaseImpl(CreateUserValidator validator, UserRepository userRepository,
+            PasswordEncoder passwordEncoder) {
+        this.validator = validator;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -29,9 +32,8 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public User create(CreateUser createUser) {
-        CreateUserValidator.validate(createUser);
+        validator.validate(createUser);
 
-        createUser.setPassword(passwordEncoder.encode(createUser.getPassword()));
         return this.userRepository.create(createUser);
     }
 

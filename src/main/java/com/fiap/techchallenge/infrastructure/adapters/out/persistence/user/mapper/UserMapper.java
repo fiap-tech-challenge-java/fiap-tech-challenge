@@ -12,7 +12,8 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserEntity mapToEntity(CreateUser createUser);
-
+    @Mapping(source = "addressesList", target = "address")
     User mapToUser(UserEntity userEntity);
+
+    UserEntity mapToEntity(CreateUser createUser);
 }

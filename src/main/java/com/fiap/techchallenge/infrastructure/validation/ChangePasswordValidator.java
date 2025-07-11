@@ -4,6 +4,7 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.domain.exceptions.InvalidPasswordPatternException;
 import com.fiap.techchallenge.domain.exceptions.MissingRequiredFieldsException;
 import com.fiap.techchallenge.domain.exceptions.PasswordsDoNotMatchException;
+import com.fiap.techchallenge.domain.utils.PasswordValidator;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 
@@ -12,7 +13,6 @@ import java.util.regex.Pattern;
 
 @Component
 public class ChangePasswordValidator {
-    private static final Pattern PASSWORD_REGEX = Pattern.compile("^(?=.*[A-Z])(?=.*\\d).{5,}$");
 
     public static boolean isValid(ChangePassword changePassword) {
         UUID uuid = changePassword.getIdUser();
@@ -27,7 +27,7 @@ public class ChangePasswordValidator {
             throw new PasswordsDoNotMatchException();
         }
 
-        if (!PASSWORD_REGEX.matcher(newPassword).matches()) {
+        if (!PasswordValidator.isValid(newPassword)) {
             throw new InvalidPasswordPatternException();
         }
 

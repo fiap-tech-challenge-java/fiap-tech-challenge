@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -41,10 +42,6 @@ public class UserEntity extends BaseEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "addresses")
-    private List<AddressUserEntity> addressesList = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
     private RoleEnum role;
@@ -52,4 +49,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "active", nullable = false)
     private boolean active;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "addresses")
+    private List<AddressUserEntity> addressesList = new ArrayList<>();
 }
