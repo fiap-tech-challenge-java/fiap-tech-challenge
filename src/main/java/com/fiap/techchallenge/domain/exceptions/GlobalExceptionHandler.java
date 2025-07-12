@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -154,7 +154,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex,
-            HttpServletRequest request) {
+                                                                       HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage("Falha na autenticação: " + ex.getMessage());
@@ -189,9 +189,7 @@ public class GlobalExceptionHandler {
 
         Throwable cause = ex.getCause();
         if (cause != null && cause.getMessage() != null && cause.getMessage().contains("RoleEnum")) {
-            String rolesPermitidas = Arrays.stream(RoleEnum.values())
-                    .map(Enum::name)
-                    .collect(Collectors.joining(", "));
+            String rolesPermitidas = Arrays.stream(RoleEnum.values()).map(Enum::name).collect(Collectors.joining(", "));
             message = "Role inválida. Roles permitidas: " + rolesPermitidas;
             code = "INVALID_ROLE";
         }
@@ -298,7 +296,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(InvalidEmailPatternException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex,
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("INVALID_EMAIL");
@@ -308,4 +307,20 @@ public class GlobalExceptionHandler {
         logger.warn("E-mail inválido: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
+
+    @ExceptionHandler(CustomAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleCustomAuthenticationException(
+            CustomAuthenticationException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Usuário ou senha incorretos");
+        errorResponse.setCode("INVALID_CREDENTIALS");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Falha de autenticação: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
 }
