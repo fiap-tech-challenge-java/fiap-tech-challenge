@@ -476,22 +476,32 @@ components:
           type: string
           description: Nome completo do usuário.
           example: João Silva
+          minLength: 1
+          maxLength: 100
         email:
           type: string
           description: Endereço de e-mail único do usuário.
           example: joao.silva@example.com
+          minLength: 1
+          maxLength: 255
         cpf:
           type: string
           description: Cadastro de Pessoa Física (CPF) do usuário. Deve ser único.
           example: '286.084.030-30'
+          minLength: 11
+          maxLength: 14
         login:
           type: string
           description: Nome de usuário para login. Deve ser único.
           example: joaosilva123
+          minLength: 1
+          maxLength: 50
         password:
           type: string
           description: Senha do usuário.
           example: MyStrongPassword123!
+          minLength: 8
+          maxLength: 64
         role:
           type: string
           description: Papel do usuário no sistema (OWNER ou CUSTOMER).
