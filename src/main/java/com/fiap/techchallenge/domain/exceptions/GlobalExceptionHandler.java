@@ -280,4 +280,16 @@ public class GlobalExceptionHandler {
         logger.error("Erro interno não tratado", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
+
+    @ExceptionHandler(InvalidEmailPatternException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_EMAIL");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("E-mail inválido: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
 }

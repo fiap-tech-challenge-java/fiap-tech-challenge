@@ -470,6 +470,11 @@ components:
       description: Estrutura da requisição para criar um novo usuário no sistema.
       required:
         - address
+        - name
+        - email
+        - cpf
+        - login
+        - password
       type: object
       properties:
         name:
