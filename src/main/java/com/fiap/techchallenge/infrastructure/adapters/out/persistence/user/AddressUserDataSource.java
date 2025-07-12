@@ -12,10 +12,12 @@ import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entit
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.AddressUserMapper;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.AddressUserJpaRepository;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class AddressUserDataSource implements AddressUserRepository {
 
     private final AddressUserJpaRepository addressUserJpaRepository;

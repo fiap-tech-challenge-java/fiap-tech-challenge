@@ -5,10 +5,12 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.CreateAddress;
 import com.fiap.techchallenge.application.ports.in.user.dtos.UpdateAddress;
 import com.fiap.techchallenge.application.ports.out.user.AddressUserRepository;
 import com.fiap.techchallenge.application.services.user.AddressUserUseCase;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
 
+@Service
 public class AddressUserUseCaseImpl implements AddressUserUseCase {
 
     private final AddressUserRepository addressUserRepository;
