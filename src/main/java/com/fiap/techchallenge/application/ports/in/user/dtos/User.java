@@ -18,12 +18,13 @@ public class User {
     private OffsetDateTime createdAt;
     private RoleEnum role;
     private boolean active;
+    private String password;
 
     public User() {
     }
 
     public User(UUID id, String name, String email, String login, String cpf, List<Address> address, RoleEnum role,
-            boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
+            boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -34,6 +35,7 @@ public class User {
         this.active = active;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+        this.password = password;
     }
 
     public UUID getId() {
@@ -114,5 +116,13 @@ public class User {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

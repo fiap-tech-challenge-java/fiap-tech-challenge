@@ -9,7 +9,6 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Component
 public class ChangePasswordValidator {

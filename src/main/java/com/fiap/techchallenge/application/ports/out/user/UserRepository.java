@@ -25,6 +25,4 @@ public interface UserRepository {
     void deleteById(UUID id);
 
     void changePassword(ChangePassword changePassword);
-
-    UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
 }

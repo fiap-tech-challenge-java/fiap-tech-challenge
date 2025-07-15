@@ -189,9 +189,7 @@ public class GlobalExceptionHandler {
 
         Throwable cause = ex.getCause();
         if (cause != null && cause.getMessage() != null && cause.getMessage().contains("RoleEnum")) {
-            String rolesPermitidas = Arrays.stream(RoleEnum.values())
-                    .map(Enum::name)
-                    .collect(Collectors.joining(", "));
+            String rolesPermitidas = Arrays.stream(RoleEnum.values()).map(Enum::name).collect(Collectors.joining(", "));
             message = "Role inválida. Roles permitidas: " + rolesPermitidas;
             code = "INVALID_ROLE";
         }
@@ -333,8 +331,12 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(InvalidEmailPatternException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex,
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("INVALID_EMAIL");

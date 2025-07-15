@@ -4,13 +4,10 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.*;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
 import com.fiap.techchallenge.domain.exceptions.BusinessException;
 import com.fiap.techchallenge.domain.exceptions.UserNotFoundException;
-import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserDetailsMapper;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.AddressUserEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.UserEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.UserMapper;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +21,6 @@ public class UserDataSource implements UserRepository {
     private final UserJpaRepository jpaRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private static final UserDetailsMapper userDetailsMapper = new UserDetailsMapper();
     private static final UserMapper USER_MAPPER = UserMapper.INSTANCE;
 
     public UserDataSource(UserJpaRepository jpaRepository, PasswordEncoder passwordEncoder) {
@@ -98,14 +94,6 @@ public class UserDataSource implements UserRepository {
             savedEntity.setPassword(changePassword.getNewPassword());
             jpaRepository.save(savedEntity);
         }
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity userEntity = jpaRepository.findByLogin(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
-
-        return userDetailsMapper.mapToUserDetails(userEntity);
     }
 
 }
