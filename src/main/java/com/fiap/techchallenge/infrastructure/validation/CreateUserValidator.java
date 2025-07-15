@@ -4,6 +4,7 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.domain.exceptions.EmailAlreadyExistsException;
 import com.fiap.techchallenge.domain.exceptions.InvalidPasswordPatternException;
 import com.fiap.techchallenge.domain.exceptions.UsernameAlreadyExistsException;
+import com.fiap.techchallenge.domain.exceptions.InvalidEmailPatternException;
 import com.fiap.techchallenge.domain.utils.CpfValidator;
 import com.fiap.techchallenge.domain.utils.PasswordValidator;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
@@ -38,7 +39,7 @@ public final class CreateUserValidator {
         }
 
         if (!EMAIL_REGEX.matcher(request.getEmail()).matches()) {
-            throw new IllegalArgumentException("E‑mail inválido.");
+            throw new InvalidEmailPatternException("E‑mail inválido.");
         }
 
         if (!PasswordValidator.isValid(request.getPassword())) {

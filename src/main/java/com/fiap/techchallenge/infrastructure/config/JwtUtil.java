@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 public class JwtUtil {
@@ -19,31 +20,46 @@ public class JwtUtil {
     @Value("${jwt.expiration-ms}")
     private long expMs;
 
-    public String generateToken(String username) {
+    public String generateToken(String username, UUID userId, String email) {
         Date now = new Date();
-        return Jwts.builder().setSubject(username).setIssuedAt(now).setExpiration(new Date(now.getTime() + expMs))
-                .signWith(SignatureAlgorithm.HS256, secret).compact();
+        return Jwts.builder().setSubject(username).claim("userId", userId).claim("email", email).setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + expMs)).signWith(SignatureAlgorithm.HS256, secret).compact();
+    }
+
+    public Claims extractAllClaims(String token) {
+        try {
+            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        } catch (ExpiredJwtException ex) {
+            logger.warn("Token expirado ao extrair claims: {}", ex.getMessage());
+            throw ex;
+        } catch (MalformedJwtException ex) {
+            logger.warn("Token malformado ao extrair claims: {}", ex.getMessage());
+            throw ex;
+        } catch (UnsupportedJwtException ex) {
+            logger.warn("Token não suportado ao extrair claims: {}", ex.getMessage());
+            throw ex;
+        } catch (IllegalArgumentException ex) {
+            logger.warn("Token com argumento ilegal ao extrair claims: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("Erro inesperado ao extrair claims do token: {}", ex.getMessage(), ex);
+            throw new JwtException("Erro ao processar token", ex);
+        }
     }
 
     public String extractUsername(String token) {
-        try {
-            return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
-        } catch (ExpiredJwtException ex) {
-            logger.warn("Token expirado ao extrair username: {}", ex.getMessage());
-            throw ex;
-        } catch (MalformedJwtException ex) {
-            logger.warn("Token malformado ao extrair username: {}", ex.getMessage());
-            throw ex;
-        } catch (UnsupportedJwtException ex) {
-            logger.warn("Token não suportado ao extrair username: {}", ex.getMessage());
-            throw ex;
-        } catch (IllegalArgumentException ex) {
-            logger.warn("Token com argumento ilegal ao extrair username: {}", ex.getMessage());
-            throw ex;
-        } catch (Exception ex) {
-            logger.error("Erro inesperado ao extrair username do token: {}", ex.getMessage(), ex);
-            throw new JwtException("Erro ao processar token", ex);
-        }
+        Claims claims = extractAllClaims(token);
+        return claims.getSubject();
+    }
+
+    public String extractUserId(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("userId", String.class);
+    }
+
+    public String extractEmail(String token) {
+        Claims claims = extractAllClaims(token);
+        return claims.get("email", String.class);
     }
 
     public boolean validateToken(String token) {

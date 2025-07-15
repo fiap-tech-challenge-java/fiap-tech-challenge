@@ -26,11 +26,6 @@ public class UserUseCaseImpl implements UserUseCase {
     }
 
     @Override
-    public User login(Login login) {
-        return null;
-    }
-
-    @Override
     public User create(CreateUser createUser) {
         validator.validate(createUser);
 

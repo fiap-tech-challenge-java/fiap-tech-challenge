@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.domain.exceptions;
 
+import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -19,8 +20,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fiap.techchallenge.model.ErrorResponse;
 
@@ -180,9 +184,21 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
             HttpServletRequest request) {
 
+        String message = "Requisição inválida. Verifique o formato dos dados enviados.";
+        String code = "INVALID_REQUEST_BODY";
+
+        Throwable cause = ex.getCause();
+        if (cause != null && cause.getMessage() != null && cause.getMessage().contains("RoleEnum")) {
+            String rolesPermitidas = Arrays.stream(RoleEnum.values())
+                    .map(Enum::name)
+                    .collect(Collectors.joining(", "));
+            message = "Role inválida. Roles permitidas: " + rolesPermitidas;
+            code = "INVALID_ROLE";
+        }
+
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Requisição inválida. Verifique o formato dos dados enviados.");
-        errorResponse.setCode("INVALID_REQUEST_BODY");
+        errorResponse.setMessage(message);
+        errorResponse.setCode(code);
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
@@ -317,6 +333,15 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
+    @ExceptionHandler(InvalidEmailPatternException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_EMAIL");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("E-mail inválido: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 }
