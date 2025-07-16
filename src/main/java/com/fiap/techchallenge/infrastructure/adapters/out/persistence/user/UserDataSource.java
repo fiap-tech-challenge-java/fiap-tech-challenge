@@ -76,6 +76,7 @@ public class UserDataSource implements UserRepository {
             savedEntity.setName(updateUser.getName());
             savedEntity.setLogin(updateUser.getLogin());
             jpaRepository.save(savedEntity);
+            return USER_MAPPER.mapToUser(savedEntity);
         }
 
         throw new UserNotFoundException();

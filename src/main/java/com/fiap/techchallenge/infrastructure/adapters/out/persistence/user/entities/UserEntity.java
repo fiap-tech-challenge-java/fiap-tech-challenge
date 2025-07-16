@@ -50,6 +50,5 @@ public class UserEntity extends BaseEntity {
     private boolean active;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name = "addresses")
     private List<AddressUserEntity> addressesList = new ArrayList<>();
 }

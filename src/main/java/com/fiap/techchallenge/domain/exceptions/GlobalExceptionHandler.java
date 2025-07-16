@@ -154,7 +154,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleAuthenticationException(AuthenticationException ex,
-                                                                       HttpServletRequest request) {
+            HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage("Falha na autenticação: " + ex.getMessage());
@@ -348,8 +348,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(CustomAuthenticationException.class)
-    public ResponseEntity<ErrorResponse> handleCustomAuthenticationException(
-            CustomAuthenticationException ex,
+    public ResponseEntity<ErrorResponse> handleCustomAuthenticationException(CustomAuthenticationException ex,
             HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
