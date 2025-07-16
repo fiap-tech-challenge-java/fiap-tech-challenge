@@ -491,7 +491,8 @@ components:
       description: Estrutura da resposta contendo os detalhes de um endereço.
       type: object
       properties:
-        idAddress:
+        id:
+          format: uuid
           type: string
           description: O ID único do endereço.
           example: b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99
@@ -582,7 +583,7 @@ components:
       description: Estrutura da resposta após a criação bem-sucedida de um usuário.
       type: object
       properties:
-        idUser:
+        id:
           format: uuid
           type: string
           description: O ID único gerado para o novo usuário.
@@ -665,7 +666,7 @@ components:
       description: Estrutura da resposta contendo os detalhes completos de um usuário.
       type: object
       properties:
-        idUser:
+        id:
           format: uuid
           type: string
           description: O ID único do usuário.
@@ -693,15 +694,15 @@ components:
             - OWNER
             - CUSTOMER
           example: CUSTOMER
+        active:
+          description: Indica se o usuário está ativo no sistema (true para ativo, false para inativo).
+          type: boolean
+          example: true
         address:
           type: array
           items:
             $ref: '#/components/schemas/AddressResponse'
           description: Uma lista dos endereços associados ao usuário.
-        active:
-          description: Indica se o usuário está ativo no sistema (true para ativo, false para inativo).
-          type: boolean
-          example: true
 
     UpdateUserRequest:
       title: Solicitação de Atualização de Usuário

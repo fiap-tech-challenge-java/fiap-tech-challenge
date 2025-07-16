@@ -189,9 +189,7 @@ public class GlobalExceptionHandler {
 
         Throwable cause = ex.getCause();
         if (cause != null && cause.getMessage() != null && cause.getMessage().contains("RoleEnum")) {
-            String rolesPermitidas = Arrays.stream(RoleEnum.values())
-                    .map(Enum::name)
-                    .collect(Collectors.joining(", "));
+            String rolesPermitidas = Arrays.stream(RoleEnum.values()).map(Enum::name).collect(Collectors.joining(", "));
             message = "Role inválida. Roles permitidas: " + rolesPermitidas;
             code = "INVALID_ROLE";
         }
@@ -297,8 +295,48 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("EMAIL_ALREADY_EXISTS");
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("USERNAME_ALREADY_EXISTS");
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidCpfException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCpfExceptionException(InvalidCpfException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("CPF_INVALID");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
     @ExceptionHandler(InvalidEmailPatternException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex,
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("INVALID_EMAIL");

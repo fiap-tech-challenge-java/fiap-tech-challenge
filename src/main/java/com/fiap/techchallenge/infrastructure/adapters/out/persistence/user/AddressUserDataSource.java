@@ -51,11 +51,10 @@ public class AddressUserDataSource implements AddressUserRepository {
     }
 
     @Override
-    public Address update(UpdateAddress updateAddress) {
-        userJpaRepository.findById(updateAddress.getIdUser()).orElseThrow(UserNotFoundException::new);
+    public Address update(UpdateAddress updateAddress, UUID userId, UUID addressId) {
+        userJpaRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        AddressUserEntity entity = addressUserJpaRepository
-                .findByIdAndUserId(updateAddress.getIdAddress(), updateAddress.getIdUser())
+        AddressUserEntity entity = addressUserJpaRepository.findByIdAndUserId(addressId, userId)
                 .orElseThrow(AddressNotFoundException::new);
 
         entity.setPublicPlace(updateAddress.getPublicPlace());

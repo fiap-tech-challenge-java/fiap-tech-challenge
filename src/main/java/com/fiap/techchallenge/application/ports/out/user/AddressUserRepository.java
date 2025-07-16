@@ -12,5 +12,5 @@ public interface AddressUserRepository {
 
     List<Address> listAll(UUID userId);
 
-    Address update(UpdateAddress updateAddress);
+    Address update(UpdateAddress updateAddress, UUID userId, UUID addressId);
 }

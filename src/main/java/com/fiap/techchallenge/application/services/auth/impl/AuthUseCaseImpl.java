@@ -8,7 +8,6 @@ import com.fiap.techchallenge.model.LoginRequest;
 import com.fiap.techchallenge.model.LoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,15 +22,12 @@ import java.util.UUID;
 @Service
 public class AuthUseCaseImpl implements AuthUseCase {
 
-    private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthUseCaseImpl(AuthenticationManager authenticationManager, JwtUtil jwtUtil,
-            UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
-        this.authenticationManager = authenticationManager;
+    public AuthUseCaseImpl(JwtUtil jwtUtil, UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;

@@ -13,29 +13,29 @@ public class User {
     private String email;
     private String cpf;
     private String login;
-    private String password;
     private List<Address> address;
     private OffsetDateTime updatedAt;
     private OffsetDateTime createdAt;
     private RoleEnum role;
     private boolean active;
+    private String password;
 
     public User() {
     }
 
-    public User(UUID id, String name, String email, String login, String password, String cpf, List<Address> address,
-            RoleEnum role, boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt) {
+    public User(UUID id, String name, String email, String login, String cpf, List<Address> address, RoleEnum role,
+            boolean active, OffsetDateTime updatedAt, OffsetDateTime createdAt, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.cpf = cpf;
         this.login = login;
-        this.password = password;
         this.address = address;
         this.role = role;
         this.active = active;
         this.updatedAt = updatedAt;
         this.createdAt = createdAt;
+        this.password = password;
     }
 
     public UUID getId() {
@@ -54,20 +54,20 @@ public class User {
         this.name = name;
     }
 
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getLogin() {
@@ -78,20 +78,28 @@ public class User {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public List<Address> getAddress() {
         return address;
     }
 
     public void setAddress(List<Address> address) {
         this.address = address;
+    }
+
+    public OffsetDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(OffsetDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(OffsetDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public RoleEnum getRole() {
@@ -110,19 +118,11 @@ public class User {
         this.active = active;
     }
 
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
+    public String getPassword() {
+        return password;
     }
 
-    public void setCreatedAt(OffsetDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public OffsetDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(OffsetDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

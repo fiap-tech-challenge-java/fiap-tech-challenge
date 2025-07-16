@@ -1,11 +1,7 @@
 package com.fiap.techchallenge.application.ports.in.user.dtos;
 
-import java.util.UUID;
-
 public class UpdateAddress {
 
-    private UUID idUser;
-    private UUID idAddress;
     private String publicPlace;
     private String number;
     private String complement;
@@ -13,22 +9,6 @@ public class UpdateAddress {
     private String city;
     private String state;
     private String postalCode;
-
-    public UUID getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(UUID idUser) {
-        this.idUser = idUser;
-    }
-
-    public UUID getIdAddress() {
-        return idAddress;
-    }
-
-    public void setIdAddress(UUID idAddress) {
-        this.idAddress = idAddress;
-    }
 
     public String getPublicPlace() {
         return publicPlace;

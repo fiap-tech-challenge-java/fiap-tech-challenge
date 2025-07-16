@@ -9,6 +9,7 @@ import com.fiap.techchallenge.model.AddressResponse;
 import com.fiap.techchallenge.model.CreateAddressRequest;
 import com.fiap.techchallenge.model.UpdateAddressRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -50,7 +51,7 @@ public class AddressUserApiImpl implements AddressesApi {
             UpdateAddressRequest updateAddressRequest) {
         UpdateAddress updateAddress = ADDRESS_USER_MAPPER.mapToUpdateAddress(updateAddressRequest);
 
-        Address updated = addressUserUseCase.update(updateAddress);
+        Address updated = addressUserUseCase.update(updateAddress, userId, addressId);
 
         AddressResponse body = ADDRESS_USER_MAPPER.mapToAddressResponse(updated);
 

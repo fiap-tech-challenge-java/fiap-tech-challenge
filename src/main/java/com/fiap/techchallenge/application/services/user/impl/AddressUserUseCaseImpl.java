@@ -30,8 +30,8 @@ public class AddressUserUseCaseImpl implements AddressUserUseCase {
     }
 
     @Override
-    public Address update(UpdateAddress updateAddress) {
-        return this.addressUserRepository.update(updateAddress);
+    public Address update(UpdateAddress updateAddress, UUID userId, UUID addressId) {
+        return this.addressUserRepository.update(updateAddress, userId, addressId);
     }
 
     @Override
