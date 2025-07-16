@@ -1,7 +1,7 @@
 package com.fiap.techchallenge.application.services.auth.impl;
 
 import com.fiap.techchallenge.application.services.auth.AuthUseCase;
-import com.fiap.techchallenge.domain.exceptions.AuthenticationException;
+import com.fiap.techchallenge.domain.exceptions.CustomAuthenticationException;
 import com.fiap.techchallenge.infrastructure.config.JwtUtil;
 import com.fiap.techchallenge.infrastructure.config.UserDetailsImpl;
 import com.fiap.techchallenge.model.LoginRequest;
@@ -39,7 +39,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getLogin());
 
             if (!passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())) {
-                throw new AuthenticationException("Credenciais inválidas");
+                throw new CustomAuthenticationException("Credenciais inválidas");
             }
 
             String username = userDetails.getUsername();
@@ -58,7 +58,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
             return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {
-            throw new AuthenticationException("Usuário não encontrado");
+            throw new CustomAuthenticationException("Usuário não encontrado");
         }
     }
 }
