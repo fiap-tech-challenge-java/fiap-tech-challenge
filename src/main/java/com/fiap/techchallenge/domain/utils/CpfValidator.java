@@ -2,6 +2,9 @@ package com.fiap.techchallenge.domain.utils;
 
 import com.fiap.techchallenge.domain.exceptions.InvalidCpfException;
 
+/**
+ * Valida CPF de acordo com os padrões
+ */
 public class CpfValidator {
 
     public static void validate(String cpf) {
@@ -41,5 +44,8 @@ public class CpfValidator {
         } catch (NumberFormatException e) {
             throw new InvalidCpfException();
         }
+    }
+
+    private CpfValidator() {
     }
 }

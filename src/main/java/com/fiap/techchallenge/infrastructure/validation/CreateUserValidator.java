@@ -2,11 +2,11 @@ package com.fiap.techchallenge.infrastructure.validation;
 
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.domain.exceptions.EmailAlreadyExistsException;
-import com.fiap.techchallenge.domain.exceptions.InvalidPasswordPatternException;
-import com.fiap.techchallenge.domain.exceptions.UsernameAlreadyExistsException;
 import com.fiap.techchallenge.domain.exceptions.InvalidEmailPatternException;
+import com.fiap.techchallenge.domain.exceptions.InvalidPasswordPatternException;
 import com.fiap.techchallenge.domain.utils.CpfValidator;
 import com.fiap.techchallenge.domain.utils.PasswordValidator;
+import com.fiap.techchallenge.domain.utils.UsernameValidator;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repositories.UserJpaRepository;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Component;
@@ -20,9 +20,11 @@ public final class CreateUserValidator {
             Pattern.CASE_INSENSITIVE);
 
     private final UserJpaRepository userJpaRepository;
+    private final UsernameValidator usernameValidator;
 
-    public CreateUserValidator(UserJpaRepository userJpaRepository) {
+    public CreateUserValidator(UserJpaRepository userJpaRepository, UsernameValidator usernameValidator) {
         this.userJpaRepository = userJpaRepository;
+        this.usernameValidator = usernameValidator;
     }
 
     public void validate(CreateUser request) {
@@ -52,9 +54,7 @@ public final class CreateUserValidator {
             throw new EmailAlreadyExistsException(request.getEmail());
         });
 
-        userJpaRepository.findByLogin(request.getLogin()).ifPresent(u -> {
-            throw new UsernameAlreadyExistsException(request.getLogin());
-        });
+        usernameValidator.validate(request.getLogin());
     }
 
 }
