@@ -612,9 +612,17 @@ components:
             - CUSTOMER
           example: CUSTOMER
         active:
-          description: Status de ativação do usuário (true se ativo, false se inativo).
           type: boolean
+          description: Status de ativação do usuário (true se ativo, false se inativo).
           example: true
+        createdAt:
+          type: string
+          description: Criação do usuário
+          example: '15/06/2025 19:40'
+        updatedAt:
+          type: string
+          description: Última atualização do usuário
+          example: '16/06/2025 19:40'
         address:
           type: array
           items:
@@ -698,6 +706,14 @@ components:
           description: Indica se o usuário está ativo no sistema (true para ativo, false para inativo).
           type: boolean
           example: true
+        createdAt:
+          type: string
+          description: Criação do usuário
+          example: '15/06/2025 19:40'
+        updatedAt:
+          type: string
+          description: Última atualização do usuário
+          example: '16/06/2025 19:40'
         address:
           type: array
           items:

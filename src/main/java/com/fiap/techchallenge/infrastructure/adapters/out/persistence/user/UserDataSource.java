@@ -4,6 +4,7 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.*;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
 import com.fiap.techchallenge.domain.exceptions.BusinessException;
 import com.fiap.techchallenge.domain.exceptions.UserNotFoundException;
+import com.fiap.techchallenge.domain.utils.UsernameValidator;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.AddressUserEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.UserEntity;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.mapper.UserMapper;
@@ -20,12 +21,15 @@ public class UserDataSource implements UserRepository {
 
     private final UserJpaRepository jpaRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UsernameValidator usernameValidator;
 
     private static final UserMapper USER_MAPPER = UserMapper.INSTANCE;
 
-    public UserDataSource(UserJpaRepository jpaRepository, PasswordEncoder passwordEncoder) {
+    public UserDataSource(UserJpaRepository jpaRepository, PasswordEncoder passwordEncoder,
+            UsernameValidator usernameValidator) {
         this.jpaRepository = jpaRepository;
         this.passwordEncoder = passwordEncoder;
+        this.usernameValidator = usernameValidator;
     }
 
     @Override
@@ -53,13 +57,14 @@ public class UserDataSource implements UserRepository {
     public Optional<User> findById(UUID id) {
         UserEntity userEntity = jpaRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("User not found with id: " + id));
-        return Optional.of(USER_MAPPER.mapToUser(userEntity));
 
+        return Optional.of(USER_MAPPER.mapToUser(userEntity));
     }
 
     @Override
     public Optional<User> findByLogin(String login) {
         Optional<UserEntity> userEntity = jpaRepository.findByLogin(login);
+
         return userEntity.map(USER_MAPPER::mapToUser);
     }
 
@@ -70,31 +75,31 @@ public class UserDataSource implements UserRepository {
 
     @Override
     public User update(UUID id, UpdateUser updateUser) {
-        UserEntity savedEntity = jpaRepository.findById(id).orElse(null);
+        UserEntity savedEntity = jpaRepository.findById(id).orElseThrow(UserNotFoundException::new);
 
-        if (savedEntity != null) {
-            savedEntity.setName(updateUser.getName());
-            savedEntity.setLogin(updateUser.getLogin());
-            jpaRepository.save(savedEntity);
-            return USER_MAPPER.mapToUser(savedEntity);
-        }
+        usernameValidator.validate(updateUser.getLogin());
 
-        throw new UserNotFoundException();
+        savedEntity.setName(updateUser.getName());
+        savedEntity.setLogin(updateUser.getLogin());
+        jpaRepository.save(savedEntity);
+
+        return USER_MAPPER.mapToUser(savedEntity);
     }
 
     @Override
     public void deleteById(UUID id) {
-        jpaRepository.deleteById(id);
+        UserEntity savedEntity = jpaRepository.findById(id).orElseThrow(UserNotFoundException::new);
+
+        savedEntity.setActive(false);
+        jpaRepository.save(savedEntity);
     }
 
     @Override
     public void changePassword(ChangePassword changePassword) {
-        UserEntity savedEntity = jpaRepository.findById(changePassword.getIdUser()).orElse(null);
+        UserEntity savedEntity = jpaRepository.findById(changePassword.getIdUser()).orElseThrow(UserNotFoundException::new);
 
-        if (savedEntity != null) {
-            savedEntity.setPassword(changePassword.getNewPassword());
-            jpaRepository.save(savedEntity);
-        }
+        savedEntity.setPassword(changePassword.getNewPassword());
+        jpaRepository.save(savedEntity);
     }
 
 }

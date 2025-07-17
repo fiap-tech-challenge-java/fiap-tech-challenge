@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * Valida senhas de acordo com a regra: - mínimo de 5 caracteres - ao menos 1 letra maiúscula - ao menos 1 dígito
  */
-public final class PasswordValidator {
+public class PasswordValidator {
 
     private static final Pattern PASSWORD_REGEX = Pattern.compile("^(?=.*[A-Z])(?=.*\\d).{5,}$");
 
