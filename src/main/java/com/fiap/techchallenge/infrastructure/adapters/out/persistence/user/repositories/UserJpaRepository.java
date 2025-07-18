@@ -3,7 +3,8 @@ package com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.repo
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.UserEntity;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -15,4 +16,7 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, UUID> {
     Optional<UserEntity> findByLogin(String login);
 
     Optional<UserEntity> findByEmailAndActiveTrue(String email);
+
+    @Query("SELECT u.password FROM UserEntity u WHERE u.id = :id")
+    Optional<String> findPasswordById(@Param("id") UUID id);
 }
