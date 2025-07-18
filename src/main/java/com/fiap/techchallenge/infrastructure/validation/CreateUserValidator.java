@@ -3,6 +3,7 @@ package com.fiap.techchallenge.infrastructure.validation;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.domain.exceptions.EmailAlreadyExistsException;
 import com.fiap.techchallenge.domain.exceptions.InvalidEmailPatternException;
+import com.fiap.techchallenge.domain.exceptions.InvalidLoginPatternException;
 import com.fiap.techchallenge.domain.exceptions.InvalidPasswordPatternException;
 import com.fiap.techchallenge.domain.utils.CpfValidator;
 import com.fiap.techchallenge.domain.utils.PasswordValidator;
@@ -53,6 +54,10 @@ public final class CreateUserValidator {
         userJpaRepository.findByEmailAndActiveTrue(request.getEmail()).ifPresent(u -> {
             throw new EmailAlreadyExistsException(request.getEmail());
         });
+
+        if (request.getLogin().length() < 5 || request.getLogin().length() > 20) {
+            throw new InvalidLoginPatternException("O login deve ter entre 5 e 20 caracteres.");
+        }
 
         usernameValidator.validate(request.getLogin());
     }
