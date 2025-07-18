@@ -3,24 +3,33 @@ package com.fiap.techchallenge.application.ports.in.user.dtos;
 import java.util.UUID;
 
 public class ChangePassword {
-    private UUID idUser;
+    private UUID id;
+    private String lastPassword;
     private String newPassword;
     private String confirmPassword;
 
     public ChangePassword() {
     }
 
-    public ChangePassword(UUID idUser, String newPassword) {
-        this.idUser = idUser;
+    public ChangePassword(UUID id, String newPassword) {
+        this.id = id;
         this.newPassword = newPassword;
     }
 
-    public UUID getIdUser() {
-        return idUser;
+    public UUID getId() {
+        return id;
     }
 
-    public void setIdUser(UUID idUser) {
-        this.idUser = idUser;
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+    public String getLastPassword() {
+        return lastPassword;
+    }
+
+    public void setLastPassword(String lastPassword) {
+        this.lastPassword = lastPassword;
     }
 
     public String getNewPassword() {

@@ -297,7 +297,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex,
-                                                                           HttpServletRequest request) {
+            HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
@@ -310,7 +310,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex,
-                                                                              HttpServletRequest request) {
+            HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
@@ -323,7 +323,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidCpfException.class)
     public ResponseEntity<ErrorResponse> handleInvalidCpfExceptionException(InvalidCpfException ex,
-                                                                            HttpServletRequest request) {
+            HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
@@ -336,7 +336,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidEmailPatternException.class)
     public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex,
-                                                                            HttpServletRequest request) {
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("INVALID_EMAIL");
@@ -349,7 +349,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomAuthenticationException.class)
     public ResponseEntity<ErrorResponse> handleCustomAuthenticationException(CustomAuthenticationException ex,
-                                                                             HttpServletRequest request) {
+            HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage("Usuário ou senha incorretos");
@@ -362,8 +362,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex,
-                                                            HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex,
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("USER_NOT_FOUND");
@@ -372,6 +372,19 @@ public class GlobalExceptionHandler {
 
         logger.warn("E-mail inválido: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidPreviousPasswordException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPreviousPasswordException(InvalidPreviousPasswordException ex,
+            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_PREVIOUS_PASSWORD");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Senha anterior inválida: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
 }

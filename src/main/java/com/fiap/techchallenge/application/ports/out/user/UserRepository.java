@@ -4,8 +4,6 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.UpdateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,4 +23,6 @@ public interface UserRepository {
     void deleteById(UUID id);
 
     void changePassword(ChangePassword changePassword);
+
+    String recoverPassword(UUID uuid);
 }
