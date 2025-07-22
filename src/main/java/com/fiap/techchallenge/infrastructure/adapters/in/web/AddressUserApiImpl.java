@@ -31,13 +31,22 @@ public class AddressUserApiImpl implements AddressesApi {
     @Override
     public ResponseEntity<AddressResponse> createAddressForUser(UUID userId,
             CreateAddressRequest createAddressRequest) {
-        Address address = this.addressUserUseCase.create(ADDRESS_USER_MAPPER.mapToCreateAddress(createAddressRequest));
+        if (!isAuthenticatedUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        var createAddress = ADDRESS_USER_MAPPER.mapToCreateAddress(createAddressRequest);
+        createAddress.setIdUser(userId);
+        Address address = this.addressUserUseCase.create(createAddress);
 
         return ResponseEntity.status(201).body(ADDRESS_USER_MAPPER.mapToAddressResponse(address));
     }
 
     @Override
     public ResponseEntity<List<AddressResponse>> listAddressesByUserId(UUID userId) {
+        if (!isAuthenticatedUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         List<Address> addresses = addressUserUseCase.listAll(userId);
 
         if (addresses.isEmpty()) {
@@ -52,18 +61,7 @@ public class AddressUserApiImpl implements AddressesApi {
     @Override
     public ResponseEntity<AddressResponse> updateAddressForUser(UUID userId, UUID addressId,
             UpdateAddressRequest updateAddressRequest) {
-        // Get authenticated user
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String authenticatedUsername = null;
-        if (principal instanceof UserDetails) {
-            authenticatedUsername = ((UserDetails) principal).getUsername();
-        } else if (principal instanceof String) {
-            authenticatedUsername = (String) principal;
-        }
-        // Check if userId matches authenticated user
-        // You may need to fetch the user by username to get their UUID
-        // For now, assume username == userId.toString() or add logic to fetch user UUID by username
-        if (!userId.toString().equals(authenticatedUsername)) {
+        if (!isAuthenticatedUser(userId)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         UpdateAddress updateAddress = ADDRESS_USER_MAPPER.mapToUpdateAddress(updateAddressRequest);
@@ -77,8 +75,21 @@ public class AddressUserApiImpl implements AddressesApi {
 
     @Override
     public ResponseEntity<Void> deleteAddressForUser(UUID userId, UUID addressId) {
+        if (!isAuthenticatedUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         addressUserUseCase.delete(userId, addressId);
         return ResponseEntity.noContent().build();
+    }
+
+    // private functions
+    private boolean isAuthenticatedUser(UUID userId) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof com.fiap.techchallenge.infrastructure.config.UserDetailsImpl) {
+            UUID authenticatedId = ((com.fiap.techchallenge.infrastructure.config.UserDetailsImpl) principal).getId();
+            return userId.equals(authenticatedId);
+        }
+        return false;
     }
 
 }

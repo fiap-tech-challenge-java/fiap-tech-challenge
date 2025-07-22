@@ -7,6 +7,7 @@ import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
 import com.fiap.techchallenge.api.UsersApi;
 import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
+import com.fiap.techchallenge.infrastructure.config.UserDetailsImpl;
 import com.fiap.techchallenge.model.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,37 +42,16 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<UserResponse> updateUser(UUID id, UpdateUserRequest updateUserRequest) {
-        // Get authenticated user
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String authenticatedUsername = null;
-        if (principal instanceof UserDetails) {
-            authenticatedUsername = ((UserDetails) principal).getUsername();
-        } else if (principal instanceof String) {
-            authenticatedUsername = (String) principal;
-        }
-        // Check if id matches authenticated user
-        // You may need to fetch the user by username to get their UUID
-        // For now, assume username == id.toString() or add logic to fetch user UUID by username
-        if (!id.toString().equals(authenticatedUsername)) {
+        if (isAuthenticatedUser(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         User userResponse = this.userUseCase.update(id, USERS_API_MAPPER.mapToUpdateUser(updateUserRequest));
-
         return ResponseEntity.ok(USERS_API_MAPPER.mapToUserResponse(userResponse));
     }
 
     @Override
     public ResponseEntity<UserResponse> getUser(UUID id) {
-        // Get authenticated user
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String authenticatedUsername = null;
-        if (principal instanceof UserDetails) {
-            authenticatedUsername = ((UserDetails) principal).getUsername();
-        } else if (principal instanceof String) {
-            authenticatedUsername = (String) principal;
-        }
-        // Only allow user to see their own data
-        if (!id.toString().equals(authenticatedUsername)) {
+        if (isAuthenticatedUser(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         User user = this.userUseCase.getById(id);
@@ -81,14 +61,7 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<List<UserResponse>> getUsers() {
-        // Get authenticated user
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String authenticatedUsername = null;
-        if (principal instanceof UserDetails) {
-            authenticatedUsername = ((UserDetails) principal).getUsername();
-        } else if (principal instanceof String) {
-            authenticatedUsername = (String) principal;
-        }
+        String authenticatedUsername = getAuthenticatedUsername();
         // Fetch authenticated user object
         User authenticatedUser = null;
         for (User u : userUseCase.getAll()) {
@@ -129,16 +102,7 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<Void> deleteUser(UUID id) {
-        // Get authenticated user
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String authenticatedUsername = null;
-        if (principal instanceof UserDetails) {
-            authenticatedUsername = ((UserDetails) principal).getUsername();
-        } else if (principal instanceof String) {
-            authenticatedUsername = (String) principal;
-        }
-        // Only allow user to delete themselves
-        if (!id.toString().equals(authenticatedUsername)) {
+        if (isAuthenticatedUser(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         this.userUseCase.delete(id);
@@ -152,5 +116,25 @@ public class UserApiImpl implements UsersApi {
         this.userUseCase.changePassword(changePassword);
 
         return ResponseEntity.noContent().build();
+    }
+
+    // private functions
+    private String getAuthenticatedUsername() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            return ((UserDetails) principal).getUsername();
+        } else if (principal instanceof String) {
+            return (String) principal;
+        }
+        return null;
+    }
+
+    private boolean isAuthenticatedUser(UUID id) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetailsImpl) {
+            UUID authenticatedId = ((UserDetailsImpl) principal).getId();
+            return !id.equals(authenticatedId);
+        }
+        return true;
     }
 }

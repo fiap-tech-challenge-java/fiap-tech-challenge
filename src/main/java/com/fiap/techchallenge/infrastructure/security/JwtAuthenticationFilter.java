@@ -1,6 +1,7 @@
 package com.fiap.techchallenge.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fiap.techchallenge.infrastructure.adapters.in.web.UserDetailsServiceImpl;
 import com.fiap.techchallenge.infrastructure.config.JwtUtil;
 import com.fiap.techchallenge.model.ErrorResponse;
 
@@ -24,6 +25,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -44,7 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         try {
-            // Processa o token JWT apenas se estiver presente
             String header = req.getHeader("Authorization");
             if (header == null || !header.startsWith("Bearer ")) {
                 chain.doFilter(req, res);
@@ -53,41 +54,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String token = header.substring(7);
             if (jwtUtil.validateToken(token)) {
-                String username = jwtUtil.extractUsername(token);
-                UserDetails ud = uds.loadUserByUsername(username);
-
+                UUID userId = jwtUtil.extractUserId(token);
+                UserDetails ud = ((UserDetailsServiceImpl) uds).loadUserById(userId);
                 var auth = new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-                logger.debug("Usuário autenticado: {}", username);
+                logger.debug("User authenticated: {}", userId);
             }
 
             chain.doFilter(req, res);
 
         } catch (ExpiredJwtException ex) {
-            logger.warn("Token JWT expirado: {}", ex.getMessage());
-            handleJwtException(res, "Token expirado", "TOKEN_EXPIRED", HttpStatus.UNAUTHORIZED);
+            logger.warn("JWT token expired: {}", ex.getMessage());
+            handleJwtException(res, "Token expired", "TOKEN_EXPIRED", HttpStatus.UNAUTHORIZED);
 
         } catch (MalformedJwtException ex) {
-            logger.warn("Token JWT malformado: {}", ex.getMessage());
-            handleJwtException(res, "Token malformado", "TOKEN_MALFORMED", HttpStatus.UNAUTHORIZED);
+            logger.warn("Malformed JWT token: {}", ex.getMessage());
+            handleJwtException(res, "Malformed token", "TOKEN_MALFORMED", HttpStatus.UNAUTHORIZED);
 
         } catch (UnsupportedJwtException ex) {
-            logger.warn("Token JWT não suportado: {}", ex.getMessage());
-            handleJwtException(res, "Token não suportado", "TOKEN_UNSUPPORTED", HttpStatus.UNAUTHORIZED);
+            logger.warn("Unsupported JWT token: {}", ex.getMessage());
+            handleJwtException(res, "Unsupported token", "TOKEN_UNSUPPORTED", HttpStatus.UNAUTHORIZED);
 
         } catch (IllegalArgumentException ex) {
-            logger.warn("Token JWT com argumento ilegal: {}", ex.getMessage());
-            handleJwtException(res, "Token inválido", "TOKEN_INVALID", HttpStatus.UNAUTHORIZED);
+            logger.warn("Illegal argument in JWT token: {}", ex.getMessage());
+            handleJwtException(res, "Invalid token", "TOKEN_INVALID", HttpStatus.UNAUTHORIZED);
 
         } catch (UsernameNotFoundException ex) {
-            logger.warn("Usuário não encontrado: {}", ex.getMessage());
-            handleJwtException(res, "Usuário não encontrado", "USER_NOT_FOUND", HttpStatus.UNAUTHORIZED);
+            logger.warn("User not found: {}", ex.getMessage());
+            handleJwtException(res, "User not found", "USER_NOT_FOUND", HttpStatus.UNAUTHORIZED);
 
         } catch (Exception ex) {
-            logger.error("Erro inesperado no filtro JWT: {}", ex.getMessage(), ex);
-            handleJwtException(res, "Erro interno de autenticação", "AUTHENTICATION_ERROR",
+            logger.error("Unexpected error in JWT filter: {}", ex.getMessage(), ex);
+            handleJwtException(res, "Internal authentication error", "AUTHENTICATION_ERROR",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
