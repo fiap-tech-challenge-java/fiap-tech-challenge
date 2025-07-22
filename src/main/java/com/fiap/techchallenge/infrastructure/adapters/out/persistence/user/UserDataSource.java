@@ -96,7 +96,8 @@ public class UserDataSource implements UserRepository {
 
     @Override
     public void changePassword(ChangePassword changePassword) {
-        UserEntity savedEntity = jpaRepository.findById(changePassword.getIdUser()).orElseThrow(UserNotFoundException::new);
+        UserEntity savedEntity = jpaRepository.findById(changePassword.getIdUser())
+                .orElseThrow(UserNotFoundException::new);
 
         savedEntity.setPassword(changePassword.getNewPassword());
         jpaRepository.save(savedEntity);

@@ -13,4 +13,6 @@ public interface AddressUserRepository {
     List<Address> listAll(UUID userId);
 
     Address update(UpdateAddress updateAddress, UUID userId, UUID addressId);
+
+    void delete(UUID userId, UUID addressId);
 }

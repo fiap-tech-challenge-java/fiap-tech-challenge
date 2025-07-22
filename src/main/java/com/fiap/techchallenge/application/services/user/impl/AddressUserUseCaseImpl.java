@@ -36,6 +36,6 @@ public class AddressUserUseCaseImpl implements AddressUserUseCase {
 
     @Override
     public void delete(UUID idUSer, UUID idAddress) {
-
+        this.addressUserRepository.delete(idUSer, idAddress);
     }
 }
