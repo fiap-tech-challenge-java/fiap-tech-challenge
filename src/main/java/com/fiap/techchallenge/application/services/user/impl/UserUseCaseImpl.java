@@ -17,12 +17,14 @@ public class UserUseCaseImpl implements UserUseCase {
     private final CreateUserValidator validator;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ChangePasswordValidator changePasswordValidator;
 
     public UserUseCaseImpl(CreateUserValidator validator, UserRepository userRepository,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder, ChangePasswordValidator changePasswordValidator) {
         this.validator = validator;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.changePasswordValidator = changePasswordValidator;
     }
 
     @Override
@@ -55,10 +57,11 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public void changePassword(ChangePassword changePassword) {
-        ChangePasswordValidator.isValid(changePassword);
+        String passwordEncoded = userRepository.recoverPassword(changePassword.getId());
+        changePasswordValidator.isValid(changePassword, passwordEncoded);
 
-        ChangePassword changingPassword = new ChangePassword(changePassword.getIdUser(),
-                passwordEncoder.encode(changePassword.getConfirmPassword()));
+        ChangePassword changingPassword = new ChangePassword(changePassword.getId(),
+                passwordEncoder.encode(changePassword.getNewPassword()));
 
         this.userRepository.changePassword(changingPassword);
     }

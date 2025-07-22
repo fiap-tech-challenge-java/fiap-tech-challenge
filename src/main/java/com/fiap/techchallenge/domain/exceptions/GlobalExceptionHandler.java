@@ -395,6 +395,30 @@ public class GlobalExceptionHandler {
 
         logger.warn("Address not linked to user: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    @ExceptionHandler(InvalidPreviousPasswordException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPreviousPasswordException(InvalidPreviousPasswordException ex,
+            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_PREVIOUS_PASSWORD");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Senha anterior inválida: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidLoginPatternException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidLoginPatternException(InvalidLoginPatternException ex,
+                                                                            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_LOGIN");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Login inválido: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
 }

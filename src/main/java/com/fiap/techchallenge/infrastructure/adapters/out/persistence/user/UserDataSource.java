@@ -96,11 +96,15 @@ public class UserDataSource implements UserRepository {
 
     @Override
     public void changePassword(ChangePassword changePassword) {
-        UserEntity savedEntity = jpaRepository.findById(changePassword.getIdUser())
-                .orElseThrow(UserNotFoundException::new);
+        UserEntity savedEntity = jpaRepository.findById(changePassword.getId()).orElseThrow(UserNotFoundException::new);
 
         savedEntity.setPassword(changePassword.getNewPassword());
         jpaRepository.save(savedEntity);
+    }
+
+    @Override
+    public String recoverPassword(UUID uuid) {
+        return jpaRepository.findPasswordById(uuid).orElseThrow(UserNotFoundException::new);
     }
 
 }

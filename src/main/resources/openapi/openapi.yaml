@@ -412,18 +412,22 @@ components:
       description: Estrutura da requisição para alterar a senha de um usuário.
       type: object
       properties:
-        idUser:
+        id:
           format: uuid
           type: string
           description: O ID único do usuário cuja senha será alterada.
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        lastPassword:
+          type: string
+          description: A senha antiga do usuário.
+          example: MinhaAntigaSenha123!
         newPassword:
           type: string
-          description: A nova senha desejada para o usuário.
+          description: A nova senha desejada pelo o usuário.
           example: MinhaNovaSenha123!
         confirmPassword:
           type: string
-          description: Confirmação da nova senha, deve ser idêntica a `newPassword`.
+          description: A confirmação da senha desejada pelo o usuário.
           example: MinhaNovaSenha123!
 
     UserRole:
