@@ -389,7 +389,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidLoginPatternException.class)
     public ResponseEntity<ErrorResponse> handleInvalidLoginPatternException(InvalidLoginPatternException ex,
-                                                                            HttpServletRequest request) {
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("INVALID_LOGIN");

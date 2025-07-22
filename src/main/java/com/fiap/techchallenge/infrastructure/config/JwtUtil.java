@@ -20,10 +20,15 @@ public class JwtUtil {
     @Value("${jwt.expiration-ms}")
     private long expMs;
 
-    public String generateToken(String username, UUID userId, String email) {
+    public String generateToken(UUID userId, String role) {
         Date now = new Date();
-        return Jwts.builder().setSubject(username).claim("userId", userId).claim("email", email).setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expMs)).signWith(SignatureAlgorithm.HS256, secret).compact();
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("role", role)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + expMs))
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
     public Claims extractAllClaims(String token) {
