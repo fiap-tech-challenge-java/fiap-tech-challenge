@@ -5,6 +5,7 @@ import com.fiap.techchallenge.application.ports.in.user.dtos.CreateAddress;
 import com.fiap.techchallenge.application.ports.in.user.dtos.UpdateAddress;
 import com.fiap.techchallenge.application.ports.out.user.AddressUserRepository;
 import com.fiap.techchallenge.domain.exceptions.AddressNotFoundException;
+import com.fiap.techchallenge.domain.exceptions.AddressNotLinkedToUserException;
 import com.fiap.techchallenge.domain.exceptions.UserNotFoundException;
 import com.fiap.techchallenge.infrastructure.adapters.in.mapper.AddressUserApiMapper;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.entities.AddressUserEntity;
@@ -68,6 +69,20 @@ public class AddressUserDataSource implements AddressUserRepository {
         AddressUserEntity saved = addressUserJpaRepository.save(entity);
 
         return ADDRESS_USER_MAPPER.mapToAddress(saved);
+    }
+
+    @Override
+    public void delete(UUID userId, UUID addressId) {
+        userJpaRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        AddressUserEntity entity = addressUserJpaRepository.findById(addressId)
+                .orElseThrow(AddressNotFoundException::new);
+
+        if (!entity.getUser().getId().equals(userId)) {
+            throw new AddressNotLinkedToUserException();
+        }
+
+        addressUserJpaRepository.delete(entity);
     }
 
 }

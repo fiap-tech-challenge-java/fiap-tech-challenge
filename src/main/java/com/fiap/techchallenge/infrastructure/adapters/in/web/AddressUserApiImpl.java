@@ -77,7 +77,8 @@ public class AddressUserApiImpl implements AddressesApi {
 
     @Override
     public ResponseEntity<Void> deleteAddressForUser(UUID userId, UUID addressId) {
-        return null;
+        addressUserUseCase.delete(userId, addressId);
+        return ResponseEntity.noContent().build();
     }
 
 }
