@@ -60,36 +60,37 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-                logger.debug("Usuário autenticado: {}", username);
+                logger.debug("Authenticated user: {}", username);
             }
 
             chain.doFilter(req, res);
 
         } catch (ExpiredJwtException ex) {
-            logger.warn("Token JWT expirado: {}", ex.getMessage());
-            handleJwtException(res, "Token expirado", "TOKEN_EXPIRED", HttpStatus.UNAUTHORIZED);
+            logger.warn("Expired JWT token: {}", ex.getMessage());
+            handleJwtException(res, "Expired token:", "TOKEN_EXPIRED", HttpStatus.UNAUTHORIZED);
 
         } catch (MalformedJwtException ex) {
-            logger.warn("Token JWT malformado: {}", ex.getMessage());
-            handleJwtException(res, "Token malformado", "TOKEN_MALFORMED", HttpStatus.UNAUTHORIZED);
+            logger.warn("Malformed JWT token: {}", ex.getMessage());
+            handleJwtException(res, "Malformed token:", "TOKEN_MALFORMED", HttpStatus.UNAUTHORIZED);
 
         } catch (UnsupportedJwtException ex) {
-            logger.warn("Token JWT não suportado: {}", ex.getMessage());
-            handleJwtException(res, "Token não suportado", "TOKEN_UNSUPPORTED", HttpStatus.UNAUTHORIZED);
+            logger.warn("Unsupported JWT token: {}", ex.getMessage());
+            handleJwtException(res, "Unsupported token", "TOKEN_UNSUPPORTED", HttpStatus.UNAUTHORIZED);
 
         } catch (IllegalArgumentException ex) {
-            logger.warn("Token JWT com argumento ilegal: {}", ex.getMessage());
-            handleJwtException(res, "Token inválido", "TOKEN_INVALID", HttpStatus.UNAUTHORIZED);
+            logger.warn("JWT token with illegal argument: {}", ex.getMessage());
+            handleJwtException(res, "Invalid token", "TOKEN_INVALID", HttpStatus.UNAUTHORIZED);
 
         } catch (UsernameNotFoundException ex) {
-            logger.warn("Usuário não encontrado: {}", ex.getMessage());
-            handleJwtException(res, "Usuário não encontrado", "USER_NOT_FOUND", HttpStatus.UNAUTHORIZED);
+            logger.warn("User not found: {}", ex.getMessage());
+            handleJwtException(res, "User not found", "USER_NOT_FOUND", HttpStatus.UNAUTHORIZED);
 
         } catch (Exception ex) {
-            logger.error("Erro inesperado no filtro JWT: {}", ex.getMessage(), ex);
-            handleJwtException(res, "Erro interno de autenticação", "AUTHENTICATION_ERROR",
+            logger.error("Unexpected error in JWT filter: {}", ex.getMessage(), ex);
+            handleJwtException(res, "Internal authentication error", "AUTHENTICATION_ERROR",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     private void handleJwtException(HttpServletResponse response, String message, String errorCode, HttpStatus status)

@@ -2,7 +2,7 @@ package com.fiap.techchallenge.domain.exceptions;
 
 public class InvalidEmailPatternException extends IllegalArgumentException {
     public InvalidEmailPatternException() {
-        super("E-mail em formato inválido.");
+        super("Invalid email format.");
     }
 
     public InvalidEmailPatternException(String message) {

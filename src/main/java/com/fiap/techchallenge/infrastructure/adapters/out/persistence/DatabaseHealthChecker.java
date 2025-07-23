@@ -21,9 +21,9 @@ public class DatabaseHealthChecker implements CommandLineRunner {
     public void run(String... args) throws Exception {
         try (Connection conn = dataSource.getConnection()) {
             System.out.println(
-                    "\u001B[32m\uD83D\uDE80  🎉 Conexão bem-sucedida! URL: \u001B[0m" + conn.getMetaData().getURL());
+                    "\u001B[32m\uD83D\uDE80  🎉 Connection successful! URL: \u001B[0m" + conn.getMetaData().getURL());
         } catch (Exception e) {
-            System.err.println("❌ Falha ao conectar: " + e.getMessage());
+            System.err.println("❌ Failed to connect: " + e.getMessage());
             throw e;
         }
     }

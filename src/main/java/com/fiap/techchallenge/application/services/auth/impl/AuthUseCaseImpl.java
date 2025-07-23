@@ -39,7 +39,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
             UserDetails userDetails = userDetailsService.loadUserByUsername(loginRequest.getLogin());
 
             if (!passwordEncoder.matches(loginRequest.getPassword(), userDetails.getPassword())) {
-                throw new CustomAuthenticationException("Credenciais inválidas");
+                throw new CustomAuthenticationException("Invalid credentials.");
             }
 
             String username = userDetails.getUsername();
@@ -58,7 +58,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
             return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {
-            throw new CustomAuthenticationException("Usuário não encontrado");
+            throw new CustomAuthenticationException("User Not Found.");
         }
     }
 }

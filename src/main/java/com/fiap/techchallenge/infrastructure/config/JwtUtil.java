@@ -30,20 +30,20 @@ public class JwtUtil {
         try {
             return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException ex) {
-            logger.warn("Token expirado ao extrair claims: {}", ex.getMessage());
+            logger.warn("Token expired while extracting claims: {}", ex.getMessage());
             throw ex;
         } catch (MalformedJwtException ex) {
-            logger.warn("Token malformado ao extrair claims: {}", ex.getMessage());
+            logger.warn("Malformed token while extracting claims: {}", ex.getMessage());
             throw ex;
         } catch (UnsupportedJwtException ex) {
-            logger.warn("Token não suportado ao extrair claims: {}", ex.getMessage());
+            logger.warn("Unsupported token while extracting claims: {}", ex.getMessage());
             throw ex;
         } catch (IllegalArgumentException ex) {
-            logger.warn("Token com argumento ilegal ao extrair claims: {}", ex.getMessage());
+            logger.warn("Token with illegal argument while extracting claims: {}", ex.getMessage());
             throw ex;
         } catch (Exception ex) {
-            logger.error("Erro inesperado ao extrair claims do token: {}", ex.getMessage(), ex);
-            throw new JwtException("Erro ao processar token", ex);
+            logger.error("Unexpected error while extracting claims from the token: {}", ex.getMessage(), ex);
+            throw new JwtException("Error while processing token.", ex);
         }
     }
 
@@ -67,20 +67,20 @@ public class JwtUtil {
             Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException ex) {
-            logger.warn("Token expirado: {}", ex.getMessage());
+            logger.warn("Token expired: {}", ex.getMessage());
             throw ex;
         } catch (MalformedJwtException ex) {
-            logger.warn("Token malformado: {}", ex.getMessage());
+            logger.warn("Malformed token: {}", ex.getMessage());
             throw ex;
         } catch (UnsupportedJwtException ex) {
-            logger.warn("Token não suportado: {}", ex.getMessage());
+            logger.warn("Unsupported token: {}", ex.getMessage());
             throw ex;
         } catch (IllegalArgumentException ex) {
-            logger.warn("Token com argumento ilegal: {}", ex.getMessage());
+            logger.warn("Token with illegal argument: {}", ex.getMessage());
             throw ex;
         } catch (Exception ex) {
-            logger.error("Erro inesperado ao validar token: {}", ex.getMessage(), ex);
-            throw new JwtException("Erro ao validar token", ex);
+            logger.error("Unexpected error while validating token: {}", ex.getMessage(), ex);
+            throw new JwtException("Error while validating token.", ex);
         }
     }
 
@@ -90,7 +90,7 @@ public class JwtUtil {
 
             return claims.getExpiration().before(new Date());
         } catch (Exception ex) {
-            logger.warn("Erro ao verificar expiração do token: {}", ex.getMessage());
+            logger.warn("Error while checking token expiration: {}", ex.getMessage());
             return true; // Considera como expirado em caso de erro
         }
     }

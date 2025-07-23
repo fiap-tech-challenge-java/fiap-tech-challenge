@@ -29,10 +29,10 @@ public class HealthApiImpl {
     @GetMapping("/test-exception")
     public HealthStatus testException(@RequestParam(required = false) String type) {
         if ("not-found".equals(type)) {
-            throw new ResourceNotFoundException("Recurso de teste", "tipo", type);
+            throw new ResourceNotFoundException("Test resource", "type", type);
         }
         if ("business".equals(type)) {
-            throw new RuntimeException("Erro de negócio simulado");
+            throw new RuntimeException("Simulated business error.");
         }
         return healthCheckService.checkHealth();
     }
