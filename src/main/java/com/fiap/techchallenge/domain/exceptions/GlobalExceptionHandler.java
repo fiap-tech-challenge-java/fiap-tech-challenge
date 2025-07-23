@@ -374,7 +374,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AddressNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleAddressNotFound(AddressNotFoundException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAddressNotFound(AddressNotFoundException ex,
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage("Address not found for the specified user.");
         errorResponse.setCode("ADDRESS_NOT_FOUND");
@@ -386,7 +387,8 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AddressNotLinkedToUserException.class)
-    public ResponseEntity<ErrorResponse> handleAddressNotLinkedToUser(AddressNotLinkedToUserException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleAddressNotLinkedToUser(AddressNotLinkedToUserException ex,
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage("You are not linked to this address.");
         errorResponse.setCode("ADDRESS_NOT_LINKED_TO_USER");
@@ -399,7 +401,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidPreviousPasswordException.class)
     public ResponseEntity<ErrorResponse> handleInvalidPreviousPasswordException(InvalidPreviousPasswordException ex,
-                                                                                HttpServletRequest request) {
+            HttpServletRequest request) {
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(ex.getMessage());
         errorResponse.setCode("INVALID_PREVIOUS_PASSWORD");
@@ -409,7 +411,6 @@ public class GlobalExceptionHandler {
         logger.warn("Senha anterior inválida: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
-
 
     @ExceptionHandler(InvalidLoginPatternException.class)
     public ResponseEntity<ErrorResponse> handleInvalidLoginPatternException(InvalidLoginPatternException ex,

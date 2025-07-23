@@ -21,19 +21,20 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: builder        # usa a etapa 'builder' (com mvnw e src)
+      target: builder
     working_dir: /build
     volumes:
-      - ./:/build           # monta código-fonte e openapi.yaml
-      - ~/.m2:/root/.m2     # cache de dependências Maven
+      - ./:/build
+      - ~/.m2:/root/.m2
     command:
       - "./mvnw"
       - "clean"
       - "generate-sources"
+      - "compile"
       - "spring-boot:run"
     ports:
-      - "8080:8080"         # API
-      - "8081:8081"         # Metrics
+      - "8080:8080"
+      - "8081:8081"
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/techchallenge
       SPRING_DATASOURCE_USERNAME: postgres
