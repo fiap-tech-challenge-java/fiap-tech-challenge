@@ -94,8 +94,7 @@ class UserApiImplTest {
         when(userUseCase.create(any(CreateUser.class))).thenReturn(domainUser);
 
         // Act
-        ResponseEntity<CreateUserResponse> response =
-                userApiImpl.createUser(createUserRequest);
+        ResponseEntity<CreateUserResponse> response = userApiImpl.createUser(createUserRequest);
 
         // Assert
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -104,11 +103,11 @@ class UserApiImplTest {
         ArgumentCaptor<CreateUser> captor = ArgumentCaptor.forClass(CreateUser.class);
         verify(userUseCase).create(captor.capture());
         CreateUser actual = captor.getValue();
-        assertEquals(createUserRequest.getLogin(),    actual.getLogin());
+        assertEquals(createUserRequest.getLogin(), actual.getLogin());
         assertEquals(createUserRequest.getPassword(), actual.getPassword());
-        assertEquals(createUserRequest.getEmail(),    actual.getEmail());
-        assertEquals(createUserRequest.getName(),     actual.getName());
-        assertEquals(createUserRequest.getCpf(),      actual.getCpf());
+        assertEquals(createUserRequest.getEmail(), actual.getEmail());
+        assertEquals(createUserRequest.getName(), actual.getName());
+        assertEquals(createUserRequest.getCpf(), actual.getCpf());
     }
 
 }

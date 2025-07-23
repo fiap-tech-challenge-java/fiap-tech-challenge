@@ -85,9 +85,8 @@ class UserDataSourceTest {
 
         when(passwordEncoder.encode("plain")).thenReturn("encoded");
         // simulate that save returns entity with address added
-        AddressUserEntity addressEntity = new AddressUserEntity(
-                null, "Street", "42", "Apt", "Neighborhood", "City", "State", "00000-000", savedEntity
-        );
+        AddressUserEntity addressEntity = new AddressUserEntity(null, "Street", "42", "Apt", "Neighborhood", "City",
+                "State", "00000-000", savedEntity);
         savedEntity.setAddressesList(List.of(addressEntity));
         when(jpaRepository.save(any(UserEntity.class))).thenReturn(savedEntity);
 
@@ -148,9 +147,9 @@ class UserDataSourceTest {
         // Assert
         assertTrue(result.isPresent());
         User u = result.get();
-        assertEquals(id,   u.getId());
+        assertEquals(id, u.getId());
         assertEquals("login", u.getLogin());
-        assertEquals("pwd",   u.getPassword());
+        assertEquals("pwd", u.getPassword());
         assertEquals("e@e.com", u.getEmail());
         assertTrue(u.isActive());
     }
@@ -200,8 +199,10 @@ class UserDataSourceTest {
     @Test
     void shouldFindAllUsersSuccessfully() {
         // Arrange
-        UserEntity e1 = new UserEntity(); e1.setId(UUID.randomUUID());
-        UserEntity e2 = new UserEntity(); e2.setId(UUID.randomUUID());
+        UserEntity e1 = new UserEntity();
+        e1.setId(UUID.randomUUID());
+        UserEntity e2 = new UserEntity();
+        e2.setId(UUID.randomUUID());
         when(jpaRepository.findAll()).thenReturn(List.of(e1, e2));
 
         // Act
@@ -234,7 +235,7 @@ class UserDataSourceTest {
         verify(usernameValidator).validate("newLogin");
         verify(jpaRepository).save(captor.capture());
         assertEquals("newLogin", captor.getValue().getLogin());
-        assertEquals("newName",  captor.getValue().getName());
+        assertEquals("newName", captor.getValue().getName());
     }
 
     @Test
@@ -244,7 +245,8 @@ class UserDataSourceTest {
         when(jpaRepository.findById(id)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(UserNotFoundException.class, () -> userDataSource.update(id, new UpdateUser("newLogin", "newName", "newEmail@email.com")));
+        assertThrows(UserNotFoundException.class,
+                () -> userDataSource.update(id, new UpdateUser("newLogin", "newName", "newEmail@email.com")));
     }
 
     @Test
@@ -259,8 +261,7 @@ class UserDataSourceTest {
         UserEntity entity = new UserEntity();
         entity.setId(id);
         when(jpaRepository.findById(id)).thenReturn(Optional.of(entity));
-        doThrow(new BusinessException("Invalid"))
-                .when(usernameValidator).validate("badLogin");
+        doThrow(new BusinessException("Invalid")).when(usernameValidator).validate("badLogin");
 
         // Act & Assert
         assertThrows(BusinessException.class, () -> userDataSource.update(id, update));

@@ -25,10 +25,9 @@ class HealthApiImplTest {
 
     @BeforeEach
     void setUp() {
-        healthStatus = new HealthStatus(
-            "true", // isHealthy
-            "All systems operational", // message
-            null // details
+        healthStatus = new HealthStatus("true", // isHealthy
+                "All systems operational", // message
+                null // details
         );
         // ...set fields as needed
     }
@@ -58,7 +57,8 @@ class HealthApiImplTest {
     @Test
     void shouldThrowResourceNotFoundExceptionForTestExceptionEndpoint() {
         // Act & Assert
-        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class, () -> healthApiImpl.testException("not-found"));
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,
+                () -> healthApiImpl.testException("not-found"));
         assertEquals("Test resource", ex.getResourceName());
     }
 
@@ -80,4 +80,3 @@ class HealthApiImplTest {
         verify(healthCheckService).checkHealth();
     }
 }
-

@@ -58,4 +58,3 @@ class UserDetailsServiceImplTest {
         verify(userRepository).findByIdOnly(userId);
     }
 }
-

@@ -59,4 +59,3 @@ class AuthApiImplTest {
         verify(authUseCaseImpl).authenticate(loginRequest);
     }
 }
-
