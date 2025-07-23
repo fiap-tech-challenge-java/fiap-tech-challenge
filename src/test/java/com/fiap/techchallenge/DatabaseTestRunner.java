@@ -1,6 +1,7 @@
 package com.fiap.techchallenge;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -11,13 +12,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @ActiveProfiles("test")
-public class DatabaseTestRunner {
+class DatabaseTestRunner {
 
-    private final DataSource dataSource;
-
-    public DatabaseTestRunner(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    @Autowired
+    private DataSource dataSource;
 
     @Test
     void shouldConnectToDatabase() throws Exception {
@@ -26,3 +24,4 @@ public class DatabaseTestRunner {
         }
     }
 }
+
