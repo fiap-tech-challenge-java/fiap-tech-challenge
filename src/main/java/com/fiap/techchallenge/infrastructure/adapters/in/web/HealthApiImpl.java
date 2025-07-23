@@ -7,7 +7,7 @@ import com.fiap.techchallenge.domain.model.HealthStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/health")
+@RequestMapping("/health")
 public class HealthApiImpl {
 
     private final HealthCheckService healthCheckService;

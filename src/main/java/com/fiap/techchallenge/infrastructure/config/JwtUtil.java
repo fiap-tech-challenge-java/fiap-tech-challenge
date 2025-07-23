@@ -20,10 +20,15 @@ public class JwtUtil {
     @Value("${jwt.expiration-ms}")
     private long expMs;
 
-    public String generateToken(String username, UUID userId, String email) {
+    public String generateToken(UUID userId, String role) {
         Date now = new Date();
-        return Jwts.builder().setSubject(username).claim("userId", userId).claim("email", email).setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + expMs)).signWith(SignatureAlgorithm.HS256, secret).compact();
+        return Jwts.builder()
+                .claim("userId", userId)
+                .claim("role", role)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + expMs))
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
     public Claims extractAllClaims(String token) {
@@ -44,6 +49,11 @@ public class JwtUtil {
         } catch (Exception ex) {
             logger.error("Unexpected error while extracting claims from the token: {}", ex.getMessage(), ex);
             throw new JwtException("Error while processing token.", ex);
+            logger.warn("Illegal argument in token while extracting claims: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("Unexpected error while extracting claims from token: {}", ex.getMessage(), ex);
+            throw new JwtException("Error processing token", ex);
         }
     }
 
@@ -52,9 +62,15 @@ public class JwtUtil {
         return claims.getSubject();
     }
 
-    public String extractUserId(String token) {
+    public UUID extractUserId(String token) {
         Claims claims = extractAllClaims(token);
-        return claims.get("userId", String.class);
+        Object userIdObj = claims.get("userId");
+        if (userIdObj instanceof UUID) {
+            return (UUID) userIdObj;
+        } else if (userIdObj instanceof String) {
+            return UUID.fromString((String) userIdObj);
+        }
+        throw new JwtException("Invalid userId claim type");
     }
 
     public String extractEmail(String token) {
@@ -81,17 +97,21 @@ public class JwtUtil {
         } catch (Exception ex) {
             logger.error("Unexpected error while validating token: {}", ex.getMessage(), ex);
             throw new JwtException("Error while validating token.", ex);
+            logger.warn("Illegal argument in token: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("Unexpected error while validating token: {}", ex.getMessage(), ex);
+            throw new JwtException("Error validating token", ex);
         }
     }
 
     public boolean isTokenExpired(String token) {
         try {
             Claims claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-
             return claims.getExpiration().before(new Date());
         } catch (Exception ex) {
-            logger.warn("Error while checking token expiration: {}", ex.getMessage());
-            return true; // Considera como expirado em caso de erro
+            logger.warn("Error checking token expiration: {}", ex.getMessage());
+            return true;
         }
     }
 }

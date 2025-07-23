@@ -62,6 +62,23 @@ public class UserDataSource implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByIdOnly(UUID id) {
+        Optional<UserEntity> userEntity = jpaRepository.findById(id);
+        // Map only essential fields to avoid lazy loading issues
+        return userEntity.map(entity -> {
+            User user = new User();
+            user.setId(entity.getId());
+            user.setLogin(entity.getLogin());
+            user.setPassword(entity.getPassword());
+            user.setEmail(entity.getEmail());
+            user.setRole(entity.getRole());
+            user.setActive(entity.isActive());
+            // Do NOT set addressesList or any lazy collections
+            return user;
+        });
+    }
+
+    @Override
     public Optional<User> findByLogin(String login) {
         Optional<UserEntity> userEntity = jpaRepository.findByLogin(login);
 

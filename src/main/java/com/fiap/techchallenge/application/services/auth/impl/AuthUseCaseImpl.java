@@ -42,11 +42,10 @@ public class AuthUseCaseImpl implements AuthUseCase {
                 throw new CustomAuthenticationException("Invalid credentials.");
             }
 
-            String username = userDetails.getUsername();
             UUID userId = ((UserDetailsImpl) userDetails).getId();
-            String email = ((UserDetailsImpl) userDetails).getEmail();
+            String role = userDetails.getAuthorities().iterator().next().getAuthority();
 
-            String token = jwtUtil.generateToken(username, userId, email);
+            String token = jwtUtil.generateToken(userId, role);
 
             long expiration = jwtUtil.extractAllClaims(token).getExpiration().getTime();
             long now = System.currentTimeMillis();
@@ -54,7 +53,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
                     ZoneId.systemDefault());
             int expiresIn = (int) ((expiration - now) / 1000);
 
-            LoginResponse response = new LoginResponse(token, username, email, expiresAt, expiresIn, userId);
+            LoginResponse response = new LoginResponse(token, null, null, expiresAt, expiresIn, userId);
 
             return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {
