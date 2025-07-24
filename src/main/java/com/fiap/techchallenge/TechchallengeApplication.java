@@ -13,7 +13,7 @@ public class TechchallengeApplication {
         // sobe o contexto
         SpringApplication.run(TechchallengeApplication.class, args);
         // imprime mensagem verde com foguete
-        System.out.println("\u001B[32m\uD83D\uDE80 TechChallenge iniciado com sucesso! \u001B[0m");
+        System.out.println("\u001B[32m\uD83D\uDE80 TechChallenge successfully started! \u001B[0m");
     }
 
 }

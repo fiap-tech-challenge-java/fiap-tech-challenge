@@ -44,6 +44,11 @@ public class JwtUtil {
             logger.warn("Unsupported token while extracting claims: {}", ex.getMessage());
             throw ex;
         } catch (IllegalArgumentException ex) {
+            logger.warn("Token with illegal argument while extracting claims: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("Unexpected error while extracting claims from the token: {}", ex.getMessage(), ex);
+            throw new JwtException("Error while processing token.", ex);
             logger.warn("Illegal argument in token while extracting claims: {}", ex.getMessage());
             throw ex;
         } catch (Exception ex) {
@@ -87,6 +92,11 @@ public class JwtUtil {
             logger.warn("Unsupported token: {}", ex.getMessage());
             throw ex;
         } catch (IllegalArgumentException ex) {
+            logger.warn("Token with illegal argument: {}", ex.getMessage());
+            throw ex;
+        } catch (Exception ex) {
+            logger.error("Unexpected error while validating token: {}", ex.getMessage(), ex);
+            throw new JwtException("Error while validating token.", ex);
             logger.warn("Illegal argument in token: {}", ex.getMessage());
             throw ex;
         } catch (Exception ex) {

@@ -3,7 +3,7 @@ package com.fiap.techchallenge.domain.exceptions;
 public class UserNotFoundException extends RuntimeException {
 
     public UserNotFoundException() {
-        super("Usuário não encontrado.");
+        super("User not found.");
     }
 
     public UserNotFoundException(String message) {
