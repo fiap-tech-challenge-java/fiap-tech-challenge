@@ -2,7 +2,7 @@ package com.fiap.techchallenge.domain.exceptions;
 
 public class MissingRequiredFieldsException extends IllegalArgumentException {
     public MissingRequiredFieldsException() {
-        super("Parâmetros obrigatórios ausentes.");
+        super("Required parameters missing.");
     }
 
     public MissingRequiredFieldsException(String message) {

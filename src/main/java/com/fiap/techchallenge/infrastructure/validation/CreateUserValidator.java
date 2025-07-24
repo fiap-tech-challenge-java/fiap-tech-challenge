@@ -28,21 +28,22 @@ public final class CreateUserValidator {
         this.usernameValidator = usernameValidator;
     }
 
+
     public void validate(CreateUser request) {
 
         if (request == null) {
-            throw new IllegalArgumentException("Objeto de requisição não pode ser nulo.");
+            throw new IllegalArgumentException("Request object cannot be null.");
         }
 
         if (Strings.isBlank(request.getName()) || Strings.isBlank(request.getEmail())
                 || Strings.isBlank(request.getCpf()) || Strings.isBlank(request.getLogin())
                 || Strings.isBlank(request.getPassword())) {
 
-            throw new IllegalArgumentException("Todos os campos obrigatórios devem ser preenchidos.");
+            throw new IllegalArgumentException("All required fields must be filled.");
         }
 
         if (!EMAIL_REGEX.matcher(request.getEmail()).matches()) {
-            throw new InvalidEmailPatternException("E‑mail inválido.");
+            throw new InvalidEmailPatternException("Invalid email.");
         }
 
         if (!PasswordValidator.isValid(request.getPassword())) {
@@ -56,10 +57,11 @@ public final class CreateUserValidator {
         });
 
         if (request.getLogin().length() < 5 || request.getLogin().length() > 20) {
-            throw new InvalidLoginPatternException("O login deve ter entre 5 e 20 caracteres.");
+            throw new InvalidLoginPatternException("Login must be between 5 and 20 characters.");
         }
 
         usernameValidator.validate(request.getLogin());
     }
+
 
 }

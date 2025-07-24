@@ -3,7 +3,7 @@ package com.fiap.techchallenge.domain.exceptions;
 public class AddressNotFoundException extends RuntimeException {
 
     public AddressNotFoundException() {
-        super("Endereço não encontrado para o usuário informado.");
+        super("Address not found for the specified user.");
     }
 
     public AddressNotFoundException(String message) {

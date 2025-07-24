@@ -1,7 +1,6 @@
 package com.fiap.techchallenge.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiap.techchallenge.infrastructure.adapters.in.web.UserDetailsServiceImpl;
 import com.fiap.techchallenge.infrastructure.config.JwtUtil;
 import com.fiap.techchallenge.model.ErrorResponse;
 
@@ -25,7 +24,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.UUID;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -46,6 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         try {
+            // Processa o token JWT apenas se estiver presente
             String header = req.getHeader("Authorization");
             if (header == null || !header.startsWith("Bearer ")) {
                 chain.doFilter(req, res);
@@ -54,31 +53,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String token = header.substring(7);
             if (jwtUtil.validateToken(token)) {
-                UUID userId = jwtUtil.extractUserId(token);
-                UserDetails ud = ((UserDetailsServiceImpl) uds).loadUserById(userId);
+                String username = jwtUtil.extractUsername(token);
+                UserDetails ud = uds.loadUserByUsername(username);
+
                 var auth = new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-                logger.debug("User authenticated: {}", userId);
+                logger.debug("Authenticated user: {}", username);
             }
 
             chain.doFilter(req, res);
 
         } catch (ExpiredJwtException ex) {
-            logger.warn("JWT token expired: {}", ex.getMessage());
-            handleJwtException(res, "Token expired", "TOKEN_EXPIRED", HttpStatus.UNAUTHORIZED);
+            logger.warn("Expired JWT token: {}", ex.getMessage());
+            handleJwtException(res, "Expired token:", "TOKEN_EXPIRED", HttpStatus.UNAUTHORIZED);
 
         } catch (MalformedJwtException ex) {
             logger.warn("Malformed JWT token: {}", ex.getMessage());
-            handleJwtException(res, "Malformed token", "TOKEN_MALFORMED", HttpStatus.UNAUTHORIZED);
+            handleJwtException(res, "Malformed token:", "TOKEN_MALFORMED", HttpStatus.UNAUTHORIZED);
 
         } catch (UnsupportedJwtException ex) {
             logger.warn("Unsupported JWT token: {}", ex.getMessage());
             handleJwtException(res, "Unsupported token", "TOKEN_UNSUPPORTED", HttpStatus.UNAUTHORIZED);
 
         } catch (IllegalArgumentException ex) {
-            logger.warn("Illegal argument in JWT token: {}", ex.getMessage());
+            logger.warn("JWT token with illegal argument: {}", ex.getMessage());
             handleJwtException(res, "Invalid token", "TOKEN_INVALID", HttpStatus.UNAUTHORIZED);
 
         } catch (UsernameNotFoundException ex) {
@@ -90,6 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             handleJwtException(res, "Internal authentication error", "AUTHENTICATION_ERROR",
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
     }
 
     private void handleJwtException(HttpServletResponse response, String message, String errorCode, HttpStatus status)

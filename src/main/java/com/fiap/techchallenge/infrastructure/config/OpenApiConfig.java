@@ -16,10 +16,10 @@ public class OpenApiConfig {
 
         return new OpenAPI()
                 .info(new Info().title("FIAP_TC1").version("1.0.0")
-                        .description("API para gerenciar usuários (dono de restaurante e cliente)"))
+                        .description("API to manage users (restaurant owner and customer)"))
 
                 .components(new Components().addSecuritySchemes(securitySchemeName, new SecurityScheme()
                         .name(securitySchemeName).type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
-                        .description("Insira o token JWT obtido do endpoint /auth/login no formato: Bearer {token}")));
+                        .description("Insert the JWT token obtained from the /auth/login endpoint in the format: Bearer {token}")));
     }
 }

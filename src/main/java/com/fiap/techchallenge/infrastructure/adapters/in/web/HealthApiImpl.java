@@ -32,7 +32,7 @@ public class HealthApiImpl {
             throw new ResourceNotFoundException("Test resource", "type", type);
         }
         if ("business".equals(type)) {
-            throw new RuntimeException("Simulated business error");
+            throw new RuntimeException("Simulated business error.");
         }
         return healthCheckService.checkHealth();
     }
