@@ -16,6 +16,22 @@ services:
       timeout: 5s
       retries: 5
 
+  techchallenge_tests:
+    image: maven:3.9.8-eclipse-temurin-21
+    container_name: techchallenge_tests
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ~/.m2:/root/.m2
+    command: ["./mvnw", "clean", "test"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/techchallenge
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgrespass
+    depends_on:
+      techchallenge_postgres:
+        condition: service_healthy
+
   techchallenge_application:
     container_name: techchallenge_application
     build:
@@ -28,7 +44,6 @@ services:
       - ~/.m2:/root/.m2
     command:
       - "./mvnw"
-      - "clean"
       - "generate-sources"
       - "compile"
       - "spring-boot:run"
