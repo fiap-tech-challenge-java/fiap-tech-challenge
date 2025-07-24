@@ -13,8 +13,8 @@ public class DatabaseHealthChecker {
     public DatabaseHealthChecker(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-  
-   // @Override
+
+    // @Override
     public void run(String... args) throws Exception {
         try (Connection conn = dataSource.getConnection()) {
             System.out.println(

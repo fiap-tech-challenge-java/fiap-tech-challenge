@@ -45,4 +45,3 @@ class CreateAddressValidatorTest {
         assertEquals("Invalid postal code. Expected format: NNNNN-NNN", ex.getMessage());
     }
 }
-

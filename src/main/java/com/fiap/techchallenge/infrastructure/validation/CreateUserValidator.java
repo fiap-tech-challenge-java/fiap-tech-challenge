@@ -28,7 +28,6 @@ public final class CreateUserValidator {
         this.usernameValidator = usernameValidator;
     }
 
-
     public void validate(CreateUser request) {
 
         if (request == null) {
@@ -62,6 +61,5 @@ public final class CreateUserValidator {
 
         usernameValidator.validate(request.getLogin());
     }
-
 
 }

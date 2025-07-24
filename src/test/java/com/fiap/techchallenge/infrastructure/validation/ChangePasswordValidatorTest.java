@@ -42,21 +42,24 @@ class ChangePasswordValidatorTest {
     @Test
     void shouldThrowExceptionWhenRequiredFieldsAreBlank() {
         changePassword.setId(null);
-        Exception ex = assertThrows(InvalidPreviousPasswordException.class, () -> validator.isValid(changePassword, storedEncodedPassword));
+        Exception ex = assertThrows(InvalidPreviousPasswordException.class,
+                () -> validator.isValid(changePassword, storedEncodedPassword));
         assertEquals("Invalid previous password.", ex.getMessage());
     }
 
     @Test
     void shouldThrowExceptionWhenPasswordsDoNotMatch() {
         changePassword.setConfirmPassword("DifferentPassword");
-        Exception ex = assertThrows(PasswordsDoNotMatchException.class, () -> validator.isValid(changePassword, storedEncodedPassword));
+        Exception ex = assertThrows(PasswordsDoNotMatchException.class,
+                () -> validator.isValid(changePassword, storedEncodedPassword));
         assertEquals("Passwords do not match.", ex.getMessage());
     }
 
     @Test
     void shouldThrowExceptionWhenLastPasswordIsInvalid() {
         when(passwordEncoder.matches("oldPass", storedEncodedPassword)).thenReturn(false);
-        Exception ex = assertThrows(InvalidPreviousPasswordException.class, () -> validator.isValid(changePassword, storedEncodedPassword));
+        Exception ex = assertThrows(InvalidPreviousPasswordException.class,
+                () -> validator.isValid(changePassword, storedEncodedPassword));
         assertEquals("Invalid previous password.", ex.getMessage());
     }
 
@@ -64,7 +67,10 @@ class ChangePasswordValidatorTest {
     void shouldThrowExceptionWhenNewPasswordPatternIsInvalid() {
         when(passwordEncoder.matches("oldPass", storedEncodedPassword)).thenReturn(true);
         mockStatic(PasswordValidator.class).when(() -> PasswordValidator.isValid("NewPassword123!")).thenReturn(false);
-        Exception ex = assertThrows(InvalidPasswordPatternException.class, () -> validator.isValid(changePassword, storedEncodedPassword));
-        assertEquals("The password must be at least 5 characters long, containing at least 1 uppercase letter and 1 number.", ex.getMessage());
+        Exception ex = assertThrows(InvalidPasswordPatternException.class,
+                () -> validator.isValid(changePassword, storedEncodedPassword));
+        assertEquals(
+                "The password must be at least 5 characters long, containing at least 1 uppercase letter and 1 number.",
+                ex.getMessage());
     }
 }

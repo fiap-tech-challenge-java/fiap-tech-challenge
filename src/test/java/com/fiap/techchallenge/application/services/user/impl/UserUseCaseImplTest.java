@@ -171,7 +171,8 @@ class UserUseCaseImplTest {
         // Arrange
         String oldPasswordEncoded = "encodedOldPassword";
         when(userRepository.recoverPassword(userId)).thenReturn(oldPasswordEncoded);
-        doThrow(new IllegalArgumentException("Invalid password")).when(changePasswordValidator).isValid(changePassword, oldPasswordEncoded);
+        doThrow(new IllegalArgumentException("Invalid password")).when(changePasswordValidator).isValid(changePassword,
+                oldPasswordEncoded);
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> userUseCase.changePassword(changePassword));
         verify(userRepository).recoverPassword(userId);

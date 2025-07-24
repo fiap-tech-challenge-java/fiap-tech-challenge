@@ -53,4 +53,3 @@ class CreateUserValidatorTest {
 
     // Add more tests for other validation rules as needed (e.g., invalid email, password, login, etc.)
 }
-

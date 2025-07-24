@@ -20,6 +20,7 @@ public class OpenApiConfig {
 
                 .components(new Components().addSecuritySchemes(securitySchemeName, new SecurityScheme()
                         .name(securitySchemeName).type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
-                        .description("Insert the JWT token obtained from the /auth/login endpoint in the format: Bearer {token}")));
+                        .description(
+                                "Insert the JWT token obtained from the /auth/login endpoint in the format: Bearer {token}")));
     }
 }
