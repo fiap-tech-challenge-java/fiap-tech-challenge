@@ -77,24 +77,22 @@ public class UserApiImpl implements UsersApi {
         if (authenticatedUser.getRole() == RoleEnum.OWNER) {
             final User finalAuthenticatedUser = authenticatedUser;
             List<UserResponse> responses = userUseCase.getAll().stream()
-                .filter(u -> u.getRole() == RoleEnum.CUSTOMER || u.getId().equals(finalAuthenticatedUser.getId()))
-                .map(USERS_API_MAPPER::mapToUserResponse)
-                .collect(Collectors.toList());
+                    .filter(u -> u.getRole() == RoleEnum.CUSTOMER || u.getId().equals(finalAuthenticatedUser.getId()))
+                    .map(USERS_API_MAPPER::mapToUserResponse).collect(Collectors.toList());
             return ResponseEntity.ok(responses);
         }
         // CUSTOMER can only see themselves
         if (authenticatedUser.getRole() == RoleEnum.CUSTOMER) {
             final User finalAuthenticatedUser = authenticatedUser;
             List<UserResponse> responses = userUseCase.getAll().stream()
-                .filter(u -> u.getId().equals(finalAuthenticatedUser.getId()))
-                .map(USERS_API_MAPPER::mapToUserResponse)
-                .collect(Collectors.toList());
+                    .filter(u -> u.getId().equals(finalAuthenticatedUser.getId()))
+                    .map(USERS_API_MAPPER::mapToUserResponse).collect(Collectors.toList());
             if (responses.size() == 1) {
                 return ResponseEntity.ok(responses);
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .header("X-Restriction-Reason", "CUSTOMER users cannot view other CUSTOMERS or OWNERS.")
-                    .body(null);
+                        .header("X-Restriction-Reason", "CUSTOMER users cannot view other CUSTOMERS or OWNERS.")
+                        .body(null);
             }
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
