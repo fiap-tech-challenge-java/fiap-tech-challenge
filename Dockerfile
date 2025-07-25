@@ -24,6 +24,9 @@ WORKDIR /build
 # Copia TODO o projeto (fonte, specs, configs, mvnw, .mvn etc)
 COPY . .
 
+# Garante que o mvnw tem permissões de execução
+RUN chmod +x mvnw
+
 # Executa clean → compile → generate-sources → package
 RUN --mount=type=cache,target=/root/.m2 \
     ./mvnw clean compile generate-sources package -DskipTests -B \
@@ -55,10 +58,10 @@ USER appuser
 WORKDIR /app
 
 # Copia camadas extraídas para otimizar rebuilds
-COPY --from=extract /build/target/extracted/dependencies/           ./dependencies/
-COPY --from=extract /build/target/extracted/spring-boot-loader/    ./spring-boot-loader/
-COPY --from=extract /build/target/extracted/snapshot-dependencies/ ./snapshot-dependencies/
-COPY --from=extract /build/target/extracted/application/           ./application/
+COPY --from=extract /build/target/extracted/dependencies/           ./
+COPY --from=extract /build/target/extracted/spring-boot-loader/    ./
+COPY --from=extract /build/target/extracted/snapshot-dependencies/ ./
+COPY --from=extract /build/target/extracted/application/           ./
 
 EXPOSE 8080
 

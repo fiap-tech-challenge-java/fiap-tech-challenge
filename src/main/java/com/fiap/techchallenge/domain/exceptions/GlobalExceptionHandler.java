@@ -272,8 +272,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse
-                .setMessage("Data integrity error. Check if the data does not violate database constraints.");
+        errorResponse.setMessage("Data integrity error. Check if the data does not violate database constraints.");
         errorResponse.setCode("DATA_INTEGRITY_VIOLATION");
         errorResponse.setStatus(HttpStatus.CONFLICT.value());
         errorResponse.setPath(request.getRequestURI());
