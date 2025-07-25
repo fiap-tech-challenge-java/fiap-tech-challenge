@@ -20,20 +20,14 @@ public class DatabaseHealthChecker implements HealthIndicator {
     public Health health() {
         try (Connection connection = dataSource.getConnection()) {
             if (connection.isValid(2)) {
-                return Health.up()
-                             .withDetail("database", "Connection OK")
-                             .withDetail("url", connection.getMetaData().getURL())
-                             .build();
+                return Health.up().withDetail("database", "Connection OK")
+                        .withDetail("url", connection.getMetaData().getURL()).build();
             } else {
-                return Health.down()
-                             .withDetail("database", "Connection NOT valid")
-                             .build();
+                return Health.down().withDetail("database", "Connection NOT valid").build();
             }
         } catch (SQLException e) {
-            return Health.down(e)
-                         .withDetail("database", "Connection error")
-                         .withDetail("message", e.getMessage())
-                         .build();
+            return Health.down(e).withDetail("database", "Connection error").withDetail("message", e.getMessage())
+                    .build();
         }
     }
 
