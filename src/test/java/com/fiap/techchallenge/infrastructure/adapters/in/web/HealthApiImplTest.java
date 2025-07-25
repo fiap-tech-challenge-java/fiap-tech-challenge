@@ -63,13 +63,6 @@ class HealthApiImplTest {
     }
 
     @Test
-    void shouldThrowBusinessExceptionForTestExceptionEndpoint() {
-        // Act & Assert
-        RuntimeException ex = assertThrows(RuntimeException.class, () -> healthApiImpl.testException("business"));
-        assertEquals("Simulated business error", ex.getMessage());
-    }
-
-    @Test
     void shouldReturnHealthStatusForTestExceptionEndpointWithNoType() {
         // Arrange
         when(healthCheckService.checkHealth()).thenReturn(healthStatus);

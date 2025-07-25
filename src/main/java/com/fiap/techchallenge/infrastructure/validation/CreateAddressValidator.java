@@ -13,17 +13,17 @@ public final class CreateAddressValidator {
 
     public void validate(CreateAddress request) {
         if (request == null) {
-            throw new IllegalArgumentException("Objeto de requisição de endereço não pode ser nulo.");
+            throw new IllegalArgumentException("Address request object cannot be null.");
         }
 
         if (Strings.isBlank(request.getPublicPlace()) || Strings.isBlank(request.getNumber())
                 || Strings.isBlank(request.getCity()) || Strings.isBlank(request.getPostalCode())) {
             throw new IllegalArgumentException(
-                    "Campos obrigatórios de endereço devem ser preenchidos: rua, número, cidade e CEP.");
+                    "Required address fields must be filled: street, number, city and postal code.");
         }
 
         if (!CEP_REGEX.matcher(request.getPostalCode()).matches()) {
-            throw new IllegalArgumentException("CEP inválido. Formato esperado: NNNNN-NNN");
+            throw new IllegalArgumentException("Invalid postal code. Expected format: NNNNN-NNN");
         }
     }
 }

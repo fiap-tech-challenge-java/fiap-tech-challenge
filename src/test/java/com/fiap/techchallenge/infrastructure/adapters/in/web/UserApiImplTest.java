@@ -2,12 +2,11 @@ package com.fiap.techchallenge.infrastructure.adapters.in.web;
 
 import com.fiap.techchallenge.application.ports.in.user.dtos.CreateUser;
 import com.fiap.techchallenge.application.ports.in.user.dtos.UpdateUser;
+import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.application.services.user.UserUseCase;
 import com.fiap.techchallenge.infrastructure.adapters.in.mapper.UserApiMapper;
-import com.fiap.techchallenge.model.CreateUserRequest;
-import com.fiap.techchallenge.model.CreateUserResponse;
-import com.fiap.techchallenge.model.UpdateUserRequest;
-import com.fiap.techchallenge.model.UserResponse;
+import com.fiap.techchallenge.infrastructure.config.UserDetailsImpl;
+import com.fiap.techchallenge.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,10 +14,10 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.util.Collections;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,12 +36,12 @@ class UserApiImplTest {
     private UUID userId;
 
     private CreateUserRequest createUserRequest;
-    private com.fiap.techchallenge.application.ports.in.user.dtos.User domainUser;
+    private User domainUser;
     private CreateUserResponse expectedCreateResponse;
+    private UserResponse expectedUpdateResponse;
 
     private UpdateUserRequest updateUserRequest;
-    private com.fiap.techchallenge.application.ports.in.user.dtos.User updatedDomainUser;
-    private UserResponse expectedUpdateResponse;
+    private User updatedDomainUser;
 
     @BeforeEach
     void setUp() {
@@ -61,9 +60,9 @@ class UserApiImplTest {
         createUserRequest.setCpf("12345678901");
         createUserRequest.setRole(CreateUserRequest.RoleEnum.CUSTOMER);
 
-        createUserRequest.setAddress(new com.fiap.techchallenge.model.AddressUserRequest());
+        createUserRequest.setAddress(new AddressUserRequest());
 
-        domainUser = new com.fiap.techchallenge.application.ports.in.user.dtos.User();
+        domainUser = new User();
         domainUser.setId(userId);
         domainUser.setLogin("newLogin");
         domainUser.setPassword("newPassword");
@@ -79,7 +78,7 @@ class UserApiImplTest {
         updateUserRequest.setEmail("updatedEmail@example.com");
         updateUserRequest.setName("Updated Name");
 
-        updatedDomainUser = new com.fiap.techchallenge.application.ports.in.user.dtos.User();
+        updatedDomainUser = new User();
         updatedDomainUser.setId(userId);
         updatedDomainUser.setLogin("updatedLogin");
         updatedDomainUser.setEmail("updatedEmail@example.com");
@@ -108,6 +107,35 @@ class UserApiImplTest {
         assertEquals(createUserRequest.getEmail(), actual.getEmail());
         assertEquals(createUserRequest.getName(), actual.getName());
         assertEquals(createUserRequest.getCpf(), actual.getCpf());
+    }
+
+    @Test
+    void shouldUpdateUserSuccessfully() {
+        // Arrange
+        // Simula usuário autenticado igual ao userId (deve permitir update)
+        UserDetailsImpl userDetails = mock(UserDetailsImpl.class);
+        when(userDetails.getId()).thenReturn(userId);
+        Authentication authentication = mock(Authentication.class);
+        when(authentication.getPrincipal()).thenReturn(userDetails);
+        SecurityContext securityContext = mock(SecurityContext.class);
+        when(securityContext.getAuthentication()).thenReturn(authentication);
+        SecurityContextHolder.setContext(securityContext);
+
+        when(userUseCase.update(eq(userId), any())).thenReturn(updatedDomainUser);
+
+        // Act
+        ResponseEntity<UserResponse> response = userApiImpl.updateUser(userId, updateUserRequest);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(expectedUpdateResponse, response.getBody());
+
+        ArgumentCaptor<UpdateUser> captor = ArgumentCaptor.forClass(UpdateUser.class);
+        verify(userUseCase).update(eq(userId), captor.capture());
+        UpdateUser actual = captor.getValue();
+        assertEquals(updateUserRequest.getLogin(), actual.getLogin());
+        assertEquals(updateUserRequest.getEmail(), actual.getEmail());
+        assertEquals(updateUserRequest.getName(), actual.getName());
     }
 
 }
