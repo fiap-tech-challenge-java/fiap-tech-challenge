@@ -37,20 +37,21 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      target: builder
-    working_dir: /build
-    volumes:
-      - ./:/build
-      - ~/.m2:/root/.m2
-    command:
-      - "./mvnw"
-      - "generate-sources"
-      - "compile"
-      - "spring-boot:run"
+#      target: builder
+#    working_dir: /build
+#    volumes:
+#      - ./:/build
+#      - ~/.m2:/root/.m2
+#    command:
+#      - "./mvnw"
+#      - "generate-sources"
+#      - "compile"
+#      - "spring-boot:run"
     ports:
       - "8080:8080"
       - "8081:8081"
     environment:
+#      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8081" # Debug using port 8081 remove jvm
       SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/techchallenge
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgrespass
