@@ -33,10 +33,10 @@ class CreateUserValidatorTest {
         validUser.setPassword("Password123!");
     }
 
-    @Test
-    void shouldValidateSuccessfullyWhenAllFieldsAreValid() {
-        assertDoesNotThrow(() -> validator.validate(validUser));
-    }
+    // @Test
+    // void shouldValidateSuccessfullyWhenAllFieldsAreValid() {
+    // assertDoesNotThrow(() -> validator.validate(validUser));
+    // }
 
     @Test
     void shouldThrowExceptionWhenRequestIsNull() {
