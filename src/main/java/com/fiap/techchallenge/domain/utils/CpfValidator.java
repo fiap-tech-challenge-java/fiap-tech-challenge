@@ -1,10 +1,12 @@
 package com.fiap.techchallenge.domain.utils;
 
 import com.fiap.techchallenge.domain.exceptions.InvalidCpfException;
+import org.springframework.stereotype.Component;
 
 /**
  * Valida CPF de acordo com os padrões
  */
+@Component
 public class CpfValidator {
 
     public static void validate(String cpf) {

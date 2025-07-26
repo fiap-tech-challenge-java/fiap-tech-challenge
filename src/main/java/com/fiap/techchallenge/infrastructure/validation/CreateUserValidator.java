@@ -22,13 +22,10 @@ public final class CreateUserValidator {
 
     private final UserJpaRepository userJpaRepository;
     private final UsernameValidator usernameValidator;
-    private final PasswordValidator passwordValidator;
 
-    public CreateUserValidator(UserJpaRepository userJpaRepository, UsernameValidator usernameValidator,
-            PasswordValidator passwordValidator) {
+    public CreateUserValidator(UserJpaRepository userJpaRepository, UsernameValidator usernameValidator) {
         this.userJpaRepository = userJpaRepository;
         this.usernameValidator = usernameValidator;
-        this.passwordValidator = passwordValidator;
     }
 
     public void validate(CreateUser request) {
@@ -48,7 +45,7 @@ public final class CreateUserValidator {
             throw new InvalidEmailPatternException("Invalid email.");
         }
 
-        if (!passwordValidator.isValid(request.getPassword())) {
+        if (!PasswordValidator.isValid(request.getPassword())) {
             throw new InvalidPasswordPatternException();
         }
 
