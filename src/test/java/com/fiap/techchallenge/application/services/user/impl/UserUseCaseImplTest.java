@@ -180,4 +180,63 @@ class UserUseCaseImplTest {
         verify(passwordEncoder, never()).encode(any());
         verify(userRepository, never()).changePassword(any());
     }
+
+    @Test
+    void shouldThrowExceptionWhenCreatingUserWithNullInput() {
+        // Arrange - Mock the validator to throw NPE when validate is called with null
+        doThrow(new NullPointerException("CreateUser cannot be null")).when(createUserValidator).validate(null);
+
+        // Act & Assert
+        assertThrows(NullPointerException.class, () -> userUseCase.create(null));
+
+        // Verify the validator was called with null
+        verify(createUserValidator).validate(null);
+        verify(userRepository, never()).create(any());
+    }
+
+    @Test
+    void shouldThrowExceptionWhenUpdateUserNotFound() {
+        // Arrange
+        when(userRepository.update(userId, updateUser)).thenThrow(new IllegalArgumentException("User not found"));
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> userUseCase.update(userId, updateUser));
+        verify(userRepository).update(userId, updateUser);
+    }
+
+    @Test
+    void shouldHandleDeleteNonExistentUser() {
+        // Arrange
+        doThrow(new IllegalArgumentException("User not found")).when(userRepository).deleteById(userId);
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> userUseCase.delete(userId));
+        verify(userRepository).deleteById(userId);
+    }
+
+    @Test
+    void shouldReturnEmptyListWhenNoUsersExist() {
+        // Arrange
+        when(userRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Act
+        List<User> result = userUseCase.getAll();
+
+        // Assert
+        assertTrue(result.isEmpty());
+        verify(userRepository).findAll();
+    }
+
+    @Test
+    void shouldThrowExceptionWhenChangePasswordForNonExistentUser() {
+        // Arrange
+        when(userRepository.recoverPassword(userId)).thenThrow(new IllegalArgumentException("User not found"));
+
+        // Act & Assert
+        assertThrows(IllegalArgumentException.class, () -> userUseCase.changePassword(changePassword));
+        verify(userRepository).recoverPassword(userId);
+        verify(changePasswordValidator, never()).isValid(any(), any());
+        verify(passwordEncoder, never()).encode(any());
+        verify(userRepository, never()).changePassword(any());
+    }
 }
