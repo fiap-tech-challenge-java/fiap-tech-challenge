@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.infrastructure.config;
 
+import com.fiap.techchallenge.infrastructure.adapters.in.web.UserDetailsServiceImpl;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.UserDataSource;
 import com.fiap.techchallenge.infrastructure.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;

@@ -14,24 +14,23 @@ import java.util.UUID;
 @Service
 public class UserUseCaseImpl implements UserUseCase {
 
+    private final CreateUserValidator validator;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ChangePasswordValidator changePasswordValidator;
 
-    public UserUseCaseImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserUseCaseImpl(CreateUserValidator validator, UserRepository userRepository,
+            PasswordEncoder passwordEncoder, ChangePasswordValidator changePasswordValidator) {
+        this.validator = validator;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public User login(Login login) {
-        return null;
+        this.changePasswordValidator = changePasswordValidator;
     }
 
     @Override
     public User create(CreateUser createUser) {
-        CreateUserValidator.validate(createUser);
+        validator.validate(createUser);
 
-        createUser.setPassword(passwordEncoder.encode(createUser.getPassword()));
         return this.userRepository.create(createUser);
     }
 
@@ -58,10 +57,11 @@ public class UserUseCaseImpl implements UserUseCase {
 
     @Override
     public void changePassword(ChangePassword changePassword) {
-        ChangePasswordValidator.isValid(changePassword);
+        String passwordEncoded = userRepository.recoverPassword(changePassword.getId());
+        changePasswordValidator.isValid(changePassword, passwordEncoded);
 
-        ChangePassword changingPassword = new ChangePassword(changePassword.getIdUser(),
-                passwordEncoder.encode(changePassword.getConfirmPassword()));
+        ChangePassword changingPassword = new ChangePassword(changePassword.getId(),
+                passwordEncoder.encode(changePassword.getNewPassword()));
 
         this.userRepository.changePassword(changingPassword);
     }

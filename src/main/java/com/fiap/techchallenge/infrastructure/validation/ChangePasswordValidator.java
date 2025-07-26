@@ -2,24 +2,32 @@ package com.fiap.techchallenge.infrastructure.validation;
 
 import com.fiap.techchallenge.application.ports.in.user.dtos.ChangePassword;
 import com.fiap.techchallenge.domain.exceptions.InvalidPasswordPatternException;
+import com.fiap.techchallenge.domain.exceptions.InvalidPreviousPasswordException;
 import com.fiap.techchallenge.domain.exceptions.MissingRequiredFieldsException;
 import com.fiap.techchallenge.domain.exceptions.PasswordsDoNotMatchException;
+import com.fiap.techchallenge.domain.utils.PasswordValidator;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
-import java.util.regex.Pattern;
 
 @Component
 public class ChangePasswordValidator {
-    private static final Pattern PASSWORD_REGEX = Pattern.compile("^(?=.*[A-Z])(?=.*\\d).{5,}$");
 
-    public static boolean isValid(ChangePassword changePassword) {
-        UUID uuid = changePassword.getIdUser();
+    private final PasswordEncoder passwordEncoder;
+
+    public ChangePasswordValidator(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public void isValid(ChangePassword changePassword, String storedEncodedPassword) {
+        UUID uuid = changePassword.getId();
+        String lastPassword = changePassword.getLastPassword();
         String newPassword = changePassword.getNewPassword();
         String confirmPassword = changePassword.getConfirmPassword();
 
-        if (uuid == null || Strings.isBlank(newPassword) || Strings.isBlank(confirmPassword)) {
+        if (Strings.isBlank(String.valueOf(uuid)) || Strings.isBlank(newPassword) || Strings.isBlank(lastPassword)) {
             throw new MissingRequiredFieldsException();
         }
 
@@ -27,11 +35,12 @@ public class ChangePasswordValidator {
             throw new PasswordsDoNotMatchException();
         }
 
-        if (!PASSWORD_REGEX.matcher(newPassword).matches()) {
-            throw new InvalidPasswordPatternException();
+        if (!passwordEncoder.matches(lastPassword, storedEncodedPassword)) {
+            throw new InvalidPreviousPasswordException();
         }
 
-        return true;
+        if (!PasswordValidator.isValid(newPassword)) {
+            throw new InvalidPasswordPatternException();
+        }
     }
-
 }

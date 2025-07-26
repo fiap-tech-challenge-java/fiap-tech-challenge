@@ -21,7 +21,11 @@ paths:
       tags:
         - auth
       summary: Autentica um usuário e retorna um token JWT
-      description: Este endpoint permite que um usuário (dono de restaurante ou cliente) realize login no sistema. Se as credenciais forem válidas, um JSON Web Token (JWT) será retornado, que deve ser usado para autenticar futuras requisições.
+      description: > 
+        Este endpoint permite que um usuário (dono de restaurante ou cliente) realize login no sistema.
+        Se as credenciais forem válidas, um JSON Web Token (JWT) será retornado.
+        O token deve ser usado no header Authorization das requisições subsequentes no formato:
+        Authorization: Bearer {token}
       requestBody:
         required: true
         content:
@@ -34,8 +38,7 @@ paths:
           content:
             application/json:
               schema:
-                type: string
-                example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNjg5MjY4MDUwLCJleHAiOjE2ODkyNzA0NTB9.XxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx
+                $ref: '#/components/schemas/LoginResponse'
         '401':
           description: Credenciais inválidas fornecidas.
           content:
@@ -50,6 +53,8 @@ paths:
         - users
       summary: Lista todos os usuários
       description: Retorna uma lista de todos os usuários cadastrados no sistema. A lista pode ser vazia se não houver usuários.
+      security:
+        - bearerAuth: []
       responses:
         '200':
           content:
@@ -93,6 +98,8 @@ paths:
         - users
       summary: Busca um usuário pelo ID
       description: Retorna os detalhes de um usuário específico, utilizando seu ID único.
+      security:
+        - bearerAuth: []
       parameters:
         - name: id
           schema:
@@ -117,6 +124,8 @@ paths:
         - users
       summary: Atualiza um usuário existente
       description: Permite a atualização de informações de um usuário existente, como nome e login.
+      security:
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -149,6 +158,8 @@ paths:
       operationId: deleteUser
       tags:
         - users
+      security:
+        - bearerAuth: []
       summary: Deleta um usuário existente
       description: Remove um usuário do sistema com base no seu ID. Esta é uma exclusão lógica.
       parameters:
@@ -173,6 +184,8 @@ paths:
     put:
       tags:
         - users
+      security:
+        - bearerAuth: [ ]
       requestBody:
         content:
           application/json:
@@ -195,9 +208,13 @@ paths:
         in: path
         required: true
         description: O ID único do usuário.
+
+
     get:
       tags:
         - addresses
+      security:
+        - bearerAuth: [ ]
       operationId: listAddressesByUserId
       summary: Lista todos os endereços de um usuário.
       description: Retorna uma lista de todos os endereços associados a um usuário específico.
@@ -214,6 +231,8 @@ paths:
     post:
       tags:
         - addresses
+      security:
+        - bearerAuth: [ ]
       operationId: createAddressForUser
       summary: Cria um novo endereço para um usuário.
       description: Adiciona um novo endereço à lista de endereços de um usuário existente.
@@ -247,9 +266,28 @@ paths:
         in: path
         required: true
         description: O ID único do endereço.
+
+
     put:
       tags:
         - addresses
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: userId
+          schema:
+            format: uuid
+            type: string
+          in: path
+          required: true
+          description: O ID único do usuário proprietário do endereço.
+        - name: addressId
+          schema:
+            format: uuid
+            type: string
+          in: path
+          required: true
+          description: O ID único do endereço.
       operationId: updateAddressForUser
       summary: Atualiza um endereço específico de um usuário.
       description: Permite a atualização dos detalhes de um endereço específico associado a um usuário.
@@ -272,6 +310,23 @@ paths:
     delete:
       tags:
         - addresses
+      security:
+        - bearerAuth: [ ]
+      parameters:
+        - name: userId
+          schema:
+            format: uuid
+            type: string
+          in: path
+          required: true
+          description: O ID único do usuário proprietário do endereço.
+        - name: addressId
+          schema:
+            format: uuid
+            type: string
+          in: path
+          required: true
+          description: O ID único do endereço.
       operationId: deleteAddressForUser
       summary: Deleta logicamente um endereço de um usuário.
       description: Marca um endereço específico como inativo para um determinado usuário, não o removendo fisicamente do banco de dados.
@@ -282,6 +337,14 @@ paths:
           description: Usuário ou endereço não encontrado.
 
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >
+        Insira o token JWT obtido do endpoint /auth/login no formato: Bearer {token}
+
   schemas:
     ErrorResponse:
       required:
@@ -315,6 +378,8 @@ components:
           example:
             email: O formato do e-mail é inválido.
             password: A senha deve ter no mínimo 8 caracteres.
+
+
     AddressUserRequest:
       type: object
       description: Representa os dados de um endereço para requisições.
@@ -353,18 +418,22 @@ components:
       description: Estrutura da requisição para alterar a senha de um usuário.
       type: object
       properties:
-        idUser:
+        id:
           format: uuid
           type: string
           description: O ID único do usuário cuja senha será alterada.
           example: d290f1ee-6c54-4b01-90e6-d701748f0851
+        lastPassword:
+          type: string
+          description: A senha antiga do usuário.
+          example: MinhaAntigaSenha123!
         newPassword:
           type: string
-          description: A nova senha desejada para o usuário.
+          description: A nova senha desejada pelo o usuário.
           example: MinhaNovaSenha123!
         confirmPassword:
           type: string
-          description: Confirmação da nova senha, deve ser idêntica a `newPassword`.
+          description: A confirmação da senha desejada pelo o usuário.
           example: MinhaNovaSenha123!
 
     UserRole:
@@ -373,6 +442,8 @@ components:
         - OWNER
         - CUSTOMER
       type: string
+
+
     CreateAddressRequest:
       title: Solicitação de Criação de Endereço
       description: Estrutura da requisição para criar um novo endereço para um usuário.
@@ -381,24 +452,31 @@ components:
         publicPlace:
           type: string
           description: Nome da rua, avenida, praça, etc.
+          example: Rua das Flores
         number:
           type: string
           description: Número do imóvel.
+          example: '123'
         complement:
           type: string
           description: Complemento do endereço (apartamento, bloco, etc.).
+          example: Apto 45
         neighborhood:
           type: string
           description: Nome do bairro.
+          example: Jardim Primavera
         city:
           type: string
           description: Nome da cidade.
+          example: São Paulo
         state:
           type: string
           description: Sigla do estado (UF).
+          example: SP
         postalCode:
           type: string
           description: Código de Endereçamento Postal (CEP).
+          example: 01234-567
 
     UpdateAddressRequest:
       title: Solicitação de Atualização de Endereço
@@ -408,31 +486,39 @@ components:
         publicPlace:
           type: string
           description: Novo nome da rua, avenida, praça, etc.
+          example: Avenida Central
         number:
           type: string
           description: Novo número do imóvel.
+          example: '999'
         complement:
           type: string
           description: Novo complemento do endereço (apartamento, bloco, etc.).
+          example: Casa
         neighborhood:
           type: string
           description: Novo nome do bairro.
+          example: Centro
         city:
           type: string
           description: Nova cidade.
+          example: Rio de Janeiro
         state:
           type: string
           description: Nova sigla do estado (UF).
+          example: RJ
         postalCode:
           type: string
           description: Novo Código de Endereçamento Postal (CEP).
+          example: 98765-432
 
     AddressResponse:
       title: Resposta de Endereço
       description: Estrutura da resposta contendo os detalhes de um endereço.
       type: object
       properties:
-        idAddress:
+        id:
+          format: uuid
           type: string
           description: O ID único do endereço.
           example: b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99
@@ -470,28 +556,43 @@ components:
       description: Estrutura da requisição para criar um novo usuário no sistema.
       required:
         - address
+        - name
+        - email
+        - cpf
+        - login
+        - password
       type: object
       properties:
         name:
           type: string
           description: Nome completo do usuário.
           example: João Silva
+          minLength: 1
+          maxLength: 100
         email:
           type: string
           description: Endereço de e-mail único do usuário.
           example: joao.silva@example.com
+          minLength: 1
+          maxLength: 255
         cpf:
           type: string
           description: Cadastro de Pessoa Física (CPF) do usuário. Deve ser único.
           example: '286.084.030-30'
+          minLength: 11
+          maxLength: 14
         login:
           type: string
           description: Nome de usuário para login. Deve ser único.
           example: joaosilva123
+          minLength: 1
+          maxLength: 50
         password:
           type: string
           description: Senha do usuário.
           example: MyStrongPassword123!
+          minLength: 8
+          maxLength: 64
         role:
           type: string
           description: Papel do usuário no sistema (OWNER ou CUSTOMER).
@@ -508,7 +609,7 @@ components:
       description: Estrutura da resposta após a criação bem-sucedida de um usuário.
       type: object
       properties:
-        idUser:
+        id:
           format: uuid
           type: string
           description: O ID único gerado para o novo usuário.
@@ -537,22 +638,69 @@ components:
             - CUSTOMER
           example: CUSTOMER
         active:
-          description: Status de ativação do usuário (true se ativo, false se inativo).
           type: boolean
+          description: Status de ativação do usuário (true se ativo, false se inativo).
           example: true
+        createdAt:
+          type: string
+          description: Criação do usuário
+          example: '15/06/2025 19:40'
+        updatedAt:
+          type: string
+          description: Última atualização do usuário
+          example: '16/06/2025 19:40'
         address:
           type: array
           items:
             $ref: '#/components/schemas/AddressResponse'
           description: Uma lista dos endereços associados ao usuário.
 
+    LoginResponse:
+      title: Resposta de Login
+      description: Estrutura da resposta do endpoint de login, incluindo informações de autenticação e token
+      required:
+        - token
+        - login
+        - email
+        - expiresAt
+        - expiresIn
+        - userId
+      type: object
+      properties:
+        token:
+          type: string
+          description: Token JWT para autenticação
+          example: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNjg5MjY4MDUwLCJleHAiOjE2ODkyNzA0NTB9.X
+        login:
+          type: string
+          description: Login do usuário
+          example: joaosilva123
+        email:
+          type: string
+          description: Email do usuário
+          example: joao.silva@example.com
+        expiresAt:
+          type: string
+          format: date-time
+          description: Data e hora de expiração do token
+          example: '2025-07-10T23:09:24-03:00'
+        expiresIn:
+          type: integer
+          format: int32
+          description: Tempo restante até a expiração do token em segundos
+          example: 3600
+        userId:
+          type: string
+          format: uuid
+          description: ID único do usuário
+          example: 123e4567-e89b-12d3-a456-426614174000
+
     UserResponse:
       title: Resposta de Detalhes do Usuário
       description: Estrutura da resposta contendo os detalhes completos de um usuário.
-      required: []
       type: object
       properties:
-        idUser:
+        id:
           format: uuid
           type: string
           description: O ID único do usuário.
@@ -580,15 +728,23 @@ components:
             - OWNER
             - CUSTOMER
           example: CUSTOMER
+        active:
+          description: Indica se o usuário está ativo no sistema (true para ativo, false para inativo).
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          description: Criação do usuário
+          example: '15/06/2025 19:40'
+        updatedAt:
+          type: string
+          description: Última atualização do usuário
+          example: '16/06/2025 19:40'
         address:
           type: array
           items:
             $ref: '#/components/schemas/AddressResponse'
           description: Uma lista dos endereços associados ao usuário.
-        active:
-          description: Indica se o usuário está ativo no sistema (true para ativo, false para inativo).
-          type: boolean
-          example: true
 
     UpdateUserRequest:
       title: Solicitação de Atualização de Usuário
@@ -603,9 +759,11 @@ components:
           type: string
           description: Novo login do usuário.
           example: LarissaLuana
-      example:
-        name: Larissa Fiap Santos
-        login: LarissaLuana
+        email:
+          type: string
+          description: Novo email do usuário.
+          example: larissa@email.com
+
     LoginRequest:
       type: object
       description: Estrutura da requisição para autenticação de um usuário.

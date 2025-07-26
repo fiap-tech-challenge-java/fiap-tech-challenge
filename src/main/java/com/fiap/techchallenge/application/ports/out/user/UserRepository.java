@@ -14,6 +14,8 @@ public interface UserRepository {
 
     Optional<User> findById(UUID id);
 
+    Optional<User> findByIdOnly(UUID id);
+
     Optional<User> findByLogin(String login);
 
     List<User> findAll();
@@ -23,4 +25,6 @@ public interface UserRepository {
     void deleteById(UUID id);
 
     void changePassword(ChangePassword changePassword);
+
+    String recoverPassword(UUID uuid);
 }

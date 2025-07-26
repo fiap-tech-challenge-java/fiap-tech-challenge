@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   techchallenge_postgres:
     image: postgres:latest
@@ -18,25 +16,42 @@ services:
       timeout: 5s
       retries: 5
 
+  techchallenge_tests:
+    image: maven:3.9.8-eclipse-temurin-21
+    container_name: techchallenge_tests
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - ~/.m2:/root/.m2
+    command: ["./mvnw", "clean", "test"]
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/techchallenge
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgrespass
+    depends_on:
+      techchallenge_postgres:
+        condition: service_healthy
+
   techchallenge_application:
     container_name: techchallenge_application
     build:
       context: .
       dockerfile: Dockerfile
-      target: builder        # usa a etapa 'builder' (com mvnw e src)
-    working_dir: /build
-    volumes:
-      - ./:/build           # monta código-fonte e openapi.yaml
-      - ~/.m2:/root/.m2     # cache de dependências Maven
-    command:
-      - "./mvnw"
-      - "clean"
-      - "generate-sources"
-      - "spring-boot:run"
+#      target: builder
+#    working_dir: /build
+#    volumes:
+#      - ./:/build
+#      - ~/.m2:/root/.m2
+#    command:
+#      - "./mvnw"
+#      - "generate-sources"
+#      - "compile"
+#      - "spring-boot:run"
     ports:
-      - "8080:8080"         # API
-      - "8081:8081"         # Metrics
+      - "8080:8080"
+      - "8081:8081"
     environment:
+#      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8081" # Debug using port 8081 remove jvm
       SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/techchallenge
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: postgrespass

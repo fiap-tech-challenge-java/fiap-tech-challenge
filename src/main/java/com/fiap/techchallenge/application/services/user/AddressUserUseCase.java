@@ -12,7 +12,7 @@ public interface AddressUserUseCase {
 
     List<Address> listAll(UUID idUser);
 
-    Address update(UpdateAddress updateAddress);
+    Address update(UpdateAddress updateAddress, UUID userId, UUID addressId);
 
     void delete(UUID idUser, UUID idAddress);
 }

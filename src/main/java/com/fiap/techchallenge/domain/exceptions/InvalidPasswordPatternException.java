@@ -2,7 +2,7 @@ package com.fiap.techchallenge.domain.exceptions;
 
 public class InvalidPasswordPatternException extends IllegalArgumentException {
     public InvalidPasswordPatternException() {
-        super("A senha deve conter pelo menos uma letra maiúscula, um número e no mínimo 5 caracteres.");
+        super("The password must be at least 5 characters long, containing at least 1 uppercase letter and 1 number.");
     }
 
     public InvalidPasswordPatternException(String message) {

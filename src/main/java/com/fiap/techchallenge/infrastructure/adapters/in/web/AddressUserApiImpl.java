@@ -9,10 +9,16 @@ import com.fiap.techchallenge.model.AddressResponse;
 import com.fiap.techchallenge.model.CreateAddressRequest;
 import com.fiap.techchallenge.model.UpdateAddressRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.UUID;
 
+@RestController
 public class AddressUserApiImpl implements AddressesApi {
     private final AddressUserUseCase addressUserUseCase;
 
@@ -25,13 +31,22 @@ public class AddressUserApiImpl implements AddressesApi {
     @Override
     public ResponseEntity<AddressResponse> createAddressForUser(UUID userId,
             CreateAddressRequest createAddressRequest) {
-        Address address = this.addressUserUseCase.create(ADDRESS_USER_MAPPER.mapToCreateAddress(createAddressRequest));
+        if (!isAuthenticatedUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        var createAddress = ADDRESS_USER_MAPPER.mapToCreateAddress(createAddressRequest);
+        createAddress.setIdUser(userId);
+        Address address = this.addressUserUseCase.create(createAddress);
 
         return ResponseEntity.status(201).body(ADDRESS_USER_MAPPER.mapToAddressResponse(address));
     }
 
     @Override
     public ResponseEntity<List<AddressResponse>> listAddressesByUserId(UUID userId) {
+        if (!isAuthenticatedUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
         List<Address> addresses = addressUserUseCase.listAll(userId);
 
         if (addresses.isEmpty()) {
@@ -46,9 +61,12 @@ public class AddressUserApiImpl implements AddressesApi {
     @Override
     public ResponseEntity<AddressResponse> updateAddressForUser(UUID userId, UUID addressId,
             UpdateAddressRequest updateAddressRequest) {
+        if (!isAuthenticatedUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         UpdateAddress updateAddress = ADDRESS_USER_MAPPER.mapToUpdateAddress(updateAddressRequest);
 
-        Address updated = addressUserUseCase.update(updateAddress);
+        Address updated = addressUserUseCase.update(updateAddress, userId, addressId);
 
         AddressResponse body = ADDRESS_USER_MAPPER.mapToAddressResponse(updated);
 
@@ -57,7 +75,21 @@ public class AddressUserApiImpl implements AddressesApi {
 
     @Override
     public ResponseEntity<Void> deleteAddressForUser(UUID userId, UUID addressId) {
-        return null;
+        if (!isAuthenticatedUser(userId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        addressUserUseCase.delete(userId, addressId);
+        return ResponseEntity.noContent().build();
+    }
+
+    // private functions
+    private boolean isAuthenticatedUser(UUID userId) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof com.fiap.techchallenge.infrastructure.config.UserDetailsImpl) {
+            UUID authenticatedId = ((com.fiap.techchallenge.infrastructure.config.UserDetailsImpl) principal).getId();
+            return userId.equals(authenticatedId);
+        }
+        return false;
     }
 
 }

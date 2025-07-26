@@ -2,6 +2,8 @@ package com.fiap.techchallenge.application.ports.in.user.dtos;
 
 import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 
+import java.util.List;
+
 public class CreateUser {
     String name;
     String email;

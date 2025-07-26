@@ -26,25 +26,25 @@ public class HealthCheckService {
             boolean dbOk = databaseHealthChecker.isDatabaseUp();
 
             if (!dbOk) {
-                logger.error("Database não está respondendo");
-                throw new BusinessException("Database não está disponível", "DATABASE_DOWN");
+                logger.error("Database is not responding.");
+                throw new BusinessException("Database is not available.", "DATABASE_DOWN");
             }
 
             return new HealthStatus("UP", version, "OK");
 
         } catch (Exception ex) {
-            logger.error("Erro ao verificar saúde da aplicação: {}", ex.getMessage(), ex);
-            throw new BusinessException("Erro ao verificar saúde da aplicação", "HEALTH_CHECK_ERROR", ex);
+            logger.error("Error while checking application health: {}", ex.getMessage(), ex);
+            throw new BusinessException("Error while checking application health.", "HEALTH_CHECK_ERROR", ex);
         }
     }
 
     public HealthStatus checkHealthWithParameter(String checkType) {
         if (checkType == null || checkType.trim().isEmpty()) {
-            throw new BusinessException("Tipo de verificação não pode ser vazio", "INVALID_CHECK_TYPE");
+            throw new BusinessException("Check type cannot be empty.", "INVALID_CHECK_TYPE");
         }
 
         if (!checkType.equals("full") && !checkType.equals("basic")) {
-            throw new BusinessException("Tipo de verificação deve ser 'full' ou 'basic'", "INVALID_CHECK_TYPE");
+            throw new BusinessException("Check type must be 'full' or 'basic'.", "INVALID_CHECK_TYPE");
         }
 
         return checkHealth();

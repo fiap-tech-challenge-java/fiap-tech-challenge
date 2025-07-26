@@ -1,5 +1,6 @@
 package com.fiap.techchallenge.domain.exceptions;
 
+import com.fiap.techchallenge.domain.model.enums.RoleEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -8,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -19,8 +20,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.fiap.techchallenge.model.ErrorResponse;
 
@@ -39,7 +43,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Erro de validação de senha: {}", ex.getMessage());
+        logger.warn("Password validation error: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -53,7 +57,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Campos obrigatórios ausentes: {}", ex.getMessage());
+        logger.warn("Missing required fields: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -67,7 +71,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Senha inválida: {}", ex.getMessage());
+        logger.warn("Invalid password: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -83,13 +87,13 @@ public class GlobalExceptionHandler {
         });
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Erro de validação dos dados");
+        errorResponse.setMessage("Data validation error");
         errorResponse.setCode("VALIDATION_ERROR");
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
         errorResponse.setFieldErrors(errors);
 
-        logger.warn("Erro de validação: {}", errors);
+        logger.warn("Validation error: {}", errors);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -103,7 +107,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Recurso não encontrado: {}", ex.getMessage());
+        logger.warn("Resource not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -116,7 +120,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Erro de negócio: {}", ex.getMessage());
+        logger.warn("Business error: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -130,7 +134,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Acesso não autorizado: {}", ex.getMessage());
+        logger.warn("Unauthorized access: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
@@ -139,12 +143,12 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Acesso negado. Você não tem permissão para acessar este recurso.");
+        errorResponse.setMessage("Access denied. You do not have permission to access this resource.");
         errorResponse.setCode("ACCESS_DENIED");
         errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Acesso negado para {}: {}", request.getRequestURI(), ex.getMessage());
+        logger.warn("Access denied for {}: {}", request.getRequestURI(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
 
@@ -153,12 +157,12 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Falha na autenticação: " + ex.getMessage());
+        errorResponse.setMessage("Authentication failed: " + ex.getMessage());
         errorResponse.setCode("AUTHENTICATION_FAILED");
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Falha na autenticação: {}", ex.getMessage());
+        logger.warn("Authentication failed: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
@@ -167,12 +171,12 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Credenciais inválidas");
+        errorResponse.setMessage("Invalid credentials.");
         errorResponse.setCode("INVALID_CREDENTIALS");
         errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Credenciais inválidas para {}", request.getRequestURI());
+        logger.warn("Invalid credentials for {}", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
 
@@ -180,13 +184,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex,
             HttpServletRequest request) {
 
+        String message = "Invalid request. Please check the format of the submitted data.";
+        String code = "INVALID_REQUEST_BODY";
+
+        Throwable cause = ex.getCause();
+        if (cause != null && cause.getMessage() != null && cause.getMessage().contains("RoleEnum")) {
+            String rolesPermitidas = Arrays.stream(RoleEnum.values()).map(Enum::name).collect(Collectors.joining(", "));
+            message = "Invalid role. Allowed roles: " + rolesPermitidas;
+            code = "INVALID_ROLE";
+        }
+
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Requisição inválida. Verifique o formato dos dados enviados.");
-        errorResponse.setCode("INVALID_REQUEST_BODY");
+        errorResponse.setMessage(message);
+        errorResponse.setCode(code);
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Erro na leitura do corpo da requisição: {}", ex.getMessage());
+        logger.warn("Error reading the request body: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -194,7 +208,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException ex, HttpServletRequest request) {
 
-        String message = String.format("O parâmetro '%s' deve ser do tipo %s", ex.getName(),
+        String message = String.format("The parameter '%s' must be of type %s", ex.getName(),
                 ex.getRequiredType().getSimpleName());
 
         ErrorResponse errorResponse = new ErrorResponse();
@@ -203,7 +217,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Tipo de parâmetro inválido: {}", message);
+        logger.warn("Invalid parameter type: {}", message);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -211,7 +225,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
             MissingServletRequestParameterException ex, HttpServletRequest request) {
 
-        String message = String.format("Parâmetro obrigatório '%s' não foi fornecido", ex.getParameterName());
+        String message = String.format("Required parameter '%s' was not provided", ex.getParameterName());
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(message);
@@ -219,7 +233,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Parâmetro obrigatório ausente: {}", ex.getParameterName());
+        logger.warn("Required parameter missing: {}", ex.getParameterName());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
 
@@ -227,7 +241,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
 
-        String message = String.format("Método HTTP '%s' não é suportado para este endpoint", ex.getMethod());
+        String message = String.format("HTTP method '%s' is not supported for this endpoint", ex.getMethod());
 
         ErrorResponse errorResponse = new ErrorResponse();
         errorResponse.setMessage(message);
@@ -235,7 +249,7 @@ public class GlobalExceptionHandler {
         errorResponse.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Método HTTP não suportado: {} {}", ex.getMethod(), request.getRequestURI());
+        logger.warn("HTTP method not supported: {} {}", ex.getMethod(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(errorResponse);
     }
 
@@ -244,12 +258,12 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Endpoint não encontrado");
+        errorResponse.setMessage("Endpoint not found");
         errorResponse.setCode("ENDPOINT_NOT_FOUND");
         errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.warn("Endpoint não encontrado: {} {}", ex.getHttpMethod(), request.getRequestURI());
+        logger.warn("Endpoint not found: {} {}", ex.getHttpMethod(), request.getRequestURI());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 
@@ -258,13 +272,12 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse
-                .setMessage("Erro de integridade dos dados. Verifique se os dados não violam restrições do banco.");
+        errorResponse.setMessage("Data integrity error. Check if the data does not violate database constraints.");
         errorResponse.setCode("DATA_INTEGRITY_VIOLATION");
         errorResponse.setStatus(HttpStatus.CONFLICT.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.error("Erro de integridade dos dados: {}", ex.getMessage(), ex);
+        logger.error("Data integrity error: {}", ex.getMessage(), ex);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
     }
 
@@ -272,12 +285,143 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex, HttpServletRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse();
-        errorResponse.setMessage("Erro interno do servidor. Tente novamente mais tarde.");
+        errorResponse.setMessage("Internal server error. Please try again later.");
         errorResponse.setCode("INTERNAL_SERVER_ERROR");
         errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         errorResponse.setPath(request.getRequestURI());
 
-        logger.error("Erro interno não tratado", ex);
+        logger.error("Unhandled internal error.", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyExistsException(EmailAlreadyExistsException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("EMAIL_ALREADY_EXISTS");
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleUsernameAlreadyExistsException(UsernameAlreadyExistsException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("USERNAME_ALREADY_EXISTS");
+        errorResponse.setStatus(HttpStatus.CONFLICT.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidCpfException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCpfExceptionException(InvalidCpfException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("CPF_INVALID");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidEmailPatternException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidEmailPatternException(InvalidEmailPatternException ex,
+            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_EMAIL");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Invalid email: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(CustomAuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleCustomAuthenticationException(CustomAuthenticationException ex,
+            HttpServletRequest request) {
+
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Incorrect username or password");
+        errorResponse.setCode("INVALID_CREDENTIALS");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Authentication failure: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFound(UserNotFoundException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("USER_NOT_FOUND");
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Invalid email: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleAddressNotFound(AddressNotFoundException ex,
+            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Address not found for the specified user.");
+        errorResponse.setCode("ADDRESS_NOT_FOUND");
+        errorResponse.setStatus(HttpStatus.NOT_FOUND.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Address not found: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+    }
+
+    @ExceptionHandler(AddressNotLinkedToUserException.class)
+    public ResponseEntity<ErrorResponse> handleAddressNotLinkedToUser(AddressNotLinkedToUserException ex,
+            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("You are not linked to this address.");
+        errorResponse.setCode("ADDRESS_NOT_LINKED_TO_USER");
+        errorResponse.setStatus(HttpStatus.FORBIDDEN.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Address not linked to user: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidPreviousPasswordException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidPreviousPasswordException(InvalidPreviousPasswordException ex,
+            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_PREVIOUS_PASSWORD");
+        errorResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Invalid previous password: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+    }
+
+    @ExceptionHandler(InvalidLoginPatternException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidLoginPatternException(InvalidLoginPatternException ex,
+            HttpServletRequest request) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setCode("INVALID_LOGIN");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+        errorResponse.setPath(request.getRequestURI());
+
+        logger.warn("Invalid login: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
 }
