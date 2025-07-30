@@ -7,16 +7,24 @@ app:
   version: 0.0.1
 
 spring:
+  profiles:
+    active: ${SPRING_PROFILE:local}
+
   datasource:
-    url: jdbc:postgresql://localhost:5438/techchallenge
-    username: postgres
-    password: postgrespass
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
+    show-sql: ${SHOW_SQL:true}
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
 
 jwt:
-  secret:        "yX56ambwC9AM8QkQzYOpHr0wYviQizzneZBtbeO+IfY="
-  expiration-ms:  604800000  # 7d em ms
+  secret: ${JWT_SECRET}
+  expiration-ms: ${JWT_EXPIRATION_MS:604800000}
