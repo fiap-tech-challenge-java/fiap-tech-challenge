@@ -27,7 +27,10 @@ public class ChangePasswordValidator {
         String newPassword = changePassword.getNewPassword();
         String confirmPassword = changePassword.getConfirmPassword();
 
-        if (Strings.isBlank(String.valueOf(uuid)) || Strings.isBlank(newPassword) || Strings.isBlank(lastPassword)) {
+        if (uuid == null) {
+            throw new InvalidPreviousPasswordException();
+        }
+        if (Strings.isBlank(newPassword) || Strings.isBlank(lastPassword)) {
             throw new MissingRequiredFieldsException();
         }
 
