@@ -1,0 +1,69 @@
+package com.fiap.techchallenge.application.services.user.impl;
+
+import com.fiap.techchallenge.application.ports.in.user.dtos.*;
+import com.fiap.techchallenge.application.ports.out.user.UserRepository;
+import com.fiap.techchallenge.application.services.user.UserUseCase;
+import com.fiap.techchallenge.infrastructure.validation.ChangePasswordValidator;
+import com.fiap.techchallenge.infrastructure.validation.CreateUserValidator;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+
+@Service
+public class UserUseCaseImpl implements UserUseCase {
+
+    private final CreateUserValidator validator;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final ChangePasswordValidator changePasswordValidator;
+
+    public UserUseCaseImpl(CreateUserValidator validator, UserRepository userRepository,
+            PasswordEncoder passwordEncoder, ChangePasswordValidator changePasswordValidator) {
+        this.validator = validator;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.changePasswordValidator = changePasswordValidator;
+    }
+
+    @Override
+    public User create(CreateUser createUser) {
+        validator.validate(createUser);
+
+        return this.userRepository.create(createUser);
+    }
+
+    @Override
+    public List<User> getAll() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public User getById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + id));
+    }
+
+    @Override
+    public User update(UUID id, UpdateUser updateUser) {
+        return this.userRepository.update(id, updateUser);
+    }
+
+    @Override
+    public void delete(UUID id) {
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public void changePassword(ChangePassword changePassword) {
+        String passwordEncoded = userRepository.recoverPassword(changePassword.getId());
+        changePasswordValidator.isValid(changePassword, passwordEncoded);
+
+        ChangePassword changingPassword = new ChangePassword(changePassword.getId(),
+                passwordEncoder.encode(changePassword.getNewPassword()));
+
+        this.userRepository.changePassword(changingPassword);
+    }
+
+}

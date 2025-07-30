@@ -1,34 +1,50 @@
 # syntax=docker/dockerfile:1
 
 ################################################################################
+# 1. Build dependencies and go-offline
 FROM eclipse-temurin:21-jdk-jammy AS deps
 WORKDIR /build
-COPY --chmod=0755 mvnw mvnw
 
-COPY pom.xml mvnw ./
+# Copia wrapper e POM
+COPY mvnw pom.xml ./
 COPY .mvn/ .mvn/
 
+# Torna o wrapper executável
 RUN chmod +x mvnw
+
+# Baixa dependências para offline (BuildKit cache)
 RUN --mount=type=cache,target=/root/.m2 \
-    ./mvnw dependency:go-offline -DskipTests
+    ./mvnw dependency:go-offline -B
 
 ################################################################################
-FROM deps AS package
+# 2. Compile, generate sources (OpenAPI) and package
+FROM deps AS builder
 WORKDIR /build
-COPY ./src src/
+
+# Copia TODO o projeto (fonte, specs, configs, mvnw, .mvn etc)
+COPY . .
+
+# Garante que o mvnw tem permissões de execução
+RUN chmod +x mvnw
+
+# Executa clean → compile → generate-sources → package
 RUN --mount=type=cache,target=/root/.m2 \
-    ./mvnw package -DskipTests && \
-    mv target/$(./mvnw help:evaluate -Dexpression=project.artifactId -q -DforceStdout)-$(./mvnw help:evaluate -Dexpression=project.version -q -DforceStdout).jar target/app.jar
+    ./mvnw clean compile generate-sources package -DskipTests -B \
+    && mv target/*.jar target/app.jar
 
 ################################################################################
-FROM package AS extract
+# 3. Extrai camadas do JAR (opcional)
+FROM builder AS extract
 WORKDIR /build
+
 RUN java -Djarmode=layertools -jar target/app.jar extract --destination target/extracted
 
 ################################################################################
+# 4. Imagem final apenas com JRE
 FROM eclipse-temurin:21-jre-jammy AS final
-
 ARG UID=10001
+
+# Cria usuário sem privilégios
 RUN adduser \
     --disabled-password \
     --gecos "" \
@@ -38,14 +54,15 @@ RUN adduser \
     --uid "${UID}" \
     appuser
 
-WORKDIR /app
 USER appuser
+WORKDIR /app
 
-COPY --from=extract /build/target/extracted/dependencies/           ./dependencies/
-COPY --from=extract /build/target/extracted/spring-boot-loader/    ./spring-boot-loader/
-COPY --from=extract /build/target/extracted/snapshot-dependencies/ ./snapshot-dependencies/
-COPY --from=extract /build/target/extracted/application/           ./application/
+# Copia camadas extraídas para otimizar rebuilds
+COPY --from=extract /build/target/extracted/dependencies/           ./
+COPY --from=extract /build/target/extracted/spring-boot-loader/    ./
+COPY --from=extract /build/target/extracted/snapshot-dependencies/ ./
+COPY --from=extract /build/target/extracted/application/           ./
 
 EXPOSE 8080
 
-ENTRYPOINT ["java", "org.springframework.boot.loader.launch.JarLauncher"]
+ENTRYPOINT ["java","org.springframework.boot.loader.launch.JarLauncher"]
