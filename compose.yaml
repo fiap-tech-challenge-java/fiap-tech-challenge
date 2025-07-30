@@ -3,11 +3,11 @@ services:
     image: postgres:latest
     container_name: techchallenge_postgres
     environment:
-      POSTGRES_DB: techchallenge
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgrespass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5438:5432"
+      - "${POSTGRES_PORT}:5432"
     volumes:
       - techchallenge_pgdata:/var/lib/postgresql/data
     healthcheck:
@@ -25,9 +25,9 @@ services:
       - ~/.m2:/root/.m2
     command: ["./mvnw", "clean", "test"]
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/techchallenge
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgrespass
+      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       techchallenge_postgres:
         condition: service_healthy
@@ -37,25 +37,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-#      target: builder
-#    working_dir: /build
-#    volumes:
-#      - ./:/build
-#      - ~/.m2:/root/.m2
-#    command:
-#      - "./mvnw"
-#      - "generate-sources"
-#      - "compile"
-#      - "spring-boot:run"
     ports:
       - "8080:8080"
       - "8081:8081"
     environment:
-#      JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:8081" # Debug using port 8081 remove jvm
-      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/techchallenge
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgrespass
-      SPRING_PROFILES_ACTIVE: dev
+      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
     depends_on:
       techchallenge_postgres:
         condition: service_healthy
