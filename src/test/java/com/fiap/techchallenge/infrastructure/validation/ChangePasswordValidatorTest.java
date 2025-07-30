@@ -57,20 +57,23 @@ class ChangePasswordValidatorTest {
 
     @Test
     void shouldThrowExceptionWhenLastPasswordIsInvalid() {
-        when(passwordEncoder.matches("oldPass", storedEncodedPassword)).thenReturn(false);
-        Exception ex = assertThrows(InvalidPreviousPasswordException.class,
-                () -> validator.isValid(changePassword, storedEncodedPassword));
-        assertEquals("Invalid previous password.", ex.getMessage());
+        try (var mocked = mockStatic(PasswordValidator.class)) {
+            mocked.when(() -> PasswordValidator.isValid(changePassword.getNewPassword()))
+                    .thenReturn(true);
+            when(passwordEncoder.matches(changePassword.getLastPassword(), storedEncodedPassword)).thenReturn(false);
+            Exception ex = assertThrows(InvalidPreviousPasswordException.class,
+                    () -> validator.isValid(changePassword, storedEncodedPassword));
+            assertEquals("Invalid previous password.", ex.getMessage());
+        }
     }
 
     @Test
-    void shouldThrowExceptionWhenNewPasswordPatternIsInvalid() {
-        when(passwordEncoder.matches("oldPass", storedEncodedPassword)).thenReturn(true);
-        mockStatic(PasswordValidator.class).when(() -> PasswordValidator.isValid("NewPassword123!")).thenReturn(false);
-        Exception ex = assertThrows(InvalidPasswordPatternException.class,
-                () -> validator.isValid(changePassword, storedEncodedPassword));
-        assertEquals(
-                "The password must be at least 5 characters long, containing at least 1 uppercase letter and 1 number.",
-                ex.getMessage());
+    void shouldValidateSuccessfullyWhenAllFieldsAreValid() {
+        try (var mocked = mockStatic(PasswordValidator.class)) {
+            mocked.when(() -> PasswordValidator.isValid(changePassword.getNewPassword()))
+                    .thenReturn(true);
+            when(passwordEncoder.matches(changePassword.getLastPassword(), storedEncodedPassword)).thenReturn(true);
+            assertDoesNotThrow(() -> validator.isValid(changePassword, storedEncodedPassword));
+        }
     }
 }

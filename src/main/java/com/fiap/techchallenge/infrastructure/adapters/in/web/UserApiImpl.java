@@ -40,9 +40,18 @@ public class UserApiImpl implements UsersApi {
         return ResponseEntity.status(201).body(userResponse);
     }
 
+    private boolean isNotAuthenticatedUser(UUID id) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetailsImpl) {
+            UUID authenticatedId = ((UserDetailsImpl) principal).getId();
+            return !id.equals(authenticatedId);
+        }
+        return true;
+    }
+
     @Override
     public ResponseEntity<UserResponse> updateUser(UUID id, UpdateUserRequest updateUserRequest) {
-        if (isAuthenticatedUser(id)) {
+        if (isNotAuthenticatedUser(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         User userResponse = this.userUseCase.update(id, USERS_API_MAPPER.mapToUpdateUser(updateUserRequest));
@@ -51,7 +60,7 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<UserResponse> getUser(UUID id) {
-        if (isAuthenticatedUser(id)) {
+        if (isNotAuthenticatedUser(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
         User user = this.userUseCase.getById(id);
@@ -100,7 +109,7 @@ public class UserApiImpl implements UsersApi {
 
     @Override
     public ResponseEntity<Void> deleteUser(UUID id) {
-        if (isAuthenticatedUser(id)) {
+        if (isNotAuthenticatedUser(id)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         this.userUseCase.delete(id);
@@ -125,14 +134,5 @@ public class UserApiImpl implements UsersApi {
             return (String) principal;
         }
         return null;
-    }
-
-    private boolean isAuthenticatedUser(UUID id) {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetailsImpl) {
-            UUID authenticatedId = ((UserDetailsImpl) principal).getId();
-            return !id.equals(authenticatedId);
-        }
-        return true;
     }
 }
