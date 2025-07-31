@@ -44,6 +44,8 @@ public class AuthUseCaseImpl implements AuthUseCase {
 
             UUID userId = ((UserDetailsImpl) userDetails).getId();
             String role = userDetails.getAuthorities().iterator().next().getAuthority();
+            String login = userDetails.getUsername();
+            String email = ((UserDetailsImpl) userDetails).getEmail();
 
             String token = jwtUtil.generateToken(userId, role);
 
@@ -53,7 +55,7 @@ public class AuthUseCaseImpl implements AuthUseCase {
                     ZoneId.systemDefault());
             int expiresIn = (int) ((expiration - now) / 1000);
 
-            LoginResponse response = new LoginResponse(token, null, null, expiresAt, expiresIn, userId);
+            LoginResponse response = new LoginResponse(token, login, email, expiresAt, expiresIn, userId);
 
             return ResponseEntity.ok(response);
         } catch (UsernameNotFoundException e) {
