@@ -47,10 +47,6 @@ public class AuthUseCaseImpl implements AuthUseCase {
             String login = userDetails.getUsername();
             String email = ((UserDetailsImpl) userDetails).getEmail();
 
-
-            //gerar print consolelog
-            System.out.println("User authenticated: " + login + " with role: " + role);
-
             String token = jwtUtil.generateToken(userId, role);
 
             long expiration = jwtUtil.extractAllClaims(token).getExpiration().getTime();
