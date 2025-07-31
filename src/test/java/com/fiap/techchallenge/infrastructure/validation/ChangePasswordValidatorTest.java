@@ -58,8 +58,7 @@ class ChangePasswordValidatorTest {
     @Test
     void shouldThrowExceptionWhenLastPasswordIsInvalid() {
         try (var mocked = mockStatic(PasswordValidator.class)) {
-            mocked.when(() -> PasswordValidator.isValid(changePassword.getNewPassword()))
-                    .thenReturn(true);
+            mocked.when(() -> PasswordValidator.isValid(changePassword.getNewPassword())).thenReturn(true);
             when(passwordEncoder.matches(changePassword.getLastPassword(), storedEncodedPassword)).thenReturn(false);
             Exception ex = assertThrows(InvalidPreviousPasswordException.class,
                     () -> validator.isValid(changePassword, storedEncodedPassword));
@@ -70,8 +69,7 @@ class ChangePasswordValidatorTest {
     @Test
     void shouldValidateSuccessfullyWhenAllFieldsAreValid() {
         try (var mocked = mockStatic(PasswordValidator.class)) {
-            mocked.when(() -> PasswordValidator.isValid(changePassword.getNewPassword()))
-                    .thenReturn(true);
+            mocked.when(() -> PasswordValidator.isValid(changePassword.getNewPassword())).thenReturn(true);
             when(passwordEncoder.matches(changePassword.getLastPassword(), storedEncodedPassword)).thenReturn(true);
             assertDoesNotThrow(() -> validator.isValid(changePassword, storedEncodedPassword));
         }
