@@ -3,34 +3,18 @@ services:
     image: postgres:latest
     container_name: techchallenge_postgres
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "${POSTGRES_PORT}:5432"
+      - "${DB_PORT}:5432"
     volumes:
       - techchallenge_pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
       interval: 10s
       timeout: 5s
       retries: 5
-
-  techchallenge_tests:
-    image: maven:3.9.8-eclipse-temurin-21
-    container_name: techchallenge_tests
-    working_dir: /app
-    volumes:
-      - ./:/app
-      - ~/.m2:/root/.m2
-    command: ["./mvnw", "clean", "test"]
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/${POSTGRES_DB}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-    depends_on:
-      techchallenge_postgres:
-        condition: service_healthy
 
   techchallenge_application:
     container_name: techchallenge_application
@@ -39,12 +23,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-      - "8081:8081"
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://techchallenge_postgres:5432/${POSTGRES_DB}
-      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
-      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILE}
+    env_file:
+      - .env
     depends_on:
       techchallenge_postgres:
         condition: service_healthy
