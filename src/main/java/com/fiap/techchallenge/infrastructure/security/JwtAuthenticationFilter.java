@@ -1,7 +1,6 @@
 package com.fiap.techchallenge.infrastructure.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fiap.techchallenge.infrastructure.adapters.in.web.UserDetailsServiceImpl;
 import com.fiap.techchallenge.infrastructure.config.JwtUtil;
 import com.fiap.techchallenge.model.ErrorResponse;
 
@@ -19,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -32,10 +30,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtUtil jwtUtil;
-    private final UserDetailsService uds;
+    private final ExtendedUserDetailsService uds;
     private final ObjectMapper objectMapper;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsService uds) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, ExtendedUserDetailsService uds) {
         this.jwtUtil = jwtUtil;
         this.uds = uds;
         this.objectMapper = new ObjectMapper();
@@ -56,7 +54,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = header.substring(7);
             if (jwtUtil.validateToken(token)) {
                 UUID userId = jwtUtil.extractUserId(token);
-                UserDetails ud = ((UserDetailsServiceImpl) uds).loadUserById(userId);
+                UserDetails ud = uds.loadUserById(userId);
+
+                logger.debug("Processing JWT for user: {}", userId);
+                if (ud == null) {
+                    throw new UsernameNotFoundException("User not found with ID: " + userId);
+                }
+
+                logger.debug("Processing for user: {}", ud);
+
 
                 var auth = new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));

@@ -2,6 +2,7 @@ package com.fiap.techchallenge.infrastructure.config;
 
 import com.fiap.techchallenge.infrastructure.adapters.in.web.UserDetailsServiceImpl;
 import com.fiap.techchallenge.infrastructure.adapters.out.persistence.user.UserDataSource;
+import com.fiap.techchallenge.infrastructure.security.ExtendedUserDetailsService;
 import com.fiap.techchallenge.infrastructure.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,12 +31,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(UserDataSource userDataSource) {
+    public ExtendedUserDetailsService userDetailsService(UserDataSource userDataSource) {
         return new UserDetailsServiceImpl(userDataSource);
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsService uds) {
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtUtil jwtUtil, ExtendedUserDetailsService uds) {
         return new JwtAuthenticationFilter(jwtUtil, uds);
     }
 
