@@ -56,6 +56,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UUID userId = jwtUtil.extractUserId(token);
                 UserDetails ud = uds.loadUserById(userId);
 
+                System.out.println("Processing JWT for user: " + userId);
+                if (ud == null) {
+                    throw new UsernameNotFoundException("User not found with ID: " + userId);
+                }
+
+                System.out.println("Processing for user: " + ud);
+
+
                 var auth = new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(auth);
