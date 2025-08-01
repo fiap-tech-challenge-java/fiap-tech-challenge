@@ -18,22 +18,22 @@ import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private final JwtUtil jwtUtil;
-    private final UserDetailsService uds;
+    private final ExtendedUserDetailsService uds;
     private final ObjectMapper objectMapper;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, UserDetailsService uds) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, ExtendedUserDetailsService uds) {
         this.jwtUtil = jwtUtil;
         this.uds = uds;
         this.objectMapper = new ObjectMapper();
@@ -53,14 +53,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String token = header.substring(7);
             if (jwtUtil.validateToken(token)) {
-                String username = jwtUtil.extractUsername(token);
-                UserDetails ud = uds.loadUserByUsername(username);
+                UUID userId = jwtUtil.extractUserId(token);
+                UserDetails ud = uds.loadUserById(userId);
+
+                logger.debug("Processing JWT for user: {}", userId);
+                if (ud == null) {
+                    throw new UsernameNotFoundException("User not found with ID: " + userId);
+                }
+
+                logger.debug("Processing for user: {}", ud);
+
 
                 var auth = new UsernamePasswordAuthenticationToken(ud, null, ud.getAuthorities());
                 auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
-                logger.debug("Authenticated user: {}", username);
+                logger.debug("Authenticated user: {}", userId);
             }
 
             chain.doFilter(req, res);

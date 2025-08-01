@@ -3,6 +3,7 @@ package com.fiap.techchallenge.infrastructure.adapters.in.web;
 import com.fiap.techchallenge.application.ports.in.user.dtos.User;
 import com.fiap.techchallenge.application.ports.out.user.UserRepository;
 import com.fiap.techchallenge.infrastructure.config.UserDetailsImpl;
+import com.fiap.techchallenge.infrastructure.security.ExtendedUserDetailsService;
 import org.springframework.context.annotation.Primary;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 @Component
 @Primary
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl implements ExtendedUserDetailsService {
 
     private final UserRepository userRepository;
 
@@ -28,9 +29,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return UserDetailsImpl.build(user);
     }
 
-    public UserDetails loadUserById(UUID id) throws UsernameNotFoundException {
-        User user = userRepository.findByIdOnly(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
+    @Override
+    public UserDetails loadUserById(UUID userId) {
+        var user = userRepository.findByIdOnly(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + userId));
         return UserDetailsImpl.build(user);
     }
 
