@@ -36,8 +36,6 @@ A aplicação utiliza **JWT** para autenticação e segue a **arquitetura hexago
 
 ## Contribuidores
 
-* *Insira aqui os nomes e RMs dos integrantes do grupo*
-
   * https://github.com/joaodamasceno2001
   * https://github.com/Lari-Lucena
   * https://github.com/TeT95
