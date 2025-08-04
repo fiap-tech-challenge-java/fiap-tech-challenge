@@ -60,7 +60,9 @@ O projeto adota a **arquitetura hexagonal**, com separação em:
 * **Adapters de Entrada**: controllers REST gerados via OpenAPI.
 * **Adapters de Saída**: repositórios JPA para persistência em PostgreSQL.
 
-![Figura 1 – Arquitetura Hexagonal](./docs/architecture.png)
+![Figura 1 – Arquitetura Hexagonal]
+<img width="1024" height="1024" alt="image" src="https://github.com/user-attachments/assets/09f189e9-981d-4888-8293-bcec33afc8be" />
+
 
 ## Endpoints da API
 
