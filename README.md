@@ -99,13 +99,19 @@ cd fiap-tech-challenge
 
 Crie na raiz um arquivo `.env` com o conteúdo:
 
+> **Atenção:** Nunca utilize valores fracos ou padrões para `JWT_SECRET`. Gere uma chave secreta forte e única para cada ambiente.  
+> Exemplo de comando para gerar uma chave segura (Linux/macOS):  
+> ```bash
+> openssl rand -base64 32
+> ```
+
 ```ini
 DB_NAME=techchallenge
 DB_USERNAME=postgres
 DB_PASSWORD=postgrespass
 DB_PORT=5438
 DB_URL=jdbc:postgresql://techchallenge_postgres:5432/techchallenge
-JWT_SECRET=INSIRA_SUA_CHAVE_SECRETA
+JWT_SECRET=2qQw8v9JkL1pXz3sT6bN0eR5uYhG7cV2mQw8v9JkL1pXz3sT6bN0eR5uYhG7cV2m
 ```
 
 ### 3. Docker Compose
