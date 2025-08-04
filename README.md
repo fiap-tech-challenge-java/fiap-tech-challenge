@@ -1,82 +1,155 @@
+# TechChallenge
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+> **Sistema Unificado de Gestão de Restaurantes** – Backend para gerenciamento de usuários (clientes e donos de restaurante) em Spring Boot
 
+## Índice
 
+* [Descrição](#descrição)
+* [Contribuidores](#contribuidores)
+* [Tecnologias](#tecnologias)
+* [Arquitetura](#arquitetura)
+* [Endpoints da API](#endpoints-da-api)
+* [Pré-requisitos](#pré-requisitos)
+* [Configuração e Execução](#configuração-e-execução)
 
-# 📦 TechChallenge - Manual de Execução com Docker
-
-Este projeto utiliza Docker e Docker Compose para facilitar a execução do ambiente de desenvolvimento. Siga este passo a passo para clonar, configurar e executar corretamente.
+  * [1. Clone do repositório](#1-clone-do-repositório)
+  * [2. Exemplo de `.env`](#2-exemplo-de-env)
+  * [3. Docker Compose](#3-docker-compose)
+  * [4. Execução no IntelliJ IDEA (opcional)](#4-execução-no-intellij-idea-opcional)
+* [Documentação Swagger](#documentação-swagger)
+* [Collection de Testes (Postman)](#collection-de-testes-postman)
+* [Qualidade de Código](#qualidade-de-código)
+* [Licença](#licença)
 
 ---
 
-## ✅ Pré-requisitos
+## Descrição
 
-Antes de começar, certifique-se de ter as seguintes ferramentas instaladas:
+TechChallenge é uma API RESTful desenvolvida em **Java 21** com **Spring Boot 3** para o gerenciamento de usuários (cadastro, atualização, exclusão lógica e autenticação) de um sistema unificado de restaurantes. Suporta dois perfis de usuário:
 
-- [Docker](https://www.docker.com/get-started) (Engine + Compose)
-- [IntelliJ IDEA](https://www.jetbrains.com/idea/)
-- [Java JDK 21](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html)
+* **OWNER**: donos de restaurante, com permissão para visualizar clientes.
+* **CUSTOMER**: clientes, com acesso restrito aos próprios dados.
 
----
+A aplicação utiliza **JWT** para autenticação e segue a **arquitetura hexagonal (ports & adapters)**, tornando o código modular, testável e de fácil manutenção.
 
-## 📥 1. Clone o repositório
+## Contribuidores
+
+* *Insira aqui os nomes e RMs dos integrantes do grupo*
+
+  * https://github.com/joaodamasceno2001
+  * https://github.com/Lari-Lucena
+  * https://github.com/TeT95
+  * https://github.com/matheuscarvalheira
+  * https://github.com/rebecanonato89
+
+## Tecnologias
+
+* **Spring Boot 3** (Java 21)
+* **Spring Web**, **Spring Data JPA**, **Spring Security**, **Spring Actuator**
+* **PostgreSQL 15**
+* **JWT** (JJWT + Spring Security)
+* **Docker** e **Docker Compose**
+* **Lombok**, **MapStruct**, **JUnit 5**, **Spring Boot Test**
+
+## Arquitetura
+
+O projeto adota a **arquitetura hexagonal**, com separação em:
+
+* **Domain**: entidades e regras de negócio.
+* **Application**: casos de uso e serviços.
+* **Adapters de Entrada**: controllers REST gerados via OpenAPI.
+* **Adapters de Saída**: repositórios JPA para persistência em PostgreSQL.
+
+![Figura 1 – Arquitetura Hexagonal](./docs/architecture.png)
+
+## Endpoints da API
+
+| Método | Path                              | Descrição                                                 |
+| -----: | --------------------------------- | --------------------------------------------------------- |
+|   POST | `/api/v1/auth/login`              | Autentica usuário e retorna token JWT                     |
+|   POST | `/api/v1/users`                   | Cria novo usuário (OWNER ou CUSTOMER)                     |
+|    GET | `/api/v1/users`                   | Lista usuários (OWNER vê todos, CUSTOMER vê só o próprio) |
+|    GET | `/api/v1/users/{id}`              | Busca usuário por ID                                      |
+|    PUT | `/api/v1/users/{id}`              | Atualiza dados de usuário                                 |
+| DELETE | `/api/v1/users/{id}`              | Exclui logicamente usuário                                |
+|    PUT | `/api/v1/users/change-password`   | Troca senha de usuário                                    |
+|    GET | `/api/v1/users/{id}/addresses`    | Lista endereços de um usuário                             |
+|   POST | `/api/v1/users/{id}/addresses`    | Adiciona novo endereço                                    |
+|    PUT | `/api/v1/users/{u}/addresses/{a}` | Atualiza endereço existente                               |
+| DELETE | `/api/v1/users/{u}/addresses/{a}` | Remove logicamente um endereço                            |
+
+> **Observação:** Protegido por JWT. Inclua o header `Authorization: Bearer <token>` nos requests.
+
+## Pré-requisitos
+
+* Docker (Engine + Compose)
+* Java JDK 21
+* (Opcional) IntelliJ IDEA ou outra IDE Java
+
+## Configuração e Execução
+
+### 1. Clone do repositório
 
 ```bash
-git clone https://github.com/fiap-tech-challenge-java/fiap-tech-challenge
+git clone https://github.com/fiap-tech-challenge-java/fiap-tech-challenge.git
 cd fiap-tech-challenge
 ```
 
-## 🐳 2. Suba os containers com Docker Compose
+### 2. Exemplo de `.env`
+
+Crie na raiz um arquivo `.env` com o conteúdo:
+
+```ini
+DB_NAME=techchallenge
+DB_USERNAME=postgres
+DB_PASSWORD=postgrespass
+DB_PORT=5438
+DB_URL=jdbc:postgresql://techchallenge_postgres:5432/techchallenge
+JWT_SECRET=INSIRA_SUA_CHAVE_SECRETA
+```
+
+### 3. Docker Compose
+
+**Suba os containers:**
 
 ```bash
 docker compose up --build
 ```
-- Isso irá baixar as imagens necessárias, compilar o projeto e iniciar os serviços.
 
-## 🛠️ 3. Configuração do IntelliJ IDEA
+* A aplicação estará disponível em `http://localhost:8080`.
+* O banco PostgreSQL escuta na porta `5438` do host.
 
-1. Abra o IntelliJ IDEA.
-2. Selecione "Open" e escolha a pasta do projeto clonado.
-3. Aguarde o IntelliJ carregar as dependências do Maven.
-4. Certifique-se de que o JDK 21 está configurado:
-   - Vá em `File` > `Project Structure` > `Project`.
-   - Selecione `Java 21` como SDK.
-   - Clique em `Apply` e depois em `OK`.
-   - Se necessário, adicione o JDK 21:
-     - Vá em `File` > `Project Structure` > `SDKs`.
-     - Clique no ícone `+` e selecione `JDK`.
-     - Navegue até o diretório onde o JDK 21 está instalado.
-     - Clique em `OK` para adicionar o JDK.
-5. Vá em Run > Edit Configurations. 
-   - Clique no ícone `+` e selecione `Spring Boot`.
-   - Nome do projeto: `TechChallengeApplication`.
-![img_1.png](src/main/resources/static/img_1.png)
-   - Na parte do Run: acesse o `Manage targets`.
-   - Selecione o `Docker Compose` e selecione o `compose.yaml` do projeto.
-   - Selecione o service: `application`.
-   - O java e jdk já estão configurados, então não é necessário alterar nada. (tem que aparecer o java 21).
-   - Clique em `OK` para salvar a configuração.
-![img.png](src/main/resources/static/img.png)
-6. Execute a aplicação:
-   - Vá em `Run` > `Run 'TechChallengeApplication'`.
-   - Aguarde até que a aplicação esteja rodando (você verá mensagens no console indicando que o servidor está ativo).
-7. Acesse o banco de dados postgres:
-   - Use o cliente de banco de dados integrado do IntelliJ ou qualquer outro cliente SQL.
-   - Conecte-se ao banco de dados usando as seguintes credenciais:
-     - Host: `localhost`
-     - Porta: `5438`
-     - Usuário: `postgres`
-     - Senha: `postgrespass`
-     - Banco de dados: `techchallenge`
-![img_2.png](src/main/resources/static/img_2.png)
-8. Verifique se a aplicação está rodando corretamente acessando o endpoint:
-   - Abra um navegador e acesse `http://localhost:8080/api/health`.
-   - Você deve ver uma resposta indicando que a aplicação está funcionando.
-   - Exemplo de resposta esperada:
-     - ```bash 
-       {
-           "status": "UP",
-           "version": "0.0.1",
-           "database": "OK"
-       }
-       ```
+### 4. Execução no IntelliJ IDEA (opcional)
+
+1. Abra o projeto no IntelliJ.
+2. Configure o SDK Java 21 em `File > Project Structure`.
+3. Em `Run > Edit Configurations`, adicione uma configuração Spring Boot:
+
+   * Target: Docker Compose (`compose.yaml`), serviço `techchallenge_application`.
+4. Execute `TechChallengeApplication`.
+
+## Documentação Swagger
+
+Acesse **Swagger UI** em:
+
+```
+http://localhost:8080/api/v1/swagger-ui/index.html#/
+```
+
+## Collection de Testes (Postman)
+
+Importe `TechChallenge.postman_collection.json` (na raiz) no Postman para testar todos os endpoints.
+
+## Qualidade de Código
+
+* **SOLID** e **DRY**
+* **DTOs** e **mapeamento** via MapStruct
+* **Tratamento global** de exceções com `@ControllerAdvice`
+* **Testes**: JUnit 5 (unitários e de integração)
+* **Segurança**: hashing de senhas (BCrypt) e JWT
+
+## Licença
+
+Este projeto está licenciado sob a **MIT License** – consulte o arquivo [LICENSE](LICENSE) para detalhes.
