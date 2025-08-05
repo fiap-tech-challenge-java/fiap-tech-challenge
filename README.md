@@ -148,6 +148,9 @@ http://localhost:8080/api/v1/swagger-ui/index.html#/
 
 Importe `TechChallenge.postman_collection.json` (na raiz) no Postman para testar todos os endpoints.
 
+Você também pode baixar a collection diretamente do Google Drive:
+[TechChallenge.postman_collection.json](https://drive.google.com/file/d/1bnSIspjlqUhaw4t4Ezu2o3SXz0UFmlQl/view?usp=sharing)
+
 ## Qualidade de Código
 
 * **SOLID** e **DRY**
