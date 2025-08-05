@@ -1,0 +1,1564 @@
+{
+	"info": {
+		"_postman_id": "e5baf572-2b90-4de0-b360-4cd72a0f20e5",
+		"name": "FIAP_TC1 - OFICIAL",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "30400075"
+	},
+	"item": [
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Lista todos os usuários",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": "{{baseURL}}/users",
+						"description": "Retorna uma lista de todos os usuários cadastrados no sistema. A lista pode ser vazia se não houver usuários."
+					},
+					"response": [
+						{
+							"name": "Lista de usuários retornada com sucesso (pode ser vazia).",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": \"9f7a7a4f-ff13-d2d2-8bf4-3b6a756c767b\",\n    \"name\": \"João Silva\",\n    \"email\": \"joao.silva@example.com\",\n    \"cpf\": \"286.084.030-30\",\n    \"login\": \"joaosilva123\",\n    \"role\": \"CUSTOMER\",\n    \"active\": true,\n    \"createdAt\": \"15/06/2025 19:40\",\n    \"updatedAt\": \"16/06/2025 19:40\",\n    \"address\": [\n      {\n        \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n        \"publicPlace\": \"Rua das Flores\",\n        \"number\": \"123\",\n        \"complement\": \"Apto 202\",\n        \"neighborhood\": \"Jardim Primavera\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"postalCode\": \"01234-567\"\n      },\n      {\n        \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n        \"publicPlace\": \"Rua das Flores\",\n        \"number\": \"123\",\n        \"complement\": \"Apto 202\",\n        \"neighborhood\": \"Jardim Primavera\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"postalCode\": \"01234-567\"\n      }\n    ]\n  },\n  {\n    \"id\": \"68a7e589-fb75-3373-8c12-9fea1837900d\",\n    \"name\": \"João Silva\",\n    \"email\": \"joao.silva@example.com\",\n    \"cpf\": \"286.084.030-30\",\n    \"login\": \"joaosilva123\",\n    \"role\": \"CUSTOMER\",\n    \"active\": true,\n    \"createdAt\": \"15/06/2025 19:40\",\n    \"updatedAt\": \"16/06/2025 19:40\",\n    \"address\": [\n      {\n        \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n        \"publicPlace\": \"Rua das Flores\",\n        \"number\": \"123\",\n        \"complement\": \"Apto 202\",\n        \"neighborhood\": \"Jardim Primavera\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"postalCode\": \"01234-567\"\n      },\n      {\n        \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n        \"publicPlace\": \"Rua das Flores\",\n        \"number\": \"123\",\n        \"complement\": \"Apto 202\",\n        \"neighborhood\": \"Jardim Primavera\",\n        \"city\": \"São Paulo\",\n        \"state\": \"SP\",\n        \"postalCode\": \"01234-567\"\n      }\n    ]\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Busca um usuário pelo ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Retorna os detalhes de um usuário específico, utilizando seu ID único."
+					},
+					"response": [
+						{
+							"name": "Usuário encontrado e seus detalhes retornados com sucesso.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"urn:uuid:6aabf5ee-5b50-68dc-9c76-03e680f4bd91\",\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"role\": \"CUSTOMER\",\n  \"active\": true,\n  \"createdAt\": \"15/06/2025 19:40\",\n  \"updatedAt\": \"16/06/2025 19:40\",\n  \"address\": [\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    },\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "Usuário não encontrado para o ID fornecido.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Atualiza um usuário existente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Pedro AAAAAAAAAAAAAAAAAAAAAAAAAAA\",\n    \"login\": \"Testando\",\n    \"email\": \"pedro.almeida@exemplo.com\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Permite a atualização de informações de um usuário existente, como nome e login."
+					},
+					"response": [
+						{
+							"name": "Usuário atualizado com sucesso. Retorna os detalhes atualizados do usuário.",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Larissa Fiap Santos\",\n  \"login\": \"LarissaLuana\",\n  \"email\": \"larissa@email.com\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"urn:uuid:6aabf5ee-5b50-68dc-9c76-03e680f4bd91\",\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"role\": \"CUSTOMER\",\n  \"active\": true,\n  \"createdAt\": \"15/06/2025 19:40\",\n  \"updatedAt\": \"16/06/2025 19:40\",\n  \"address\": [\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    },\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "Usuário não encontrado para o ID fornecido.",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Larissa Fiap Santos\",\n  \"login\": \"LarissaLuana\",\n  \"email\": \"larissa@email.com\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Dados de entrada inválidos.\",\n  \"code\": \"INVALID_INPUT\",\n  \"status\": 400,\n  \"path\": \"/api/v1/users\",\n  \"fieldErrors\": {\n    \"email\": \"O formato do e-mail é inválido.\",\n    \"password\": \"A senha deve ter no mínimo 8 caracteres.\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Deleta um usuário existente",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/users/:id",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": ""
+								}
+							]
+						},
+						"description": "Remove um usuário do sistema com base no seu ID. Esta é uma exclusão lógica."
+					},
+					"response": [
+						{
+							"name": "Usuário deletado com sucesso. Nenhuma resposta de conteúdo.",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Usuário não encontrado para o ID fornecido.",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Dados de entrada inválidos.\",\n  \"code\": \"INVALID_INPUT\",\n  \"status\": 400,\n  \"path\": \"/api/v1/users\",\n  \"fieldErrors\": {\n    \"email\": \"O formato do e-mail é inválido.\",\n    \"password\": \"A senha deve ter no mínimo 8 caracteres.\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Troca a senha do usuário.",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"d290f1ee-6c54-4b01-90e6-d701748f0851\",\n    \"lastPassword\": \"MinhaAntigaSenha123!\",\n    \"newPassword\": \"MinhaNovaSenha123!\",\n    \"confirmPassword\": \"MinhaNovaSenha123!\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/users/change-password",
+						"description": "Permite que um usuário altere sua senha de acesso."
+					},
+					"response": [
+						{
+							"name": "Senha trocada com sucesso. Nenhuma resposta de conteúdo.",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"id\": \"d290f1ee-6c54-4b01-90e6-d701748f0851\",\n  \"lastPassword\": \"MinhaAntigaSenha123!\",\n  \"newPassword\": \"MinhaNovaSenha123!\",\n  \"confirmPassword\": \"MinhaNovaSenha123!\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users/change-password"
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Cria um novo usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": {\n        \"publicPlace\": \"Rua das Acácias\",\n        \"number\": \"456\",\n        \"complement\": \"Bloco C, Apto 101\",\n        \"neighborhood\": \"Bela Vista\",\n        \"city\": \"Belo Horizonte\",\n        \"state\": \"MG\",\n        \"postalCode\": \"30160-010\"\n    },\n    \"name\": \"João Silva\",\n    \"email\": \"joao.silva@example.com\",\n    \"cpf\": \"286.084.030-30\",\n    \"login\": \"joaosilva123\",\n    \"password\": \"MyStrongPassword123!\",\n    \"role\": \"CUSTOMER\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/users",
+						"description": "Cadastra um novo usuário no sistema, podendo ser um dono de restaurante ou um cliente. Um endereço inicial é obrigatório no momento da criação."
+					},
+					"response": [
+						{
+							"name": "Usuário criado com sucesso. Retorna os detalhes do usuário recém-criado, incluindo seu ID.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"address\": {\n    \"publicPlace\": \"Rua das Acácias\",\n    \"number\": \"456\",\n    \"complement\": \"Bloco C, Apto 101\",\n    \"neighborhood\": \"Bela Vista\",\n    \"city\": \"Belo Horizonte\",\n    \"state\": \"MG\",\n    \"postalCode\": \"30160-010\"\n  },\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"password\": \"MyStrongPassword123!\",\n  \"role\": \"CUSTOMER\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"urn:uuid:04daf270-71da-b7fa-ede2-8d27c788103c\",\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"role\": \"CUSTOMER\",\n  \"active\": true,\n  \"createdAt\": \"15/06/2025 19:40\",\n  \"updatedAt\": \"16/06/2025 19:40\",\n  \"address\": [\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    },\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "Dados inválidos fornecidos na requisição.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"address\": {\n    \"publicPlace\": \"Rua das Acácias\",\n    \"number\": \"456\",\n    \"complement\": \"Bloco C, Apto 101\",\n    \"neighborhood\": \"Bela Vista\",\n    \"city\": \"Belo Horizonte\",\n    \"state\": \"MG\",\n    \"postalCode\": \"30160-010\"\n  },\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"password\": \"MyStrongPassword123!\",\n  \"role\": \"CUSTOMER\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Dados de entrada inválidos.\",\n  \"code\": \"INVALID_INPUT\",\n  \"status\": 400,\n  \"path\": \"/api/v1/users\",\n  \"fieldErrors\": {\n    \"email\": \"O formato do e-mail é inválido.\",\n    \"password\": \"A senha deve ter no mínimo 8 caracteres.\"\n  }\n}"
+						}
+					]
+				},
+				{
+					"name": "Cria um outro novo usuário",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"address\": {\n        \"publicPlace\": \"Rua Sete de Setembro\",\n        \"number\": \"123\",\n        \"complement\": \"Apto 502\",\n        \"neighborhood\": \"Centro\",\n        \"city\": \"Porto Alegre\",\n        \"state\": \"RS\",\n        \"postalCode\": \"90010-190\"\n    },\n    \"name\": \"Pedro Almeida\",\n    \"email\": \"pedro.almeida@exemplo.com\",\n    \"cpf\": \"714.628.314-35\",\n    \"login\": \"pedroalmeida\",\n    \"password\": \"SenhaDoPedro123$\",\n    \"role\": \"OWNER\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/users",
+						"description": "Cadastra um novo usuário no sistema, podendo ser um dono de restaurante ou um cliente. Um endereço inicial é obrigatório no momento da criação."
+					},
+					"response": [
+						{
+							"name": "Usuário criado com sucesso. Retorna os detalhes do usuário recém-criado, incluindo seu ID.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"address\": {\n    \"publicPlace\": \"Rua das Acácias\",\n    \"number\": \"456\",\n    \"complement\": \"Bloco C, Apto 101\",\n    \"neighborhood\": \"Bela Vista\",\n    \"city\": \"Belo Horizonte\",\n    \"state\": \"MG\",\n    \"postalCode\": \"30160-010\"\n  },\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"password\": \"MyStrongPassword123!\",\n  \"role\": \"CUSTOMER\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"urn:uuid:04daf270-71da-b7fa-ede2-8d27c788103c\",\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"role\": \"CUSTOMER\",\n  \"active\": true,\n  \"createdAt\": \"15/06/2025 19:40\",\n  \"updatedAt\": \"16/06/2025 19:40\",\n  \"address\": [\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    },\n    {\n      \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n      \"publicPlace\": \"Rua das Flores\",\n      \"number\": \"123\",\n      \"complement\": \"Apto 202\",\n      \"neighborhood\": \"Jardim Primavera\",\n      \"city\": \"São Paulo\",\n      \"state\": \"SP\",\n      \"postalCode\": \"01234-567\"\n    }\n  ]\n}"
+						},
+						{
+							"name": "Dados inválidos fornecidos na requisição.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"address\": {\n    \"publicPlace\": \"Rua das Acácias\",\n    \"number\": \"456\",\n    \"complement\": \"Bloco C, Apto 101\",\n    \"neighborhood\": \"Bela Vista\",\n    \"city\": \"Belo Horizonte\",\n    \"state\": \"MG\",\n    \"postalCode\": \"30160-010\"\n  },\n  \"name\": \"João Silva\",\n  \"email\": \"joao.silva@example.com\",\n  \"cpf\": \"286.084.030-30\",\n  \"login\": \"joaosilva123\",\n  \"password\": \"MyStrongPassword123!\",\n  \"role\": \"CUSTOMER\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/users"
+							},
+							"status": "Bad Request",
+							"code": 400,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Dados de entrada inválidos.\",\n  \"code\": \"INVALID_INPUT\",\n  \"status\": 400,\n  \"path\": \"/api/v1/users\",\n  \"fieldErrors\": {\n    \"email\": \"O formato do e-mail é inválido.\",\n    \"password\": \"A senha deve ter no mínimo 8 caracteres.\"\n  }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "addresses",
+			"item": [
+				{
+					"name": "Lista todos os endereços de um usuário.",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/users/:userId/addresses",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"addresses"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Retorna uma lista de todos os endereços associados a um usuário específico."
+					},
+					"response": [
+						{
+							"name": "Lista com sucesso todos os endereços do usuário. Pode retornar uma lista vazia.",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:userId/addresses",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"addresses"
+									],
+									"variable": [
+										{
+											"key": "userId"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "[\n  {\n    \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n    \"publicPlace\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"complement\": \"Apto 202\",\n    \"neighborhood\": \"Jardim Primavera\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"postalCode\": \"01234-567\"\n  },\n  {\n    \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n    \"publicPlace\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"complement\": \"Apto 202\",\n    \"neighborhood\": \"Jardim Primavera\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"postalCode\": \"01234-567\"\n  }\n]"
+						}
+					]
+				},
+				{
+					"name": "Cria um novo endereço para um usuário.",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"publicPlace\": \"Rua das Flores\",\n    \"number\": \"123\",\n    \"complement\": \"Apto 45\",\n    \"neighborhood\": \"Jardim Primavera\",\n    \"city\": \"São Paulo\",\n    \"state\": \"SP\",\n    \"postalCode\": \"01234-567\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/:userId/addresses",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"addresses"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Adiciona um novo endereço à lista de endereços de um usuário existente."
+					},
+					"response": [
+						{
+							"name": "Cria com sucesso endereço ao usuário. Retorna os detalhes do endereço recém-criado.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"publicPlace\": \"Rua das Flores\",\n  \"number\": \"123\",\n  \"complement\": \"Apto 45\",\n  \"neighborhood\": \"Jardim Primavera\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"postalCode\": \"01234-567\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/:userId/addresses",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"addresses"
+									],
+									"variable": [
+										{
+											"key": "userId"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n  \"publicPlace\": \"Rua das Flores\",\n  \"number\": \"123\",\n  \"complement\": \"Apto 202\",\n  \"neighborhood\": \"Jardim Primavera\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"postalCode\": \"01234-567\"\n}"
+						}
+					]
+				},
+				{
+					"name": "Deleta logicamente um endereço de um usuário.",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/users/:userId/addresses/:addressId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"addresses",
+								":addressId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": ""
+								},
+								{
+									"key": "addressId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Marca um endereço específico como inativo para um determinado usuário, não o removendo fisicamente do banco de dados."
+					},
+					"response": [
+						{
+							"name": "Endereço deletado com sucesso. Nenhuma resposta de conteúdo.",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:userId/addresses/:addressId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"addresses",
+										":addressId"
+									],
+									"variable": [
+										{
+											"key": "userId"
+										},
+										{
+											"key": "addressId"
+										}
+									]
+								}
+							},
+							"status": "No Content",
+							"code": 204,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						},
+						{
+							"name": "Usuário ou endereço não encontrado.",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/users/:userId/addresses/:addressId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"addresses",
+										":addressId"
+									],
+									"variable": [
+										{
+											"key": "userId"
+										},
+										{
+											"key": "addressId"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				},
+				{
+					"name": "Atualiza um endereço específico de um usuário.",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": {
+								"token": "{{bearerToken}}"
+							}
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"publicPlace\": \"Avenida Central\",\n    \"number\": \"999\",\n    \"complement\": \"Casa\",\n    \"neighborhood\": \"Centro\",\n    \"city\": \"Rio de Janeiro\",\n    \"state\": \"RJ\",\n    \"postalCode\": \"98765-432\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/users/:userId/addresses/:addressId",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"users",
+								":userId",
+								"addresses",
+								":addressId"
+							],
+							"variable": [
+								{
+									"key": "userId",
+									"value": ""
+								},
+								{
+									"key": "addressId",
+									"value": ""
+								}
+							]
+						},
+						"description": "Permite a atualização dos detalhes de um endereço específico associado a um usuário."
+					},
+					"response": [
+						{
+							"name": "Endereço atualizado com sucesso. Retorna os detalhes atualizados do endereço.",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"publicPlace\": \"Avenida Central\",\n  \"number\": \"999\",\n  \"complement\": \"Casa\",\n  \"neighborhood\": \"Centro\",\n  \"city\": \"Rio de Janeiro\",\n  \"state\": \"RJ\",\n  \"postalCode\": \"98765-432\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/:userId/addresses/:addressId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"addresses",
+										":addressId"
+									],
+									"variable": [
+										{
+											"key": "userId"
+										},
+										{
+											"key": "addressId"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"id\": \"b1a7d7a3-2f18-4c91-a10d-9e4a5c0f3b99\",\n  \"publicPlace\": \"Rua das Flores\",\n  \"number\": \"123\",\n  \"complement\": \"Apto 202\",\n  \"neighborhood\": \"Jardim Primavera\",\n  \"city\": \"São Paulo\",\n  \"state\": \"SP\",\n  \"postalCode\": \"01234-567\"\n}"
+						},
+						{
+							"name": "Usuário ou endereço não encontrado.",
+							"originalRequest": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer <token>",
+										"description": "Added as a part of security scheme: bearer"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"publicPlace\": \"Avenida Central\",\n  \"number\": \"999\",\n  \"complement\": \"Casa\",\n  \"neighborhood\": \"Centro\",\n  \"city\": \"Rio de Janeiro\",\n  \"state\": \"RJ\",\n  \"postalCode\": \"98765-432\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/users/:userId/addresses/:addressId",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"users",
+										":userId",
+										"addresses",
+										":addressId"
+									],
+									"variable": [
+										{
+											"key": "userId"
+										},
+										{
+											"key": "addressId"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "text",
+							"header": [],
+							"cookie": [],
+							"body": ""
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "Autentica um usuário e retorna um token JWT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const responseJson = pm.response.json();\r",
+									"\r",
+									"if (responseJson && responseJson.token) {\r",
+									"    pm.environment.set(\"bearerToken\", responseJson.token);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\": \"joaosilva123\",\n    \"password\": \"MyStrongPassword123!\"\n}",
+							"options": {
+								"raw": {
+									"headerFamily": "json",
+									"language": "json"
+								}
+							}
+						},
+						"url": "{{baseURL}}/auth/login",
+						"description": "Este endpoint permite que um usuário (dono de restaurante ou cliente) realize login no sistema. Se as credenciais forem válidas, um JSON Web Token (JWT) será retornado. O token deve ser usado no header Authorization das requisições subsequentes no formato: Authorization: Bearer {token}\n"
+					},
+					"response": [
+						{
+							"name": "Usuário autenticado com sucesso e token JWT retornado.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"login\": \"joaosilva123\",\n  \"password\": \"MyStrongPassword123!\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/auth/login"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"token\": \"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNjg5MjY4MDUwLCJleHAiOjE2ODkyNzA0NTB9.X\",\n  \"login\": \"joaosilva123\",\n  \"email\": \"joao.silva@example.com\",\n  \"expiresAt\": \"2025-07-10T23:09:24-03:00\",\n  \"expiresIn\": 3600,\n  \"userId\": \"123e4567-e89b-12d3-a456-426614174000\"\n}"
+						},
+						{
+							"name": "Credenciais inválidas fornecidas.",
+							"originalRequest": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"login\": \"joaosilva123\",\n  \"password\": \"MyStrongPassword123!\"\n}",
+									"options": {
+										"raw": {
+											"headerFamily": "json",
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{baseUrl}}/auth/login"
+							},
+							"status": "Unauthorized",
+							"code": 401,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"message\": \"Dados de entrada inválidos.\",\n  \"code\": \"INVALID_INPUT\",\n  \"status\": 400,\n  \"path\": \"/api/v1/users\",\n  \"fieldErrors\": {\n    \"email\": \"O formato do e-mail é inválido.\",\n    \"password\": \"A senha deve ter no mínimo 8 caracteres.\"\n  }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "health",
+			"item": [
+				{
+					"name": "check",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": "{{baseURL}}/health"
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": "{{baseUrl}}/health"
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"string\",\n  \"version\": \"st\",\n  \"database\": \"stri\"\n}"
+						}
+					]
+				},
+				{
+					"name": "check With Type",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/health/:checkType",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"health",
+								":checkType"
+							],
+							"variable": [
+								{
+									"key": "checkType",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/health/:checkType",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"health",
+										":checkType"
+									],
+									"variable": [
+										{
+											"key": "checkType",
+											"value": "string",
+											"description": "(Required) "
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"string\",\n  \"version\": \"st\",\n  \"database\": \"stri\"\n}"
+						}
+					]
+				},
+				{
+					"name": "test Exception",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "*/*"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/health/test-exception?type=string",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"health",
+								"test-exception"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "string"
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "OK",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*"
+									}
+								],
+								"url": {
+									"raw": "{{baseUrl}}/health/test-exception?type=string",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"health",
+										"test-exception"
+									],
+									"query": [
+										{
+											"key": "type",
+											"value": "string"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "*/*"
+								}
+							],
+							"cookie": [],
+							"body": "{\n  \"status\": \"string\",\n  \"version\": \"st\",\n  \"database\": \"stri\"\n}"
+						}
+					]
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseURL",
+			"value": "http://localhost:8080/api/v1",
+			"type": "default"
+		}
+	]
+}
